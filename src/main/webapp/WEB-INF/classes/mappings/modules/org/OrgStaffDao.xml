@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.org.dao.OrgStaffDao">
+    
+	<sql id="orgStaffColumns">
+		a.id AS "id",
+		a.org_id AS "orgId",
+		a.name AS "name",
+		a.sex AS "sex",
+		a.card AS "card",
+		a.card_photo AS "cardPhoto",
+		a.work_start AS "workStart",
+		a.university AS "university",
+		a.degree AS "degree",
+		a.ssn AS "ssn",
+		a.protitle_photo AS "protitlePhoto",
+		a.pro_title AS "proTitle",
+		a.voc_qua AS "vocQua",
+		a.work_type AS "workType",
+		a.dept AS "dept"
+	</sql>
+	
+	<sql id="orgStaffJoins">
+	</sql>
+    
+	<select id="get" resultType="OrgStaff">
+		SELECT 
+			<include refid="orgStaffColumns"/>
+		FROM org_staff a
+		<include refid="orgStaffJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="OrgStaff">
+		SELECT 
+			<include refid="orgStaffColumns"/>
+		FROM org_staff a
+		<include refid="orgStaffJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="orgId != null and orgId != ''">
+				AND a.org_id = #{orgId} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OrgStaff">
+		SELECT 
+			<include refid="orgStaffColumns"/>
+		FROM org_staff a
+		<include refid="orgStaffJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO org_staff(
+			org_id,
+			name,
+			sex,
+			card,
+			card_photo,
+			work_start,
+			university,
+			degree,
+			ssn,
+			protitle_photo,
+			pro_title,
+			voc_qua,
+			work_type,
+			dept
+		) VALUES (
+			#{orgId},
+			#{name},
+			#{sex},
+			#{card},
+			#{cardPhoto},
+			#{workStart},
+			#{university},
+			#{degree},
+			#{ssn},
+			#{protitlePhoto},
+			#{proTitle},
+			#{vocQua},
+			#{workType},
+			#{dept}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE org_staff SET 	
+			org_id = #{orgId},
+			name = #{name},
+			sex = #{sex},
+			card = #{card},
+			card_photo = #{cardPhoto},
+			work_start = #{workStart},
+			university = #{university},
+			degree = #{degree},
+			ssn = #{ssn},
+			protitle_photo = #{protitlePhoto},
+			pro_title = #{proTitle},
+			voc_qua = #{vocQua},
+			work_type = #{workType},
+			dept = #{dept}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM org_staff
+		WHERE id = #{id}
+	</update>
+	<!-- 查询身份证是否重复 -->
+	<select id="findNumByCard" parameterType="java.lang.String" resultType="Integer">
+		SELECT count(card) FROM  org_staff a WHERE a.card = #{card}
+	</select>
+	<select id="findNumByCardAndOrg" parameterType="java.lang.String" resultType="Integer">
+		SELECT count(*) FROM  org_staff a WHERE a.card = #{card} and a.org_id != #{orgId}
+	</select>
+	<!-- 根据机构id查询专职 -->
+	<select id="findStaffByOrgId" parameterType="java.lang.String" resultType="orgStaff">
+		SELECT <include refid="orgStaffColumns"/> FROM  org_staff a WHERE a.org_id = #{orgId}
+	</select>
+	<select id="findPage2" parameterType="page2" resultType="orgStaff">
+		SELECT <include refid="orgStaffColumns"/> FROM  org_staff a WHERE a.org_id = #{map.orgId}
+	</select>
+</mapper>

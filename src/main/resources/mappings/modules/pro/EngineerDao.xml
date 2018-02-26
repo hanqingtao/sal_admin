@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pro.dao.EngineerDao">
+    
+	<sql id="engineerColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.owner AS "owner",
+		a.report_number AS "reportNumber",
+		a.approval_number AS "approvalNumber",
+		a.record_number AS "recordNumber",
+		a.industry AS "industry",
+		a.built_site AS "builtSite",
+		a.built_scale AS "builtScale",
+		a.total_money AS "totalMoney",
+		a.central_money AS "centralMoney",
+		a.centralinvest_type AS "centralinvestType",
+		a.centraluse_type AS "centraluseType",
+		a.centralinvest_money AS "centralinvestMoney",
+		a.area_id AS "area.id",
+		a.create_id AS "createId",
+		a.create_time AS "createTime",
+		a.org_id AS "orgId",
+		a15.name AS "area.name"
+	</sql>
+	
+	<sql id="engineerJoins">
+		LEFT JOIN sys_area a15 ON a15.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="Engineer">
+		SELECT 
+			<include refid="engineerColumns"/>
+		FROM engineer a
+		<include refid="engineerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Engineer">
+		SELECT 
+			<include refid="engineerColumns"/>
+		FROM engineer a
+		<include refid="engineerJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Engineer">
+		SELECT 
+			<include refid="engineerColumns"/>
+		FROM engineer a
+		<include refid="engineerJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO engineer(
+			name,
+			owner,
+			report_number,
+			approval_number,
+			record_number,
+			industry,
+			built_site,
+			built_scale,
+			total_money,
+			central_money,
+			centralinvest_type,
+			centraluse_type,
+			centralinvest_money,
+			area_id,
+			create_id,
+			create_time,
+			org_id
+		) VALUES (
+			#{name},
+			#{owner},
+			#{reportNumber},
+			#{approvalNumber},
+			#{recordNumber},
+			#{industry},
+			#{builtSite},
+			#{builtScale},
+			#{totalMoney},
+			#{centralMoney},
+			#{centralinvestType},
+			#{centraluseType},
+			#{centralinvestMoney},
+			#{area.id},
+			#{createId},
+			#{createTime},
+			#{orgId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE engineer SET 	
+			name = #{name},
+			owner = #{owner},
+			report_number = #{reportNumber},
+			approval_number = #{approvalNumber},
+			record_number = #{recordNumber},
+			industry = #{industry},
+			built_site = #{builtSite},
+			built_scale = #{builtScale},
+			total_money = #{totalMoney},
+			central_money = #{centralMoney},
+			centralinvest_type = #{centralinvestType},
+			centraluse_type = #{centraluseType},
+			centralinvest_money = #{centralinvestMoney},
+			area_id = #{area.id},
+			create_id = #{createId},
+			create_time = #{createTime},
+			org_id = #{orgId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM engineer
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findInfoByOrgId" parameterType="java.lang.String"  resultType="Engineer">
+		SELECT 
+			*
+		FROM engineer a  WHERE a.org_id = #{orgId}
+	</select>
+	
+</mapper>

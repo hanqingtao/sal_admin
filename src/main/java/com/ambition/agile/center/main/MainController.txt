@@ -1,0 +1,126 @@
+package com.ambition.agile.center.main;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ambition.agile.common.persistence.Page;
+import com.ambition.agile.common.web.BaseController;
+import com.ambition.agile.modules.org.entity.Org;
+import com.ambition.agile.modules.org.service.OrgService;
+import com.ambition.agile.modules.pro.entity.Project;
+
+@Controller
+@RequestMapping(value = "{frontPath}/index")
+public class MainController extends BaseController{
+	@Autowired
+	private OrgService orgService;
+	
+	@RequestMapping(value = "index.do")
+	public ModelAndView getSystemNoticeList(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("index");
+		return mv;
+	}
+	/**
+	 *首页进入代理机构
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	
+	@RequestMapping(value = "agent.do")
+	public ModelAndView orgEntry(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("center/agent/agentList");
+		return mv;
+	}
+	/**
+	 * 进入中央投资项目
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "pro.do")
+	public ModelAndView proEntry(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("center/investmentPro/proList");
+		return mv;
+	}
+	
+	/**
+	 * 黑名单内容
+	 * @param request
+	 * @param org
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "black.do")
+	public ModelAndView black(HttpServletRequest request,Org org,HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		org.setStatus("4");//4表示黑名单
+		Page<Org> page = orgService.findPage(new Page<Org>(request, response), org);
+		  mv.addObject("page",page);
+		mv.setViewName("center/black/blackList");
+		return mv;
+	}
+	
+	/**
+	 * 加载日常监督
+	 * @param request
+	 * @param org
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "prison.do")
+	public ModelAndView prison(HttpServletRequest request,Org org,HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		 
+		mv.setViewName("center/supervise/superviseList");
+		return mv;
+	}
+	
+	
+	/**
+	 * 加载信用记录
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "credit.do")
+	public ModelAndView credit(HttpServletRequest request,Org org,HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		Page<Org> page = orgService.findPage(new Page<Org>(request, response), org);
+		  mv.addObject("page",page);
+		mv.setViewName("center/credit/credit");
+		return mv;
+	}
+	/**
+	 * 加载违规投诉内容
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "complaint.do")
+	public ModelAndView complaint(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("center/complaint/complaint");
+		return mv;
+	}
+	/**
+	 * 加载帮助文档内容
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "help.do")
+	public ModelAndView help(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("center/help/help");
+		return mv;
+	}
+}

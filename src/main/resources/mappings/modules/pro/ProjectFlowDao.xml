@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pro.dao.ProjectFlowDao">
+    
+	<sql id="projectFlowColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.notice_file AS "noticeFile",
+		a.notice_status as "noticeStatus",
+		a.tender_file AS "tenderFile",
+		a.tender_status as "tenderStatus",
+		a.file_evaluation AS "fileEvaluation",
+		a.file_evaluationexpert AS "fileEvaluationexpert",
+		a.report_status as "reportStatus",
+		a.bid_winner AS "bidWinner",
+		a.contact AS "contact",
+		a.phone AS "phone",
+		a.bid_money AS "bidMoney",
+		a.capitalsaving_ratio AS "capitalsavingRatio",
+		a.bidnotice_time AS "bidnoticeTime",
+		a.file_bid AS "fileBid",
+		a.bid_status as "bidStatus",
+		a.order_num AS "orderNum",
+		a.bid_unit AS "bidUnit"
+	</sql>
+	
+	<sql id="projectFlowJoins">
+	</sql>
+    
+	<select id="get" resultType="ProjectFlow">
+		SELECT 
+			<include refid="projectFlowColumns"/>
+		FROM project_flow a
+		<include refid="projectFlowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProjectFlow">
+		SELECT 
+			<include refid="projectFlowColumns"/>
+		FROM project_flow a
+		<include refid="projectFlowJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProjectFlow">
+		SELECT 
+			<include refid="projectFlowColumns"/>
+		FROM project_flow a
+		<include refid="projectFlowJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO project_flow(
+			project_id,
+			notice_file,
+			notice_status,
+			tender_file,
+			tender_status,
+			file_evaluation,
+			file_evaluationexpert,
+			report_status,
+			bid_winner,
+			contact,
+			phone,
+			bid_money,
+			capitalsaving_ratio,
+			bidnotice_time,
+			file_bid,
+			bid_status,
+			order_num
+		) VALUES (
+			#{projectId},
+			#{noticeFile},
+			#{noticeStatus},
+			#{tenderFile},
+			#{tenderStatus},
+			#{fileEvaluation},
+			#{fileEvaluationexpert},
+			#{reportStatus},
+			#{bidWinner},
+			#{contact},
+			#{phone},
+			#{bidMoney},
+			#{capitalsavingRatio},
+			#{bidnoticeTime},
+			#{fileBid},
+			#{bidStatus},
+			#{orderNum}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE project_flow SET 	
+			project_id = #{projectId},
+			notice_file = #{noticeFile},
+			notice_status = #{noticeStatus},
+			tender_file = #{tenderFile},
+			tender_status = #{tenderStatus},
+			file_evaluation = #{fileEvaluation},
+			file_evaluationexpert = #{fileEvaluationexpert},
+			report_status = #{reportStatus},
+			bid_winner = #{bidWinner},
+			contact = #{contact},
+			phone = #{phone},
+			bid_money = #{bidMoney},
+			capitalsaving_ratio = #{capitalsavingRatio},
+			bidnotice_time = #{bidnoticeTime},
+			file_bid = #{fileBid},
+			bid_status = #{bidStatus},
+			order_num = #{orderNum}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM project_flow
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findInfoByProId" parameterType="Integer" resultType="ProjectFlow">
+		SELECT 
+			<include refid="projectFlowColumns"/>
+		FROM project_flow a where a.project_id=#{projectId} limit 1
+		                                 
+		 		
+	</select>
+	
+</mapper>

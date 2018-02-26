@@ -1,0 +1,150 @@
+.bottomstep .on{color:#fff}
+
+.msgInfo {
+	color: red;
+	margin-left: 15px;
+	display: none;
+}
+
+label.error {
+	padding-left: 16px;
+	padding-bottom: 2px;
+	color: red;
+}
+
+span.info,i.info{
+	margin-left:15px;
+	color: red;
+}
+
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0px 1000px #FFF inset;
+}
+
+.uploadMainStyle {
+	display: none;
+}
+
+.uploadFile {
+	display: none;
+}
+
+.level {
+	width: 190px;
+	height: 30px;
+	border: solid 1px #dee2ed;
+}
+table .save,table .del,table .upload{
+	border:none;
+	background:none;
+	outline:none;
+	cursor: pointer;
+	color:#4b88cd;
+}
+
+table .save:hover,table .del:hover,table .upload:hover{
+	color:#2783e1;
+}
+ 
+.reportBox{
+	display:none;
+}
+
+ .customContent{
+	      margin-top:10px;
+	      margin-bottom:10px;
+	      position:relative;
+	    }
+	     .customContent h4{
+	      color:#000;
+	      margin-left:20px;
+	    }
+	    .customContent .rightContent{
+	      position:absolute;
+	      top:0;
+	      right:80px;
+	      
+	    }
+	    .customContent .rightContent a{
+	     border:1px solid #ccc;
+	      padding:5px 15px;
+	      
+	    }
+
+.orgNameContent  h4{
+	 color:#000;
+	    margin-left: 105px;
+    margin-bottom: 20px;
+}
+
+
+
+.main  .gonggao .newsContainerContent{
+}
+
+.main  .gonggao .newsContainerContent ul li p{
+	    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.newbox .newsContent{
+}
+.newbox .newsContent ul li .left{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 85%;
+}
+
+.tongji_right .top  .infoLog{
+	float: right;
+    /* margin-top: 20px; */
+    display: inline-block;
+    /* border: 1px solid red; */
+    height: 41px;
+    line-height: 41px;
+    margin-right: 10px;
+    color: #ff8417;
+}
+
+
+
+.promptBox .promptContent{
+	width:40%;
+	margin:15px auto;padding:10px 20px;border:1px solid #C7DDB9;
+	    background: #F3FFEB;
+    color: #009900;
+	position:relative;
+	letter-spacing: 2px;
+	    margin-bottom: -30px;
+	    
+	
+}
+
+.promptBox .promptContent .promptClose{
+	position:absolute;
+	right: 5px;
+	color:#C1CDBB;
+	font-size:20px;
+	    top: -5px;
+	    font-size: 30px;cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

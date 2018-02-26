@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pro.dao.CreditRecordDao">
+    
+	<sql id="creditRecordColumns">
+		a.id AS "id",
+		a.report_time AS "reportTime",
+		a.project_name AS "projectName",
+		a.project_code AS "projectCode",
+		a.leader AS "leader",
+		a.instruction AS "instruction",
+		a.result AS "result",
+		a.create_by AS "createBy.id",
+		a.create_time AS "createTime",
+		a.org_id AS "org.id",
+		b.name AS "org.name"
+	</sql>
+	
+	<sql id="creditRecordJoins">
+	    LEFT JOIN org b ON  a.org_id=b.id
+	</sql>
+    
+	<select id="get" resultType="CreditRecord">
+		SELECT 
+			<include refid="creditRecordColumns"/>
+		FROM credit_record a
+		<include refid="creditRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CreditRecord">
+		SELECT 
+			<include refid="creditRecordColumns"/>
+		FROM credit_record a
+		<include refid="creditRecordJoins"/>
+		<where>
+			
+			<if test="reportTime != null and reportTime != ''">
+				AND a.report_time = #{reportTime}
+			</if>
+			<if test="projectName != null and projectName != ''">
+				AND a.project_name = #{projectName}
+			</if>
+			<if test="projectCode != null and projectCode != ''">
+				AND a.project_code = #{projectCode}
+			</if>
+			<if test="leader != null and leader != ''">
+				AND a.leader = #{leader}
+			</if>
+			
+			<if test="org != null and org.id != ''">
+						AND a.org_id = #{org.id}
+					</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CreditRecord">
+		SELECT 
+			<include refid="creditRecordColumns"/>
+		FROM credit_record a
+		<include refid="creditRecordJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO credit_record(
+			report_time,
+			project_name,
+			project_code,
+			leader,
+			instruction,
+			result,
+			create_by,
+			create_time,
+			org_id
+		) VALUES (
+			#{reportTime},
+			#{projectName},
+			#{projectCode},
+			#{leader},
+			#{instruction},
+			#{result},
+			#{createBy.id},
+			now(),
+			<!-- #{createTime}, -->
+			#{org.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE credit_record SET 	
+			report_time = #{reportTime},
+			project_name = #{projectName},
+			project_code = #{projectCode},
+			leader = #{leader},
+			instruction = #{instruction},
+			result = #{result},
+			create_time = #{createTime},
+			org_id=#{org.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM credit_record
+		WHERE id = #{id}
+	</update>
+	<!-- 根据机构id查询信用记录-->
+	<select id="findCreditRecordByOrgId" parameterType="Integer" resultType="creditRecord">
+		SELECT a.id AS "id",
+		a.report_time AS "reportTime",
+		a.project_name AS "projectName",
+		a.project_code AS "projectCode",
+		a.leader AS "leader",
+		a.instruction AS "instruction",
+		a.result AS "result",
+		a.create_by AS "createBy.id",
+		a.create_time AS "createTime"
+		  FROM  credit_record a WHERE a.org_id = #{orgId}
+	</select>
+</mapper>
