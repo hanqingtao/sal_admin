@@ -12,3 +12,5 @@ pom.xml.versionsBackup
 pom.xml.next
 dependency-reduced-pom.xml
 *.class
+pom.xml
+./pom.xml
