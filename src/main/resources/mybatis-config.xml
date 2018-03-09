@@ -43,7 +43,6 @@
 	<typeAliases>
 		<typeAlias alias="Page" type="com.ambition.agile.common.persistence.Page" /><!--分页  -->
 		<typeAlias alias="page2" type="com.ambition.agile.common.util.Page" /><!--分页 2 -->
-		<typeAlias alias="OrgProjectExcel" type="com.ambition.agile.modules.org.entity.OrgProjectExcel" /><!--Excel数据 -->
 	</typeAliases>
 	
 	<!-- 插件配置 -->
