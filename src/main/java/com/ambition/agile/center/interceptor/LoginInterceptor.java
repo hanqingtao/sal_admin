@@ -18,8 +18,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSON;
 
-import com.ambition.agile.modules.org.entity.OrgUser;
-
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 	final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);;
@@ -53,20 +51,21 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             HandlerMethod _handler = (HandlerMethod) handler;
             RequireLogin login = _handler.getMethodAnnotation(RequireLogin.class);
             
-            OrgUser orgUser = (OrgUser)request.getAttribute("user");
+            //OrgUser orgUser = (OrgUser)request.getAttribute("user");
             
             // 没有声明权限,放行
             if (null == login) {
-            	if(null != orgUser && StringUtils.isNotEmpty(orgUser.getId())){
-            		request.setAttribute("userId", orgUser.getId());
-            	}else{
-            		request.setAttribute("userId", null);
-            	}
+//            	if(null != orgUser && StringUtils.isNotEmpty(orgUser.getId())){
+//            		request.setAttribute("userId", orgUser.getId());
+//            	}else{
+//            		request.setAttribute("userId", null);
+//            	}
             	return true;
             }
             //根据 cookie 获取当前登录用户
             //int userId = CookieUtil.getUserIdByCookie(request, RedisConstants.COOKIE_ID);
-            if (orgUser == null) {
+            //if (orgUser == null) {
+            if(true){
                 // 没有获取到用户登录状态
                 if (login.value() == ResultTypeEnum.page) {
 	                //传统页面的登录
@@ -87,7 +86,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 }
                 return false;
             }
-            request.setAttribute("userId", orgUser.getId());
+            //request.setAttribute("userId", orgUser.getId());
             return true;
         } else {
             return true;

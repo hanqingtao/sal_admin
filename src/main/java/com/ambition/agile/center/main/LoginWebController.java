@@ -31,12 +31,6 @@ import com.ambition.agile.common.util.MailBean;
 import com.ambition.agile.common.util.MailUtil;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
-import com.ambition.agile.modules.org.entity.Org;
-import com.ambition.agile.modules.org.entity.OrgUser;
-import com.ambition.agile.modules.org.service.OrgService;
-import com.ambition.agile.modules.org.service.OrgUserService;
-import com.ambition.agile.modules.pro.entity.Project;
-import com.ambition.agile.modules.pro.service.ProjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -48,17 +42,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping(value = "${frontPath}")
 public class LoginWebController extends BaseController {
 	 
-	@Autowired
-	private OrgUserService orgUserService;
-	
-	@Autowired
-	private OrgService orgService;
-	
-	@Autowired
-	private ProjectService projectService;
-	
-	
-	
 	@Autowired
 	private MailUtil mailUtil;
 	
@@ -78,7 +61,7 @@ public class LoginWebController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
-	public String signIn(String qualificationManagement,String loginName,String password,String verification,Org org,OrgUser orgUser,Model model, RedirectAttributes redirectAttributes,HttpSession session) {
+	public String signIn(String qualificationManagement,String loginName,String password,String verification,Model model, RedirectAttributes redirectAttributes,HttpSession session) {
 		System.out.println("登录时显示"+qualificationManagement);
 		
 		if(StringUtils.isNotEmpty(qualificationManagement)&&"qualificationManagement".equals(qualificationManagement)){
@@ -86,21 +69,18 @@ public class LoginWebController extends BaseController {
 			if(StringUtils.isNotEmpty(loginName)&&StringUtils.isNotEmpty(password)&&StringUtils.isNotEmpty(verification)){
 				  model.addAttribute("loginName",loginName);
 				  model.addAttribute("password",password);
-	              orgUser=orgUserService.findInfo(loginName);
-	              if(orgUser!=null){
-	            	  if(!loginName.equals(orgUser.getLoginName())||!MD5Encrypt.encrypt(password).equals(orgUser.getPassword())){
-	                	  model.addAttribute("message","用户名或密码错误" );
-	                	  
-	                	  return "center/login";  	
-	                  }
-	                  if(!"1".equals(orgUser.getStatus())){
-	                	  model.addAttribute("message","用户状态失效！" );
-	                	  return "center/login";   	
-	                  }
-	                   OrgUser user=(OrgUser)session.getAttribute("user");
-	                  if(user==null){
-	                	  session.setAttribute("user",orgUser);	  
-	                  }
+	            //  orgUser=null;//orgUserService.findInfo(loginName);
+	              if(true){//orgUser!=null){
+//	            	  if(!loginName.equals(orgUser.getLoginName())||!MD5Encrypt.encrypt(password).equals(orgUser.getPassword())){
+//	                	  model.addAttribute("message","用户名或密码错误" );
+//	                	  
+//	                	  return "center/login";  	
+//	                  }
+//	                  if(!"1".equals(orgUser.getStatus())){
+//	                	  model.addAttribute("message","用户状态失效！" );
+//	                	  return "center/login";   	
+//	                  }
+//	                 
 	                
 	              }else{
 	            	  model.addAttribute("message","您还未注册,请您注册！" );
@@ -110,12 +90,6 @@ public class LoginWebController extends BaseController {
 	              
 			}
 			
-			
-			OrgUser user = (OrgUser) session.getAttribute("user");
-			OrgUser orgUser1=orgUserService.get(user);
-		    Org orgObj = orgUser1.getOrg();
-		    model.addAttribute("org", orgObj);
-			
 			return "center/mechanism/mechanism";
 		}
 		
@@ -124,21 +98,20 @@ public class LoginWebController extends BaseController {
 		if(StringUtils.isNotEmpty(loginName)&&StringUtils.isNotEmpty(password)&&StringUtils.isNotEmpty(verification)){
 			  model.addAttribute("loginName",loginName);
 			  model.addAttribute("password",password);
-              orgUser=orgUserService.findInfo(loginName);
-              if(orgUser!=null){
-            	  if(!loginName.equals(orgUser.getLoginName())||!MD5Encrypt.encrypt(password).equals(orgUser.getPassword())){
-                	  model.addAttribute("message","用户名或密码错误" );
-                	  
-                	  return "center/login";  	
-                  }
-                  if(!"1".equals(orgUser.getStatus())){
-                	  model.addAttribute("message","用户状态失效" );
-                	  return "center/login";   	
-                  }
-                   OrgUser user=(OrgUser)session.getAttribute("user");
-                  if(user==null){
-                	  session.setAttribute("user",orgUser);	  
-                  }
+              if(true){
+//            	  if(!loginName.equals(orgUser.getLoginName())||!MD5Encrypt.encrypt(password).equals(orgUser.getPassword())){
+//                	  model.addAttribute("message","用户名或密码错误" );
+//                	  
+//                	  return "center/login";  	
+//                  }
+//                  if(!"1".equals(orgUser.getStatus())){
+//                	  model.addAttribute("message","用户状态失效" );
+//                	  return "center/login";   	
+//                  }
+//                   OrgUser user=(OrgUser)session.getAttribute("user");
+//                  if(user==null){
+//                	  session.setAttribute("user",orgUser);	  
+//                  }
                 
               }else{
             	  model.addAttribute("message","您还未注册,请您注册" );
@@ -146,15 +119,7 @@ public class LoginWebController extends BaseController {
               }
 		}
 		
-		List<Org> orgList=orgService.findOrgInfoByNum();
-		List<Project> projectList=projectService.findProjectInfoByNum();
-		model.addAttribute("orgList",orgList);
-		model.addAttribute("projectList",projectList);
-		model.addAttribute("user",session.getAttribute("user"));
-		model.addAttribute("org", org);
-		model.addAttribute("loginName",loginName);
-		model.addAttribute("password", password);
-		model.addAttribute("verification", verification);
+	
 		return "index";
 	 }
 	/**
@@ -164,8 +129,8 @@ public class LoginWebController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/loginOut")
-	public String loginOut(OrgUser orgUser, Model model,HttpSession session) {
-		model.addAttribute("orgUser", orgUser);
+	public String loginOut( Model model,HttpSession session) {
+		//model.addAttribute("orgUser", orgUser);
 		session.removeAttribute("user");
 		return "index";
 	}
@@ -177,14 +142,14 @@ public class LoginWebController extends BaseController {
 	  * @return
 	  */
 	@RequestMapping(value = "/toLogin")
-	public String toLogin(OrgUser orgUser, Model model) {
-		model.addAttribute("orgUser", orgUser);
+	public String toLogin( Model model) {
+		//model.addAttribute("orgUser", orgUser);
 		return "center/login";
 	}
 	
 	@RequestMapping(value = "/toValidateEmail")
-	public String tofindPassWord(OrgUser orgUser, Model model) {
-		model.addAttribute("orgUser", orgUser);
+	public String tofindPassWord( Model model) {
+		//model.addAttribute("orgUser", orgUser);
 		return "center/org/toValidateEmail";
 	}
 	
@@ -212,16 +177,16 @@ public class LoginWebController extends BaseController {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				PrintWriter writer = response.getWriter();
-				Integer num=orgUserService.findName(userName);
+				Integer num=0;//orgUserService.findName(userName);
 				if(num==0){
 					msg.put("m1", "no");
 					msg.put("m2", "该用户名不存在");
 					String str = mapper.writeValueAsString(msg);
 					writer.println(str);
 				}
-				
-				OrgUser orgUser=orgUserService.findInfo(userName);
-				String mailName=orgUser.getEmail();
+//				
+//				OrgUser orgUser=orgUserService.findInfo(userName);
+				String mailName="";//orgUser.getEmail();
 				
 	           if(!mailName.equals(mail)){
 	        	   msg.put("m1", "no");
@@ -247,14 +212,14 @@ public class LoginWebController extends BaseController {
 	@RequestMapping(value="sendPwdMail")
 	public void sendPwdMail(String userName,HttpSession session,HttpServletRequest request,HttpServletResponse response,ModelAndView mv) throws IOException  {
 		 
-		OrgUser user = orgUserService.findInfo(userName);
-		if(null!=user&&null!=user.getEmail()){
+		//OrgUser user = orgUserService.findInfo(userName);
+		if(true){//null!=user&&null!=user.getEmail()){
 			
-			 user.setMaildate(new Date());
-			 user.setUserauthvalue(MD5Encrypt.encrypt(new Date().toString()+"adks"));
+//			 user.setMaildate(new Date());
+//			 user.setUserauthvalue(MD5Encrypt.encrypt(new Date().toString()+"adks"));
 			 //userDao.updateUserForFindPsd(user);
 			//String  appName = BaseConfigHolder.getAppName();
-			String  appName = "中央投资项目招标服务与管理平台";
+			String  appName = "开评标室管理平台 ";
 			
 			//创建邮件  
 			StringBuffer maiContents = new StringBuffer(255);
@@ -266,11 +231,11 @@ public class LoginWebController extends BaseController {
 		    mailBean.setSubject("密码重置邮件");  
 		        
 		    try{
-		        String[] addresses = {user.getEmail()};
+		        String[] addresses =null;// {user.getEmail()};
 				mailBean.setToEmails(addresses); 
 				String webPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-				maiContents.append("请你30分钟内点击链接完成密码修改链接： <a href="+webPath+"/toPwdChangeFromMail?loginName="+ user.getLoginName() + "> 点我重置 </a>");
-				maiContents.append(" <br> 如果打不开链接，请复制以下内容在 浏览器中打开."+webPath+"/toPwdChangeFromMail?loginName="+ user.getLoginName());
+				//maiContents.append("请你30分钟内点击链接完成密码修改链接： <a href="+webPath+"/toPwdChangeFromMail?loginName="+ user.getLoginName() + "> 点我重置 </a>");
+			//	maiContents.append(" <br> 如果打不开链接，请复制以下内容在 浏览器中打开."+webPath+"/toPwdChangeFromMail?loginName="+ user.getLoginName());
 				maiContents.append("点我重置 ");
 				mailBean.setTemplate(maiContents.toString());  
 		    }catch(Exception e){
@@ -330,9 +295,9 @@ public class LoginWebController extends BaseController {
 	@RequestMapping(value="/passChange",method = RequestMethod.POST)
 	public String passChange(HttpServletResponse response,String NewPwd,String loginName,Model model) {
 	    if(StringUtils.isNotEmpty(NewPwd)&&StringUtils.isNotEmpty(loginName)){
-	    	OrgUser user=orgUserService.findInfo(loginName);
-	    	user.setPassword(MD5Encrypt.encrypt(NewPwd));
-	    	orgUserService.save(user);
+//	    	OrgUser user=orgUserService.findInfo(loginName);
+//	    	user.setPassword(MD5Encrypt.encrypt(NewPwd));
+//	    	orgUserService.save(user);
 	    	model.addAttribute("message", "密码重置成功，请您登录！");
 	    }
 		return "center/login";
