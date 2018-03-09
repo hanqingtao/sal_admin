@@ -16,3 +16,4 @@ dependency-reduced-pom.xml
 *.class
 pom.xml
 ./pom.xml
+.gitignore
