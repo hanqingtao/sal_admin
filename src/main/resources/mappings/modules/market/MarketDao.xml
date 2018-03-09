@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.market.dao.MarketDao">
+    
+	<sql id="marketColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.address AS "address",
+		a.photo_path AS "photoPath",
+		a.content AS "content",
+		a.province_id AS "provinceId",
+		a.city_id AS "cityId",
+		a.area_id AS "area.id",
+		a.town_id AS "townId",
+		a.area_full_name AS "areaFullName",
+		a.longitude AS "longitude",
+		a.latitude AS "latitude",
+		a.click_count AS "clickCount",
+		a.collect_count AS "collectCount",
+		a.recommend AS "recommend",
+		a.main_product AS "mainProduct",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a8.name AS "area.name"
+	</sql>
+	
+	<sql id="marketJoins">
+		LEFT JOIN sys_area a8 ON a8.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="Market">
+		SELECT 
+			<include refid="marketColumns"/>
+		FROM market a
+		<include refid="marketJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Market">
+		SELECT 
+			<include refid="marketColumns"/>
+		FROM market a
+		<include refid="marketJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="recommend != null and recommend != ''">
+				AND a.recommend = #{recommend}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Market">
+		SELECT 
+			<include refid="marketColumns"/>
+		FROM market a
+		<include refid="marketJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO market(
+			name,
+			address,
+			photo_path,
+			content,
+			province_id,
+			city_id,
+			area_id,
+			town_id,
+			area_full_name,
+			longitude,
+			latitude,
+			click_count,
+			collect_count,
+			recommend,
+			main_product,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{name},
+			#{address},
+			#{photoPath},
+			#{content},
+			#{provinceId},
+			#{cityId},
+			#{area.id},
+			#{townId},
+			#{areaFullName},
+			#{longitude},
+			#{latitude},
+			#{clickCount},
+			#{collectCount},
+			#{recommend},
+			#{mainProduct},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE market SET 	
+			name = #{name},
+			address = #{address},
+			photo_path = #{photoPath},
+			content = #{content},
+			province_id = #{provinceId},
+			city_id = #{cityId},
+			area_id = #{area.id},
+			town_id = #{townId},
+			area_full_name = #{areaFullName},
+			longitude = #{longitude},
+			latitude = #{latitude},
+			click_count = #{clickCount},
+			collect_count = #{collectCount},
+			recommend = #{recommend},
+			main_product = #{mainProduct},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE market SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
