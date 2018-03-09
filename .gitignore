@@ -6,6 +6,8 @@ target/
 out/
 template/
 image/
+/bin/
+/classes/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -14,3 +16,4 @@ dependency-reduced-pom.xml
 *.class
 pom.xml
 ./pom.xml
+.gitignore
