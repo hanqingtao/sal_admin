@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.users.dao.UsersDao">
+    
+	<sql id="usersColumns">
+		a.id AS "id",
+		a.login_name AS "loginName",
+		a.name AS "name",
+		a.password AS "password",
+		a.email AS "email",
+		a.province_id AS "provinceId",
+		a.city_id AS "cityId",
+		a.area_id AS "area.id",
+		a.full_name AS "fullName",
+		a.telphone AS "telphone",
+		a.status AS "status",
+		a.kind AS "kind",
+		a.gender AS "gender",
+		a.birthday AS "birthday",
+		a.degree AS "degree",
+		a.photo_path AS "photoPath",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a8.name AS "area.name"
+	</sql>
+	
+	<sql id="usersJoins">
+		LEFT JOIN sys_area a8 ON a8.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="Users">
+		SELECT 
+			<include refid="usersColumns"/>
+		FROM users a
+		<include refid="usersJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Users">
+		SELECT 
+			<include refid="usersColumns"/>
+		FROM users a
+		<include refid="usersJoins"/>
+		<where>
+			
+			<if test="loginName != null and loginName != ''">
+				AND a.login_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{loginName},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="kind != null and kind != ''">
+				AND a.kind = #{kind}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Users">
+		SELECT 
+			<include refid="usersColumns"/>
+		FROM users a
+		<include refid="usersJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO users(
+			login_name,
+			name,
+			password,
+			email,
+			province_id,
+			city_id,
+			area_id,
+			full_name,
+			telphone,
+			status,
+			kind,
+			gender,
+			birthday,
+			degree,
+			photo_path,
+			create_date,
+			remarks
+		) VALUES (
+			#{loginName},
+			#{name},
+			#{password},
+			#{email},
+			#{provinceId},
+			#{cityId},
+			#{area.id},
+			#{fullName},
+			#{telphone},
+			#{status},
+			#{kind},
+			#{gender},
+			#{birthday},
+			#{degree},
+			#{photoPath},
+			#{createDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE users SET 	
+			login_name = #{loginName},
+			name = #{name},
+			password = #{password},
+			email = #{email},
+			province_id = #{provinceId},
+			city_id = #{cityId},
+			area_id = #{area.id},
+			full_name = #{fullName},
+			telphone = #{telphone},
+			status = #{status},
+			kind = #{kind},
+			gender = #{gender},
+			birthday = #{birthday},
+			degree = #{degree},
+			photo_path = #{photoPath},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM users
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
