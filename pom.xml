@@ -956,26 +956,6 @@
 		</plugins>
 	</build>
 	
-	<profiles>
-		<!-- 初始化数据库 -->			
-		<profile>
-			<id>init-db</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.dbunit</groupId>
-					<artifactId>dbunit</artifactId>
-					<version>2.4.8</version>
-				</dependency>
-			  	<dependency>
-				    <groupId>org.apache.poi</groupId>
-				    <artifactId>poi</artifactId>
-				    <version>3.2-FINAL</version>
-				</dependency>
-			</dependencies>
-			
-		</profile>
-	</profiles>
-	
 	<!-- dev 信息 -->
 	<developers>  
 		<developer>
