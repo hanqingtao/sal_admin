@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.eval.dao.UserCommentDao">
+    
+	<sql id="userCommentColumns">
+		a.id AS "id",
+		a.market_id AS "marketId",
+		a.content AS "content",
+		a.evaluate AS "evaluate",
+		a.create_id AS "createId",
+		a.photo_url1 AS "photoUrl1",
+		a.create_name AS "createName",
+		a.is_anony AS "isAnony",
+		a.photo_url2 AS "photoUrl2",
+		a.photo_url3 AS "photoUrl3",
+		a.photo_url4 AS "photoUrl4",
+		a.photo_url5 AS "photoUrl5",
+		a.photo_url6 AS "photoUrl6"
+	</sql>
+	
+	<sql id="userCommentJoins">
+	</sql>
+    
+	<select id="get" resultType="UserComment">
+		SELECT 
+			<include refid="userCommentColumns"/>
+		FROM comment a
+		<include refid="userCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UserComment">
+		SELECT 
+			<include refid="userCommentColumns"/>
+		FROM comment a
+		<include refid="userCommentJoins"/>
+		<where>
+			
+			<if test="evaluate != null and evaluate != ''">
+				AND a.evaluate = #{evaluate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserComment">
+		SELECT 
+			<include refid="userCommentColumns"/>
+		FROM comment a
+		<include refid="userCommentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO comment(
+			market_id,
+			content,
+			evaluate,
+			create_id,
+			photo_url1,
+			create_name,
+			is_anony,
+			photo_url2,
+			photo_url3,
+			photo_url4,
+			photo_url5,
+			photo_url6
+		) VALUES (
+			#{marketId},
+			#{content},
+			#{evaluate},
+			#{createId},
+			#{photoUrl1},
+			#{createName},
+			#{isAnony},
+			#{photoUrl2},
+			#{photoUrl3},
+			#{photoUrl4},
+			#{photoUrl5},
+			#{photoUrl6}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE comment SET 	
+			market_id = #{marketId},
+			content = #{content},
+			evaluate = #{evaluate},
+			create_id = #{createId},
+			photo_url1 = #{photoUrl1},
+			create_name = #{createName},
+			is_anony = #{isAnony},
+			photo_url2 = #{photoUrl2},
+			photo_url3 = #{photoUrl3},
+			photo_url4 = #{photoUrl4},
+			photo_url5 = #{photoUrl5},
+			photo_url6 = #{photoUrl6}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM comment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

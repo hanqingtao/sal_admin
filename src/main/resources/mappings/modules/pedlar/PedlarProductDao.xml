@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pedlar.dao.PedlarProductDao">
+    
+	<sql id="pedlarProductColumns">
+		a.id AS "id",
+		a.catalog_id AS "catalogId",
+		a.catalog_name AS "catalogName",
+		a.pedlar_id AS "pedlarId",
+		a.create_id AS "createId",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="pedlarProductJoins">
+	</sql>
+    
+	<select id="get" resultType="PedlarProduct">
+		SELECT 
+			<include refid="pedlarProductColumns"/>
+		FROM pedlar_product a
+		<include refid="pedlarProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PedlarProduct">
+		SELECT 
+			<include refid="pedlarProductColumns"/>
+		FROM pedlar_product a
+		<include refid="pedlarProductJoins"/>
+		<where>
+			
+			<if test="catalogName != null and catalogName != ''">
+				AND a.catalog_name = #{catalogName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PedlarProduct">
+		SELECT 
+			<include refid="pedlarProductColumns"/>
+		FROM pedlar_product a
+		<include refid="pedlarProductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pedlar_product(
+			catalog_id,
+			catalog_name,
+			pedlar_id,
+			create_id,
+			create_date,
+			remarks
+		) VALUES (
+			#{catalogId},
+			#{catalogName},
+			#{pedlarId},
+			#{createId},
+			#{createDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pedlar_product SET 	
+			catalog_id = #{catalogId},
+			catalog_name = #{catalogName},
+			pedlar_id = #{pedlarId},
+			create_id = #{createId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pedlar_product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

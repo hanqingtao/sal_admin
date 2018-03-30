@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.users.dao.UserConcernDao">
+    
+	<sql id="userConcernColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.concern_type AS "concernType",
+		a.concern_id AS "concernId",
+		a.concern_name AS "concernName",
+		a.create_id AS "createId",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="userConcernJoins">
+	</sql>
+    
+	<select id="get" resultType="UserConcern">
+		SELECT 
+			<include refid="userConcernColumns"/>
+		FROM user_concern a
+		<include refid="userConcernJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UserConcern">
+		SELECT 
+			<include refid="userConcernColumns"/>
+		FROM user_concern a
+		<include refid="userConcernJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserConcern">
+		SELECT 
+			<include refid="userConcernColumns"/>
+		FROM user_concern a
+		<include refid="userConcernJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO user_concern(
+			user_id,
+			concern_type,
+			concern_id,
+			concern_name,
+			create_id,
+			create_date,
+			remarks
+		) VALUES (
+			#{userId},
+			#{concernType},
+			#{concernId},
+			#{concernName},
+			#{createId},
+			#{createDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE user_concern SET 	
+			user_id = #{userId},
+			concern_type = #{concernType},
+			concern_id = #{concernId},
+			concern_name = #{concernName},
+			create_id = #{createId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM user_concern
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
