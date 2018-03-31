@@ -30,7 +30,7 @@ import com.ambition.agile.modules.product.service.ProductCatalogService;
 /**
  * 商品分类Controller
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @Controller
 @RequestMapping(value = "${adminPath}/product/productCatalog")

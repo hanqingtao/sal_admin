@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2012-2017  All rights reserved.
  */
-package com.ambition.agile.modules.eval.service;
+package com.ambition.agile.modules.users.service;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ambition.agile.common.persistence.Page;
 import com.ambition.agile.common.service.CrudService;
-import com.ambition.agile.modules.eval.entity.UserComment;
-import com.ambition.agile.modules.eval.dao.UserCommentDao;
+import com.ambition.agile.modules.users.entity.UserComment;
+import com.ambition.agile.modules.users.dao.UserCommentDao;
 
 /**
  * 评价信息Service
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @Service
 @Transactional(readOnly = true)

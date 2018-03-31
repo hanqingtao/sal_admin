@@ -11,16 +11,15 @@ import com.ambition.agile.common.persistence.TreeEntity;
 /**
  * 商品分类Entity
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 public class ProductCatalog extends TreeEntity<ProductCatalog> {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;		// 商品分类名称
-	private String code;		// 商品分类唯一编号标识
-	private ProductCatalog parent;		// 父商品分类
-	private String parentName;		// 父商品分类名称
-	private Integer orderNum;		// 排序字段
+	private ProductCatalog parent;		// 父分类ID
+	private String parentIds;		// 所有父分类
+	private Integer sort;		// 排序字段
 	
 	public ProductCatalog() {
 		super();
@@ -39,15 +38,6 @@ public class ProductCatalog extends TreeEntity<ProductCatalog> {
 		this.name = name;
 	}
 	
-	@Length(min=0, max=64, message="商品分类唯一编号标识长度必须介于 0 和 64 之间")
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-	
 	@JsonBackReference
 	public ProductCatalog getParent() {
 		return parent;
@@ -57,21 +47,24 @@ public class ProductCatalog extends TreeEntity<ProductCatalog> {
 		this.parent = parent;
 	}
 	
-	@Length(min=0, max=32, message="父商品分类名称长度必须介于 0 和 32 之间")
-	public String getParentName() {
-		return parentName;
+	@Length(min=0, max=10, message="所有父分类长度必须介于 0 和 10 之间")
+	public String getParentIds() {
+		return parentIds;
 	}
 
-	public void setParentName(String parentName) {
-		this.parentName = parentName;
+	public void setParentIds(String parentIds) {
+		this.parentIds = parentIds;
 	}
 	
-	public Integer getOrderNum() {
-		return orderNum;
+	public Integer getSort() {
+		return sort;
 	}
 
-	public void setOrderNum(Integer orderNum) {
-		this.orderNum = orderNum;
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 	
+	public String getParentId() {
+		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
 }

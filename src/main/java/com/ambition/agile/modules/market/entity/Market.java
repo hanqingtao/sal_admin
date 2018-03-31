@@ -5,14 +5,13 @@ package com.ambition.agile.modules.market.entity;
 
 import org.hibernate.validator.constraints.Length;
 import com.ambition.agile.modules.sys.entity.Area;
-import org.hibernate.validator.constraints.Length;
 
 import com.ambition.agile.common.persistence.DataEntity;
 
 /**
  * 集市信息管理Entity
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 public class Market extends DataEntity<Market> {
 	
@@ -21,17 +20,17 @@ public class Market extends DataEntity<Market> {
 	private String address;		// 地址
 	private String photoPath;		// 集市全景观图
 	private String content;		// 简介
-	private Integer provinceId;		// 省
-	private Integer cityId;		// 市
-	private Area area;		// 县
-	private Integer townId;		// 镇 id
-	private String areaFullName;		// (省市县集合名称)#分割
-	private String longitude;		// jing du
-	private String latitude;		// wei du
+	private Area areap;		// 省
+	private Area areac;		// 市
+	private Area areaa;		// 县
+	private Area areat;		// 镇
+	private String areaFullName;		// 省市县集合名称
+	private String longitude;		// 经度
+	private String latitude;		// 纬度
 	private Integer clickCount;		// 多少人去过
 	private Integer collectCount;		// 关注数
-	private String recommend;		// 推荐指数 1 -5
-	private String mainProduct;		// main_product
+	private String recommend;		// 推荐指数
+	private String mainProduct;		// 主营产品
 	
 	public Market() {
 		super();
@@ -77,39 +76,39 @@ public class Market extends DataEntity<Market> {
 		this.content = content;
 	}
 	
-	public Integer getProvinceId() {
-		return provinceId;
+	public Area getAreap() {
+		return areap;
 	}
 
-	public void setProvinceId(Integer provinceId) {
-		this.provinceId = provinceId;
+	public void setAreap(Area areap) {
+		this.areap = areap;
 	}
 	
-	public Integer getCityId() {
-		return cityId;
+	public Area getAreac() {
+		return areac;
 	}
 
-	public void setCityId(Integer cityId) {
-		this.cityId = cityId;
+	public void setAreac(Area areac) {
+		this.areac = areac;
 	}
 	
-	public Area getArea() {
-		return area;
+	public Area getAreaa() {
+		return areaa;
 	}
 
-	public void setArea(Area area) {
-		this.area = area;
+	public void setAreaa(Area areaa) {
+		this.areaa = areaa;
 	}
 	
-	public Integer getTownId() {
-		return townId;
+	public Area getAreat() {
+		return areat;
 	}
 
-	public void setTownId(Integer townId) {
-		this.townId = townId;
+	public void setAreat(Area areat) {
+		this.areat = areat;
 	}
 	
-	@Length(min=0, max=128, message="(省市县集合名称)#分割长度必须介于 0 和 128 之间")
+	@Length(min=0, max=128, message="省市县集合名称长度必须介于 0 和 128 之间")
 	public String getAreaFullName() {
 		return areaFullName;
 	}
@@ -118,7 +117,7 @@ public class Market extends DataEntity<Market> {
 		this.areaFullName = areaFullName;
 	}
 	
-	@Length(min=0, max=16, message="jing du长度必须介于 0 和 16 之间")
+	@Length(min=0, max=16, message="经度长度必须介于 0 和 16 之间")
 	public String getLongitude() {
 		return longitude;
 	}
@@ -127,7 +126,7 @@ public class Market extends DataEntity<Market> {
 		this.longitude = longitude;
 	}
 	
-	@Length(min=0, max=16, message="wei du长度必须介于 0 和 16 之间")
+	@Length(min=0, max=16, message="纬度长度必须介于 0 和 16 之间")
 	public String getLatitude() {
 		return latitude;
 	}
@@ -152,7 +151,7 @@ public class Market extends DataEntity<Market> {
 		this.collectCount = collectCount;
 	}
 	
-	@Length(min=0, max=1, message="推荐指数 1 -5长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="推荐指数长度必须介于 0 和 1 之间")
 	public String getRecommend() {
 		return recommend;
 	}
@@ -161,7 +160,7 @@ public class Market extends DataEntity<Market> {
 		this.recommend = recommend;
 	}
 	
-	@Length(min=0, max=128, message="main_product长度必须介于 0 和 128 之间")
+	@Length(min=0, max=128, message="主营产品长度必须介于 0 和 128 之间")
 	public String getMainProduct() {
 		return mainProduct;
 	}

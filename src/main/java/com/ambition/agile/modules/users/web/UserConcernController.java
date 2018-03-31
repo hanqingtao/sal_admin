@@ -25,7 +25,7 @@ import com.ambition.agile.modules.users.service.UserConcernService;
 /**
  * 我的关注Controller
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @Controller
 @RequestMapping(value = "${adminPath}/users/userConcern")

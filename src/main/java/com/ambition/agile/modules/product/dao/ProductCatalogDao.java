@@ -10,7 +10,7 @@ import com.ambition.agile.modules.product.entity.ProductCatalog;
 /**
  * 商品分类DAO接口
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @MyBatisDao
 public interface ProductCatalogDao extends TreeDao<ProductCatalog> {

@@ -10,7 +10,7 @@ import com.ambition.agile.modules.users.entity.Users;
 /**
  * 用户信息DAO接口
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @MyBatisDao
 public interface UsersDao extends CrudDao<Users> {

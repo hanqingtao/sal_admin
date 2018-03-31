@@ -8,9 +8,9 @@
 		a.name AS "name",
 		a.password AS "password",
 		a.email AS "email",
-		a.province_id AS "provinceId",
-		a.city_id AS "cityId",
-		a.area_id AS "area.id",
+		a.province_id AS "areap.id",
+		a.city_id AS "areac.id",
+		a.area_id AS "areaa.id",
 		a.full_name AS "fullName",
 		a.telphone AS "telphone",
 		a.status AS "status",
@@ -21,10 +21,14 @@
 		a.photo_path AS "photoPath",
 		a.create_date AS "createDate",
 		a.remarks AS "remarks",
-		a8.name AS "area.name"
+		a6.name AS "areap.name",
+		a7.name AS "areac.name",
+		a8.name AS "areaa.name"
 	</sql>
 	
 	<sql id="usersJoins">
+		LEFT JOIN sys_area a6 ON a6.id = a.province_id
+		LEFT JOIN sys_area a7 ON a7.id = a.city_id
 		LEFT JOIN sys_area a8 ON a8.id = a.area_id
 	</sql>
     
@@ -112,9 +116,9 @@
 			#{name},
 			#{password},
 			#{email},
-			#{provinceId},
-			#{cityId},
-			#{area.id},
+			#{areap.id},
+			#{areac.id},
+			#{areaa.id},
 			#{fullName},
 			#{telphone},
 			#{status},
@@ -134,9 +138,9 @@
 			name = #{name},
 			password = #{password},
 			email = #{email},
-			province_id = #{provinceId},
-			city_id = #{cityId},
-			area_id = #{area.id},
+			province_id = #{areap.id},
+			city_id = #{areac.id},
+			area_id = #{areaa.id},
 			full_name = #{fullName},
 			telphone = #{telphone},
 			status = #{status},

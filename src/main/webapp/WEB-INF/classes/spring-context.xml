@@ -57,6 +57,7 @@
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<property name="configLocation" value="classpath:${ehcache.configFile}" />
 	</bean>
+	
 	<!-- 配置路径 -->
 	 
 	<bean id="systemGlobalsConfig" class="com.ambition.agile.common.BaseFrameworkConfig">

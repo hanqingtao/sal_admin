@@ -14,9 +14,9 @@ import com.ambition.agile.modules.pedlar.entity.Pedlar;
 import com.ambition.agile.modules.pedlar.dao.PedlarDao;
 
 /**
- * 商贩信息Service
+ * 商家信息Service
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 @Service
 @Transactional(readOnly = true)

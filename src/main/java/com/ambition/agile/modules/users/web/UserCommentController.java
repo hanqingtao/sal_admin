@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2012-2017  All rights reserved.
  */
-package com.ambition.agile.modules.eval.web;
+package com.ambition.agile.modules.users.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,16 +19,16 @@ import com.ambition.agile.common.config.Global;
 import com.ambition.agile.common.persistence.Page;
 import com.ambition.agile.common.web.BaseController;
 import com.ambition.agile.common.utils.StringUtils;
-import com.ambition.agile.modules.eval.entity.UserComment;
-import com.ambition.agile.modules.eval.service.UserCommentService;
+import com.ambition.agile.modules.users.entity.UserComment;
+import com.ambition.agile.modules.users.service.UserCommentService;
 
 /**
  * 评价信息Controller
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @Controller
-@RequestMapping(value = "${adminPath}/eval/userComment")
+@RequestMapping(value = "${adminPath}/users/userComment")
 public class UserCommentController extends BaseController {
 
 	@Autowired
@@ -46,22 +46,22 @@ public class UserCommentController extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("eval:userComment:view")
+	@RequiresPermissions("users:userComment:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(UserComment userComment, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<UserComment> page = userCommentService.findPage(new Page<UserComment>(request, response), userComment); 
 		model.addAttribute("page", page);
-		return "modules/eval/userCommentList";
+		return "modules/users/userCommentList";
 	}
 
-	@RequiresPermissions("eval:userComment:view")
+	@RequiresPermissions("users:userComment:view")
 	@RequestMapping(value = "form")
 	public String form(UserComment userComment, Model model) {
 		model.addAttribute("userComment", userComment);
-		return "modules/eval/userCommentForm";
+		return "modules/users/userCommentForm";
 	}
 
-	@RequiresPermissions("eval:userComment:edit")
+	@RequiresPermissions("users:userComment:edit")
 	@RequestMapping(value = "save")
 	public String save(UserComment userComment, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, userComment)){
@@ -69,15 +69,15 @@ public class UserCommentController extends BaseController {
 		}
 		userCommentService.save(userComment);
 		addMessage(redirectAttributes, "保存评价信息成功");
-		return "redirect:"+Global.getAdminPath()+"/eval/userComment/?repage";
+		return "redirect:"+Global.getAdminPath()+"/users/userComment/?repage";
 	}
 	
-	@RequiresPermissions("eval:userComment:edit")
+	@RequiresPermissions("users:userComment:edit")
 	@RequestMapping(value = "delete")
 	public String delete(UserComment userComment, RedirectAttributes redirectAttributes) {
 		userCommentService.delete(userComment);
 		addMessage(redirectAttributes, "删除评价信息成功");
-		return "redirect:"+Global.getAdminPath()+"/eval/userComment/?repage";
+		return "redirect:"+Global.getAdminPath()+"/users/userComment/?repage";
 	}
 
 }

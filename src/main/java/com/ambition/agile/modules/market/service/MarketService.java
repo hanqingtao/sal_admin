@@ -16,7 +16,7 @@ import com.ambition.agile.modules.market.dao.MarketDao;
 /**
  * 集市信息管理Service
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 @Service
 @Transactional(readOnly = true)

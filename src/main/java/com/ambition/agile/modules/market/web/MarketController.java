@@ -25,7 +25,7 @@ import com.ambition.agile.modules.market.service.MarketService;
 /**
  * 集市信息管理Controller
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 @Controller
 @RequestMapping(value = "${adminPath}/market/market")

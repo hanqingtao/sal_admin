@@ -34,7 +34,7 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">登录名  不可修改：</label>
+			<label class="control-label">登录名：</label>
 			<div class="controls">
 				<form:input path="loginName" htmlEscape="false" maxlength="32" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -59,21 +59,23 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">省级 id：</label>
+			<label class="control-label">省：</label>
 			<div class="controls">
-				<form:input path="provinceId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+				<sys:treeselect id="areap" name="areap.id" value="${users.areap.id}" labelName="areap.name" labelValue="${users.areap.name}"
+					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">部门 code：</label>
+			<label class="control-label">市：</label>
 			<div class="controls">
-				<form:input path="cityId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+				<sys:treeselect id="areac" name="areac.id" value="${users.areac.id}" labelName="areac.name" labelValue="${users.areac.name}"
+					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">机构名称：</label>
+			<label class="control-label">区/县：</label>
 			<div class="controls">
-				<sys:treeselect id="area" name="area.id" value="${users.area.id}" labelName="area.name" labelValue="${users.area.name}"
+				<sys:treeselect id="areaa" name="areaa.id" value="${users.areaa.id}" labelName="areaa.name" labelValue="${users.areaa.name}"
 					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
@@ -90,13 +92,13 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">用户状态  1 正常  0停用：</label>
+			<label class="control-label">用户状态：</label>
 			<div class="controls">
 				<form:radiobuttons path="status" items="${fns:getDictList('users_status')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">用户类型 1 普通用户  2 商贩  3 4：</label>
+			<label class="control-label">用户类型：</label>
 			<div class="controls">
 				<form:select path="kind" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -105,7 +107,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">性别 男 女：</label>
+			<label class="control-label">性别：</label>
 			<div class="controls">
 				<form:radiobuttons path="gender" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
 			</div>

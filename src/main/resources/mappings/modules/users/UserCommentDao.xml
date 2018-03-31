@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.users.dao.UserCommentDao">
+    
+	<sql id="userCommentColumns">
+		a.id AS "id",
+		a.market_id AS "marketId",
+		a.content AS "content",
+		a.evaluate AS "evaluate",
+		a.create_by AS "createBy.id",
+		a.photo_url AS "photoUrl",
+		a.create_name AS "createName",
+		a.is_anony AS "isAnony"
+	</sql>
+	
+	<sql id="userCommentJoins">
+	</sql>
+    
+	<select id="get" resultType="UserComment">
+		SELECT 
+			<include refid="userCommentColumns"/>
+		FROM comment a
+		<include refid="userCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UserComment">
+		SELECT 
+			<include refid="userCommentColumns"/>
+		FROM comment a
+		<include refid="userCommentJoins"/>
+		<where>
+			
+			<if test="evaluate != null and evaluate != ''">
+				AND a.evaluate = #{evaluate}
+			</if>
+			<if test="isAnony != null and isAnony != ''">
+				AND a.is_anony = #{isAnony}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UserComment">
+		SELECT 
+			<include refid="userCommentColumns"/>
+		FROM comment a
+		<include refid="userCommentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO comment(
+			market_id,
+			content,
+			evaluate,
+			create_by,
+			photo_url,
+			create_name,
+			is_anony
+		) VALUES (
+			#{marketId},
+			#{content},
+			#{evaluate},
+			#{createBy.id},
+			#{photoUrl},
+			#{createName},
+			#{isAnony}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE comment SET 	
+			market_id = #{marketId},
+			content = #{content},
+			evaluate = #{evaluate},
+			photo_url = #{photoUrl},
+			create_name = #{createName},
+			is_anony = #{isAnony}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM comment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

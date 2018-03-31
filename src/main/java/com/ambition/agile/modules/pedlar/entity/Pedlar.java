@@ -5,24 +5,29 @@ package com.ambition.agile.modules.pedlar.entity;
 
 import org.hibernate.validator.constraints.Length;
 import com.ambition.agile.modules.sys.entity.User;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.ambition.agile.common.persistence.DataEntity;
 
 /**
- * 商贩信息Entity
+ * 商家信息Entity
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 public class Pedlar extends DataEntity<Pedlar> {
 	
 	private static final long serialVersionUID = 1L;
-	private String name;		// 商贩名称
-	private Integer marketId;		// 所属的集市
-	private User user;		// 用户id
-	private String marketName;		// 所属集市名称
+	private String name;		// 商家名称
+	private Integer marketId;		// 集市(默认)
+	private User user;		// 用户
+	private String marketName;		// 集市名称
 	private String logoPath;		// 商贩logo
 	private String mainProduct;		// 主营商品
 	private String content;		// 推荐描述
+	private String status;		// 状态
+	private User auditBy;		// 审核人
+	private Date auditDate;		// 审核时间
 	
 	public Pedlar() {
 		super();
@@ -32,7 +37,7 @@ public class Pedlar extends DataEntity<Pedlar> {
 		super(id);
 	}
 
-	@Length(min=0, max=32, message="商贩名称长度必须介于 0 和 32 之间")
+	@Length(min=0, max=32, message="商家名称长度必须介于 0 和 32 之间")
 	public String getName() {
 		return name;
 	}
@@ -57,7 +62,7 @@ public class Pedlar extends DataEntity<Pedlar> {
 		this.user = user;
 	}
 	
-	@Length(min=0, max=32, message="所属集市名称长度必须介于 0 和 32 之间")
+	@Length(min=0, max=32, message="集市名称长度必须介于 0 和 32 之间")
 	public String getMarketName() {
 		return marketName;
 	}
@@ -91,6 +96,32 @@ public class Pedlar extends DataEntity<Pedlar> {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	
+	@Length(min=0, max=1, message="状态长度必须介于 0 和 1 之间")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public User getAuditBy() {
+		return auditBy;
+	}
+
+	public void setAuditBy(User auditBy) {
+		this.auditBy = auditBy;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getAuditDate() {
+		return auditDate;
+	}
+
+	public void setAuditDate(Date auditDate) {
+		this.auditDate = auditDate;
 	}
 	
 }

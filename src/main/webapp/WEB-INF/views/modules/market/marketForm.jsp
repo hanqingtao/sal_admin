@@ -42,7 +42,7 @@
 		<div class="control-group">
 			<label class="control-label">地址：</label>
 			<div class="controls">
-				<form:input path="address" htmlEscape="false" maxlength="256" class="input-xlarge "/>
+				<form:textarea path="address" htmlEscape="false" rows="4" maxlength="256" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -61,42 +61,45 @@
 		<div class="control-group">
 			<label class="control-label">省：</label>
 			<div class="controls">
-				<form:input path="provinceId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+				<sys:treeselect id="areap" name="areap.id" value="${market.areap.id}" labelName="areap.name" labelValue="${market.areap.name}"
+					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">市：</label>
 			<div class="controls">
-				<form:input path="cityId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+				<sys:treeselect id="areac" name="areac.id" value="${market.areac.id}" labelName="areac.name" labelValue="${market.areac.name}"
+					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">县：</label>
 			<div class="controls">
-				<sys:treeselect id="area" name="area.id" value="${market.area.id}" labelName="area.name" labelValue="${market.area.name}"
+				<sys:treeselect id="areaa" name="areaa.id" value="${market.areaa.id}" labelName="areaa.name" labelValue="${market.areaa.name}"
 					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">镇 id：</label>
+			<label class="control-label">镇：</label>
 			<div class="controls">
-				<form:input path="townId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+				<sys:treeselect id="areat" name="areat.id" value="${market.areat.id}" labelName="areat.name" labelValue="${market.areat.name}"
+					title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">(省市县集合名称)#分割：</label>
+			<label class="control-label">省市县集合名称：</label>
 			<div class="controls">
 				<form:input path="areaFullName" htmlEscape="false" maxlength="128" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">jing du：</label>
+			<label class="control-label">经度：</label>
 			<div class="controls">
 				<form:input path="longitude" htmlEscape="false" maxlength="16" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">wei du：</label>
+			<label class="control-label">纬度：</label>
 			<div class="controls">
 				<form:input path="latitude" htmlEscape="false" maxlength="16" class="input-xlarge "/>
 			</div>
@@ -114,7 +117,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">推荐指数 1 -5：</label>
+			<label class="control-label">推荐指数：</label>
 			<div class="controls">
 				<form:select path="recommend" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -123,9 +126,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">main_product：</label>
+			<label class="control-label">主营产品：</label>
 			<div class="controls">
-				<form:input path="mainProduct" htmlEscape="false" maxlength="128" class="input-xlarge "/>
+				<form:textarea path="mainProduct" htmlEscape="false" rows="4" maxlength="128" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">

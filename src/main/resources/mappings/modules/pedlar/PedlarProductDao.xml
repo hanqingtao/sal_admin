@@ -5,11 +5,10 @@
 	<sql id="pedlarProductColumns">
 		a.id AS "id",
 		a.catalog_id AS "catalogId",
-		a.catalog_name AS "catalogName",
 		a.pedlar_id AS "pedlarId",
-		a.create_id AS "createId",
+		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
-		a.remarks AS "remarks"
+		a.sort AS "sort"
 	</sql>
 	
 	<sql id="pedlarProductJoins">
@@ -30,9 +29,6 @@
 		<include refid="pedlarProductJoins"/>
 		<where>
 			
-			<if test="catalogName != null and catalogName != ''">
-				AND a.catalog_name = #{catalogName}
-			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -63,28 +59,24 @@
 	<insert id="insert">
 		INSERT INTO pedlar_product(
 			catalog_id,
-			catalog_name,
 			pedlar_id,
-			create_id,
+			create_by,
 			create_date,
-			remarks
+			sort
 		) VALUES (
 			#{catalogId},
-			#{catalogName},
 			#{pedlarId},
-			#{createId},
+			#{createBy.id},
 			#{createDate},
-			#{remarks}
+			#{sort}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE pedlar_product SET 	
 			catalog_id = #{catalogId},
-			catalog_name = #{catalogName},
 			pedlar_id = #{pedlarId},
-			create_id = #{createId},
-			remarks = #{remarks}
+			sort = #{sort}
 		WHERE id = #{id}
 	</update>
 	

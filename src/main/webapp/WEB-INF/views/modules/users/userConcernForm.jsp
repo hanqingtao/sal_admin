@@ -36,7 +36,7 @@
 		<div class="control-group">
 			<label class="control-label">用户id：</label>
 			<div class="controls">
-				<form:input path="userId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+				<form:input path="userId" htmlEscape="false" maxlength="11" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -55,18 +55,6 @@
 			<label class="control-label">关注的内容：</label>
 			<div class="controls">
 				<form:input path="concernName" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">创建者：</label>
-			<div class="controls">
-				<form:input path="createId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="128" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">

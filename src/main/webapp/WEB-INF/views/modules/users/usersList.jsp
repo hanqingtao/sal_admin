@@ -25,16 +25,16 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>登录名  不可修改：</label>
+			<li><label>登录名：</label>
 				<form:input path="loginName" htmlEscape="false" maxlength="32" class="input-medium"/>
 			</li>
 			<li><label>真实姓名：</label>
 				<form:input path="name" htmlEscape="false" maxlength="32" class="input-medium"/>
 			</li>
-			<li><label>用户状态  1 正常  0停用：</label>
+			<li><label>用户状态：</label>
 				<form:radiobuttons path="status" items="${fns:getDictList('users_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</li>
-			<li><label>用户类型 1 普通用户  2 商贩  3 4：</label>
+			<li><label>用户类型：</label>
 				<form:select path="kind" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('users_kind')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -48,10 +48,10 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>登录名  不可修改</th>
+				<th>登录名</th>
 				<th>真实姓名</th>
-				<th>用户状态  1 正常  0停用</th>
-				<th>用户类型 1 普通用户  2 商贩  3 4</th>
+				<th>用户状态</th>
+				<th>用户类型</th>
 				<th>备注</th>
 				<shiro:hasPermission name="users:users:edit"><th>操作</th></shiro:hasPermission>
 			</tr>

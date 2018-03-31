@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.users.dao.InformationDao">
+    
+	<sql id="informationColumns">
+		a.id AS "id",
+		a.market_id AS "marketId",
+		a.content AS "content",
+		a.photo_url AS "photoUrl",
+		a.product_catalog_name AS "productCatalogName",
+		a.product_catalog_id AS "productCatalogId",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+	
+	<sql id="informationJoins">
+	</sql>
+    
+	<select id="get" resultType="Information">
+		SELECT 
+			<include refid="informationColumns"/>
+		FROM information a
+		<include refid="informationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Information">
+		SELECT 
+			<include refid="informationColumns"/>
+		FROM information a
+		<include refid="informationJoins"/>
+		<where>
+			
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Information">
+		SELECT 
+			<include refid="informationColumns"/>
+		FROM information a
+		<include refid="informationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO information(
+			market_id,
+			content,
+			photo_url,
+			product_catalog_name,
+			product_catalog_id,
+			create_date,
+			create_by
+		) VALUES (
+			#{marketId},
+			#{content},
+			#{photoUrl},
+			#{productCatalogName},
+			#{productCatalogId},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE information SET 	
+			market_id = #{marketId},
+			content = #{content},
+			photo_url = #{photoUrl},
+			product_catalog_name = #{productCatalogName},
+			product_catalog_id = #{productCatalogId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM information
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

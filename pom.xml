@@ -326,6 +326,7 @@
 		<!-- SECURITY end -->
 		
 		<!-- Activiti -->
+		
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
@@ -365,12 +366,14 @@
 			<artifactId>activiti-diagram-rest</artifactId>
 			<version>${activiti.version}</version>
 		</dependency>
+		
 		<!-- 支持activiti缓存 -->
 		<!-- <dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
 			<version>5.1.7.Final</version>
 		</dependency> -->
+		
 		
 		<!-- LOGGING begin -->
 		<dependency>
@@ -459,12 +462,12 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		
-		<!-- fastjson json
+		<!-- fastjson json-->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>${fastjson.version}</version>
-		</dependency> -->
+		</dependency> 
 		
 		<!-- xstream xml -->
 		<dependency>

@@ -23,9 +23,9 @@ import com.ambition.agile.modules.pedlar.entity.Pedlar;
 import com.ambition.agile.modules.pedlar.service.PedlarService;
 
 /**
- * 商贩信息Controller
+ * 商家信息Controller
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 @Controller
 @RequestMapping(value = "${adminPath}/pedlar/pedlar")
@@ -68,7 +68,7 @@ public class PedlarController extends BaseController {
 			return form(pedlar, model);
 		}
 		pedlarService.save(pedlar);
-		addMessage(redirectAttributes, "保存商贩信息成功");
+		addMessage(redirectAttributes, "保存商家信息成功");
 		return "redirect:"+Global.getAdminPath()+"/pedlar/pedlar/?repage";
 	}
 	
@@ -76,7 +76,7 @@ public class PedlarController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(Pedlar pedlar, RedirectAttributes redirectAttributes) {
 		pedlarService.delete(pedlar);
-		addMessage(redirectAttributes, "删除商贩信息成功");
+		addMessage(redirectAttributes, "删除商家信息成功");
 		return "redirect:"+Global.getAdminPath()+"/pedlar/pedlar/?repage";
 	}
 

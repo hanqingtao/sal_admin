@@ -8,10 +8,10 @@
 		a.address AS "address",
 		a.photo_path AS "photoPath",
 		a.content AS "content",
-		a.province_id AS "provinceId",
-		a.city_id AS "cityId",
-		a.area_id AS "area.id",
-		a.town_id AS "townId",
+		a.province_id AS "areap.id",
+		a.city_id AS "areac.id",
+		a.area_id AS "areaa.id",
+		a.town_id AS "areat.id",
 		a.area_full_name AS "areaFullName",
 		a.longitude AS "longitude",
 		a.latitude AS "latitude",
@@ -25,11 +25,17 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a8.name AS "area.name"
+		a6.name AS "areap.name",
+		a7.name AS "areac.name",
+		a8.name AS "areaa.name",
+		a9.name AS "areat.name"
 	</sql>
 	
 	<sql id="marketJoins">
+		LEFT JOIN sys_area a6 ON a6.id = a.province_id
+		LEFT JOIN sys_area a7 ON a7.id = a.city_id
 		LEFT JOIN sys_area a8 ON a8.id = a.area_id
+		LEFT JOIN sys_area a9 ON a9.id = a.town_id
 	</sql>
     
 	<select id="get" resultType="Market">
@@ -113,10 +119,10 @@
 			#{address},
 			#{photoPath},
 			#{content},
-			#{provinceId},
-			#{cityId},
-			#{area.id},
-			#{townId},
+			#{areap.id},
+			#{areac.id},
+			#{areaa.id},
+			#{areat.id},
 			#{areaFullName},
 			#{longitude},
 			#{latitude},
@@ -139,10 +145,10 @@
 			address = #{address},
 			photo_path = #{photoPath},
 			content = #{content},
-			province_id = #{provinceId},
-			city_id = #{cityId},
-			area_id = #{area.id},
-			town_id = #{townId},
+			province_id = #{areap.id},
+			city_id = #{areac.id},
+			area_id = #{areaa.id},
+			town_id = #{areat.id},
 			area_full_name = #{areaFullName},
 			longitude = #{longitude},
 			latitude = #{latitude},
