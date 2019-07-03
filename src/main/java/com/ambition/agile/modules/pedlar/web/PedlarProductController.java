@@ -25,7 +25,7 @@ import com.ambition.agile.modules.pedlar.service.PedlarProductService;
 /**
  * 商贩产品信息Controller
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @Controller
 @RequestMapping(value = "${adminPath}/pedlar/pedlarProduct")

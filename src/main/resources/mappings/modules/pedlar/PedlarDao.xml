@@ -16,11 +16,18 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		a.audit_by AS "auditBy.id",
+		a.audit_date AS "auditDate",
 		u4.name AS "user.name"
 	</sql>
 	
 	<sql id="pedlarJoins">
 		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+		LEFT JOIN sys_user u9 ON u9.id = a.create_by
+		LEFT JOIN sys_user u11 ON u11.id = a.update_by
+		LEFT JOIN sys_user u16 ON u16.id = a.audit_by
 	</sql>
     
 	<select id="get" resultType="Pedlar">
@@ -37,15 +44,18 @@
 		FROM pedlar a
 		<include refid="pedlarJoins"/>
 		<where>
-			
+			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
-			<if test="marketName != null and marketName != ''">
-				AND a.market_name = #{marketName}
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
 			</if>
 		</where>
 		<choose>
@@ -64,7 +74,7 @@
 		FROM pedlar a
 		<include refid="pedlarJoins"/>
 		<where>
-			
+			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -80,27 +90,29 @@
 		INSERT INTO pedlar(
 			name,
 			market_id,
+			user_id,
 			market_name,
 			logo_path,
 			main_product,
 			content,
 			create_by,
 			create_date,
-			update_by,
-			update_date,
-			remarks
+			remarks,
+			del_flag,
+			status
 		) VALUES (
 			#{name},
 			#{marketId},
+			#{user.id},
 			#{marketName},
 			#{logoPath},
 			#{mainProduct},
 			#{content},
 			#{createBy.id},
 			#{createDate},
-			#{updateBy.id},
-			#{updateDate},
-			#{remarks}
+			#{remarks},
+			#{delFlag},
+			#{status}
 		)
 	</insert>
 	
@@ -115,12 +127,16 @@
 			content = #{content},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			status = #{status},
+			audit_by = #{auditBy.id},
+			audit_date = #{auditDate}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		DELETE FROM pedlar
+		UPDATE pedlar SET 
+			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 	

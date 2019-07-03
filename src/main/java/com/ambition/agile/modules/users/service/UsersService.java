@@ -16,7 +16,7 @@ import com.ambition.agile.modules.users.dao.UsersDao;
 /**
  * 用户信息Service
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @Service
 @Transactional(readOnly = true)

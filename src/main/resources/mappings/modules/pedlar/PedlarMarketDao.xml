@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pedlar.dao.PedlarMarketDao">
+    
+	<sql id="pedlarMarketColumns">
+		a.id AS "id",
+		a.market_id AS "marketId",
+		a.pedlar_id AS "pedlarId",
+		a.is_default AS "isDefault",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+	
+	<sql id="pedlarMarketJoins">
+	</sql>
+    
+	<select id="get" resultType="PedlarMarket">
+		SELECT 
+			<include refid="pedlarMarketColumns"/>
+		FROM pedlar_market a
+		<include refid="pedlarMarketJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PedlarMarket">
+		SELECT 
+			<include refid="pedlarMarketColumns"/>
+		FROM pedlar_market a
+		<include refid="pedlarMarketJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PedlarMarket">
+		SELECT 
+			<include refid="pedlarMarketColumns"/>
+		FROM pedlar_market a
+		<include refid="pedlarMarketJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pedlar_market(
+			market_id,
+			pedlar_id,
+			is_default,
+			sort,
+			create_date,
+			create_by
+		) VALUES (
+			#{marketId},
+			#{pedlarId},
+			#{isDefault},
+			#{sort},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pedlar_market SET 	
+			market_id = #{marketId},
+			pedlar_id = #{pedlarId},
+			is_default = #{isDefault},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pedlar_market
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

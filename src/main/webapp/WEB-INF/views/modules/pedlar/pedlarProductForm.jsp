@@ -40,27 +40,15 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">分类名称：</label>
-			<div class="controls">
-				<form:input path="catalogName" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">商贩 id：</label>
+			<label class="control-label">商家：</label>
 			<div class="controls">
 				<form:input path="pedlarId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">创建者：</label>
+			<label class="control-label">顺序号：</label>
 			<div class="controls">
-				<form:input path="createId" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="128" class="input-xxlarge "/>
+				<form:input path="sort" htmlEscape="false" maxlength="5" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="form-actions">

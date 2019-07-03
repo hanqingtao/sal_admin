@@ -8,9 +8,9 @@ import com.ambition.agile.common.persistence.annotation.MyBatisDao;
 import com.ambition.agile.modules.pedlar.entity.Pedlar;
 
 /**
- * 商贩信息DAO接口
+ * 商家信息DAO接口
  * @author harry
- * @version 2018-03-09
+ * @version 2018-03-31
  */
 @MyBatisDao
 public interface PedlarDao extends CrudDao<Pedlar> {

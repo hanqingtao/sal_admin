@@ -13,23 +13,23 @@ import com.ambition.agile.common.persistence.DataEntity;
 /**
  * 用户信息Entity
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 public class Users extends DataEntity<Users> {
 	
 	private static final long serialVersionUID = 1L;
-	private String loginName;		// 登录名  不可修改
+	private String loginName;		// 登录名
 	private String name;		// 真实姓名
 	private String password;		// 登录 密码
 	private String email;		// email
-	private Integer provinceId;		// 省级 id
-	private Integer cityId;		// 部门 code
-	private Area area;		// 机构名称
+	private Area areap;		// 省
+	private Area areac;		// 市
+	private Area areaa;		// 区/县
 	private String fullName;		// 区域名称
 	private String telphone;		// 手机号
-	private String status;		// 用户状态  1 正常  0停用
-	private String kind;		// 用户类型 1 普通用户  2 商贩  3 4
-	private String gender;		// 性别 男 女
+	private String status;		// 用户状态
+	private String kind;		// 用户类型
+	private String gender;		// 性别
 	private Date birthday;		// 出生日期
 	private String degree;		// 学历
 	private String photoPath;		// 头像
@@ -42,7 +42,7 @@ public class Users extends DataEntity<Users> {
 		super(id);
 	}
 
-	@Length(min=1, max=32, message="登录名  不可修改长度必须介于 1 和 32 之间")
+	@Length(min=1, max=32, message="登录名长度必须介于 1 和 32 之间")
 	public String getLoginName() {
 		return loginName;
 	}
@@ -78,28 +78,28 @@ public class Users extends DataEntity<Users> {
 		this.email = email;
 	}
 	
-	public Integer getProvinceId() {
-		return provinceId;
+	public Area getAreap() {
+		return areap;
 	}
 
-	public void setProvinceId(Integer provinceId) {
-		this.provinceId = provinceId;
+	public void setAreap(Area areap) {
+		this.areap = areap;
 	}
 	
-	public Integer getCityId() {
-		return cityId;
+	public Area getAreac() {
+		return areac;
 	}
 
-	public void setCityId(Integer cityId) {
-		this.cityId = cityId;
+	public void setAreac(Area areac) {
+		this.areac = areac;
 	}
 	
-	public Area getArea() {
-		return area;
+	public Area getAreaa() {
+		return areaa;
 	}
 
-	public void setArea(Area area) {
-		this.area = area;
+	public void setAreaa(Area areaa) {
+		this.areaa = areaa;
 	}
 	
 	@Length(min=0, max=64, message="区域名称长度必须介于 0 和 64 之间")
@@ -120,7 +120,7 @@ public class Users extends DataEntity<Users> {
 		this.telphone = telphone;
 	}
 	
-	@Length(min=0, max=1, message="用户状态  1 正常  0停用长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="用户状态长度必须介于 0 和 1 之间")
 	public String getStatus() {
 		return status;
 	}
@@ -129,7 +129,7 @@ public class Users extends DataEntity<Users> {
 		this.status = status;
 	}
 	
-	@Length(min=0, max=1, message="用户类型 1 普通用户  2 商贩  3 4长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="用户类型长度必须介于 0 和 1 之间")
 	public String getKind() {
 		return kind;
 	}
@@ -138,7 +138,7 @@ public class Users extends DataEntity<Users> {
 		this.kind = kind;
 	}
 	
-	@Length(min=0, max=1, message="性别 男 女长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="性别长度必须介于 0 和 1 之间")
 	public String getGender() {
 		return gender;
 	}

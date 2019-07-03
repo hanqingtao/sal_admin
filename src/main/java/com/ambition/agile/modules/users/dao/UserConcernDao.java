@@ -10,7 +10,7 @@ import com.ambition.agile.modules.users.entity.UserConcern;
 /**
  * 我的关注DAO接口
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 @MyBatisDao
 public interface UserConcernDao extends CrudDao<UserConcern> {

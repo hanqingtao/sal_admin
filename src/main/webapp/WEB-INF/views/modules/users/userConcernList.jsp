@@ -25,6 +25,12 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>关注类型：</label>
+				<form:input path="concernType" htmlEscape="false" maxlength="1" class="input-medium"/>
+			</li>
+			<li><label>关注的内容：</label>
+				<form:input path="concernName" htmlEscape="false" maxlength="32" class="input-medium"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
@@ -33,7 +39,8 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>备注信息</th>
+				<th>关注类型</th>
+				<th>关注的内容</th>
 				<shiro:hasPermission name="users:userConcern:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -41,8 +48,11 @@
 		<c:forEach items="${page.list}" var="userConcern">
 			<tr>
 				<td><a href="${ctx}/users/userConcern/form?id=${userConcern.id}">
-					${userConcern.remarks}
+					${userConcern.concernType}
 				</a></td>
+				<td>
+					${userConcern.concernName}
+				</td>
 				<shiro:hasPermission name="users:userConcern:edit"><td>
     				<a href="${ctx}/users/userConcern/form?id=${userConcern.id}">修改</a>
 					<a href="${ctx}/users/userConcern/delete?id=${userConcern.id}" onclick="return confirmx('确认要删除该我的关注吗？', this.href)">删除</a>

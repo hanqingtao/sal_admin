@@ -41,28 +41,16 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">商品分类唯一编号标识：</label>
+			<label class="control-label">上级父分类ID:</label>
 			<div class="controls">
-				<form:input path="code" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">上级父商品分类:</label>
-			<div class="controls">
-				<sys:treeselect id="parent" name="parent" value="${productCatalog.parent}" labelName="" labelValue="${productCatalog.}"
-					title="父商品分类" url="/product/productCatalog/treeData" extId="${productCatalog.id}" cssClass="" allowClear="true"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">父商品分类名称：</label>
-			<div class="controls">
-				<form:input path="parentName" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				<sys:treeselect id="parent" name="parent.id" value="${productCatalog.parent.id}" labelName="parent.name" labelValue="${productCatalog.parent.name}"
+					title="父分类ID" url="/product/productCatalog/treeData" extId="${productCatalog.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">排序字段：</label>
 			<div class="controls">
-				<form:input path="orderNum" htmlEscape="false" maxlength="5" class="input-xlarge  digits"/>
+				<form:input path="sort" htmlEscape="false" maxlength="5" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="control-group">

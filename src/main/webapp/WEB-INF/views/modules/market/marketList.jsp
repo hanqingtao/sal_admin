@@ -28,7 +28,7 @@
 			<li><label>集市名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="32" class="input-medium"/>
 			</li>
-			<li><label>推荐指数 1 -5：</label>
+			<li><label>推荐指数：</label>
 				<form:select path="recommend" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('market_reco')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -44,7 +44,7 @@
 			<tr>
 				<th>集市名称</th>
 				<th>关注数</th>
-				<th>推荐指数 1 -5</th>
+				<th>推荐指数</th>
 				<th>创建者</th>
 				<th>更新时间</th>
 				<th>备注信息</th>

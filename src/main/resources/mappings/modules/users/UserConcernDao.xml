@@ -8,9 +8,8 @@
 		a.concern_type AS "concernType",
 		a.concern_id AS "concernId",
 		a.concern_name AS "concernName",
-		a.create_id AS "createId",
-		a.create_date AS "createDate",
-		a.remarks AS "remarks"
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate"
 	</sql>
 	
 	<sql id="userConcernJoins">
@@ -31,6 +30,12 @@
 		<include refid="userConcernJoins"/>
 		<where>
 			
+			<if test="concernType != null and concernType != ''">
+				AND a.concern_type = #{concernType}
+			</if>
+			<if test="concernName != null and concernName != ''">
+				AND a.concern_name = #{concernName}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -64,17 +69,15 @@
 			concern_type,
 			concern_id,
 			concern_name,
-			create_id,
-			create_date,
-			remarks
+			create_by,
+			create_date
 		) VALUES (
 			#{userId},
 			#{concernType},
 			#{concernId},
 			#{concernName},
-			#{createId},
-			#{createDate},
-			#{remarks}
+			#{createBy.id},
+			#{createDate}
 		)
 	</insert>
 	
@@ -83,9 +86,7 @@
 			user_id = #{userId},
 			concern_type = #{concernType},
 			concern_id = #{concernId},
-			concern_name = #{concernName},
-			create_id = #{createId},
-			remarks = #{remarks}
+			concern_name = #{concernName}
 		WHERE id = #{id}
 	</update>
 	

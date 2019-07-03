@@ -3,6 +3,7 @@
  */
 package com.ambition.agile.modules.users.entity;
 
+import com.ambition.agile.modules.sys.entity.User;
 import org.hibernate.validator.constraints.Length;
 
 import com.ambition.agile.common.persistence.DataEntity;
@@ -10,16 +11,15 @@ import com.ambition.agile.common.persistence.DataEntity;
 /**
  * 我的关注Entity
  * @author harry
- * @version 2018-03-10
+ * @version 2018-03-31
  */
 public class UserConcern extends DataEntity<UserConcern> {
 	
 	private static final long serialVersionUID = 1L;
-	private Integer userId;		// 用户id
+	private User userId;		// 用户id
 	private String concernType;		// 关注类型
 	private Integer concernId;		// 关注 id
 	private String concernName;		// 关注的内容
-	private Integer createId;		// 创建者
 	
 	public UserConcern() {
 		super();
@@ -29,11 +29,11 @@ public class UserConcern extends DataEntity<UserConcern> {
 		super(id);
 	}
 
-	public Integer getUserId() {
+	public User getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(User userId) {
 		this.userId = userId;
 	}
 	
@@ -61,14 +61,6 @@ public class UserConcern extends DataEntity<UserConcern> {
 
 	public void setConcernName(String concernName) {
 		this.concernName = concernName;
-	}
-	
-	public Integer getCreateId() {
-		return createId;
-	}
-
-	public void setCreateId(Integer createId) {
-		this.createId = createId;
 	}
 	
 }

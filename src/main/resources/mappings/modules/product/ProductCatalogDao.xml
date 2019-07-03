@@ -5,10 +5,9 @@
 	<sql id="productCatalogColumns">
 		a.id AS "id",
 		a.name AS "name",
-		a.code AS "code",
-		a.parent AS "parent",
-		a.parent_name AS "parentName",
-		a.order_num AS "orderNum",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.sort AS "sort",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -40,7 +39,17 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
 		</where>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<select id="findAllList" resultType="ProductCatalog">
@@ -51,6 +60,7 @@
 		<where>
 			
 		</where>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<select id="findByParentIdsLike" resultType="ProductCatalog">
@@ -64,15 +74,15 @@
 			
 			AND a.parent_ids LIKE #{parentIds}
 		</where>
+		ORDER BY a.sort ASC
 	</select>
 	
 	<insert id="insert">
 		INSERT INTO product_catalog(
 			name,
-			code,
-			parent,
-			parent_name,
-			order_num,
+			parent_id,
+			parent_ids,
+			sort,
 			create_by,
 			create_date,
 			update_by,
@@ -80,10 +90,9 @@
 			remarks
 		) VALUES (
 			#{name},
-			#{code},
-			#{parent},
-			#{parentName},
-			#{orderNum},
+			#{parent.id},
+			#{parentIds},
+			#{sort},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -95,10 +104,9 @@
 	<update id="update">
 		UPDATE product_catalog SET 	
 			name = #{name},
-			code = #{code},
-			parent = #{parent},
-			parent_name = #{parentName},
-			order_num = #{orderNum},
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			sort = #{sort},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
