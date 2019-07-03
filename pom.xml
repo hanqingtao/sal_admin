@@ -965,7 +965,7 @@
 			<id>harry</id>
 			<name>harry</name>
 			<email>at 163.com</email>
-			<roles><role>Project lead</role></roles>
+			<roles><role>Project manager</role></roles>
 			<timezone>+8</timezone>
 		</developer>
 	</developers>
