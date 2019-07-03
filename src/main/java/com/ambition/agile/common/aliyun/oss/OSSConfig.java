@@ -9,7 +9,7 @@ import com.ambition.agile.common.util.PropertiesFactory;
 /**
  * @ClassName: OSSConfig
  * @Description: OSS配置类
- * @author libo
+ * @author harry
  */
 public class OSSConfig {
 

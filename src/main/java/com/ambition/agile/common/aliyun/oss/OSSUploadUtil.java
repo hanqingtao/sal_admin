@@ -27,7 +27,7 @@ import com.aliyun.oss.model.PutObjectRequest;
  * 
  * @ClassName: OSSUploadUtil
  * @Description: 阿里云OSS文件上传工具类
- * @author libo
+ * @author harry
  * 
  * OSSUploadUtil.uploadFile(File file, String fileType)//单文件上传，fileType:文件后缀名
  * OSSUploadUtil.updateFile(File file, String fileType, String oldUrl)//更新文件:只更新内容，不更新文件名和文件地址。
