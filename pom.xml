@@ -8,9 +8,9 @@
 	<version>1.2.7</version>
 	<packaging>war</packaging>
 	
-	<name>智慧农活 管理平台</name>
+	<name>智能机器人-管理平台</name>
 	<url></url>
-	<inceptionYear>2018</inceptionYear>
+	<inceptionYear>2019</inceptionYear>
 	
 	<!-- 项目属性 -->
 	<properties>
