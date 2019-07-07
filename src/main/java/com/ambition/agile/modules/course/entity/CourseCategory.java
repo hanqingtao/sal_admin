@@ -4,15 +4,15 @@
 package com.ambition.agile.modules.course.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
 
 import com.ambition.agile.common.persistence.TreeEntity;
 
 /**
  * 课程分类Entity
  * @author harry
- * @version 2019-07-02
+ * @version 2019-07-05
  */
 public class CourseCategory extends TreeEntity<CourseCategory> {
 	
@@ -31,7 +31,6 @@ public class CourseCategory extends TreeEntity<CourseCategory> {
 	}
 
 	@JsonBackReference
-	@NotNull(message="父级编号不能为空")
 	public CourseCategory getParent() {
 		return parent;
 	}

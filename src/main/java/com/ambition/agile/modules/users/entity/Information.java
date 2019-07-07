@@ -4,7 +4,6 @@
 package com.ambition.agile.modules.users.entity;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Length(min=0, max=1024, message="图片地址;
 
 import com.ambition.agile.common.persistence.DataEntity;
 

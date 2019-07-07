@@ -358,6 +358,6 @@ public class DateTimeUtil {
     }
 	
 	public static void main(String[] args) {
-		System.out.println(longToString(1914));
+		System.out.println( DateTimeUtil.getCurrentTime());
 	}
 }

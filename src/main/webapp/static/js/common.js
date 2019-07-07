@@ -482,6 +482,38 @@ function lookOrgContent(arg){
 
 
 
+function clearFileData(arg){
+	var file = document.getElementById(arg);
+	// for IE, Opera, Safari, Chrome
+	if (file.outerHTML) {
+	    file.outerHTML = file.outerHTML;
+	} else { // FF(包括3.5)
+	    file.value = "";
+	}
+
+}
+
+function ajaxFileAlert(){
+	alert("系统网络延迟，请稍后上传！");
+}
+
+function getFileName(filePath){
+	var fileName="";
+	if(filePath!=null && filePath!='' && filePath!='undefined'){
+		var filePathArr=filePath.split("\\");
+		if(filePathArr==null || filePathArr.length<=0){
+			var filePathArr1=filePath.split("/");
+			if(filePathArr1!=null && filePathArr1.length>0){
+				fileName=filePathArr1[filePathArr1.length-1];
+			}
+		}else{
+			fileName=filePathArr[filePathArr.length-1];
+		}
+	}
+	return fileName;
+}
+
+
 function showMode(){
 	    
 	    $("#Mode").show();
@@ -493,5 +525,16 @@ function closePrompt(){
 	$(".promptBox").hide();
 }
 
+/*
+function toTipAnimateAlertEntry(msg){
+	 
+	$("#toTipAnimateEntry").click();
+	$("#myTipModalContainer").html(msg);
+}
 
- 
+function toTipAnimateAlertEntrys(msg){
+	  
+	$("a.btn.btn-primary.toTipAnimateEntrys").click();
+	$("#myTipModalContainer").html(msg);
+}
+*/ 

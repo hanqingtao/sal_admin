@@ -30,7 +30,7 @@ import com.ambition.agile.modules.course.service.CourseCategoryService;
 /**
  * 课程分类Controller
  * @author harry
- * @version 2019-07-02
+ * @version 2019-07-05
  */
 @Controller
 @RequestMapping(value = "${adminPath}/course/courseCategory")

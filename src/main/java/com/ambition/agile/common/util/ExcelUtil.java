@@ -1,47 +1,49 @@
 package com.ambition.agile.common.util;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import com.ambition.agile.common.ApiResponse;
-import com.ambition.agile.common.constant.Constants;
-import com.ambition.agile.modules.sys.utils.DictUtils;
-
- 
- 
+import com.ambition.agile.modules.course.entity.Course;
+import com.ambition.agile.modules.course.entity.CourseCategory;
+//import com.adks.dubbo.commons.ApiResponse;
 
 /**
  * apache poi 操作excel 方法
- * @author ckl
+ * @author harry
  *
  */
 public class ExcelUtil{
 	
 	/**
-	 * excle 读取用户返回User集合，兼容2003-2007-2010excel
+	 * excle 读取用户返回User集合，兼容2003-2007-2010excel(需求修改，导入用户返回excel,excel中的数据是导入失败的用户)
 	 * @param type :目标实体类型
 	 * @param path ：excel 文件
 	 * @return
 	 */
-	/**@SuppressWarnings("unused")
-	public static  ApiResponse<List<User>> readExcelToUsers(InputStream inputStream){
+	@SuppressWarnings("unused")
+	public static  List<Course> readExcelToCourse(InputStream inputStream){
 		
 		try {
 			Workbook workbook = WorkbookFactory.create(inputStream);
 			if(workbook == null){
-				return ApiResponse.fail(500, "Excel workbook is null...");
+				return null;//ApiResponse.fail(500, "Excel workbook is null...");
 			}
-			User user = null;
-			List<User> userList = new ArrayList<>();
+			Course user = null;
+			List<Course> courseList = new ArrayList<>();
 			System.out.println("sheet个数:"+workbook.getNumberOfSheets());
 			//循环excel sheet
 			for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++){
@@ -54,12 +56,14 @@ public class ExcelUtil{
 				for(int rowNum = 2; rowNum <= sheet.getLastRowNum(); rowNum++){
 					Row row = sheet.getRow(rowNum);
 					if(row != null){
-						user = new User();
+						user = new Course();
 						Cell cell_loginName = row.getCell(0);
 						Cell cell_userName = row.getCell(1);
 						Cell cell_email = row.getCell(2);
 						Cell cell_deptName = row.getCell(3);
 						Cell cell_telphone = row.getCell(4);
+						Cell cell_gender = row.getCell(5);
+						Cell cell_icard = row.getCell(6);
 						
 						if(cell_loginName != null){							
 							cell_loginName.setCellType(Cell.CELL_TYPE_STRING);
@@ -82,6 +86,20 @@ public class ExcelUtil{
 							cell_telphone.setCellType(Cell.CELL_TYPE_STRING);
 							user.setTelphone(cell_telphone.getStringCellValue());
 						}
+						Integer gender = 1;
+						if(cell_gender != null){
+							cell_gender.setCellType(Cell.CELL_TYPE_STRING);
+							String gs = cell_gender.getStringCellValue();
+							if(gs != null && gs.equals("女")){
+								gender = 0;
+							}
+						}
+						user.setGender(gender);
+						if(cell_icard != null){
+							cell_icard.setCellType(Cell.CELL_TYPE_STRING);
+							user.setIcard(cell_icard.getStringCellValue());
+						}
+						
 						if(user.getLogin_name() != null && user.getUser_name() != null){
 							userList.add(user);
 						}
@@ -95,10 +113,70 @@ public class ExcelUtil{
 			e.printStackTrace();
 		}
 		return ApiResponse.fail(500, "Excel异常，请检查");
-	}**/
+	}
 	
+	@SuppressWarnings("unused")
+    public static  ApiResponse<Map> renameExcelFileName(InputStream inputStream){
+        
+        try {
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            if(workbook == null){
+                return ApiResponse.fail(500, "Excel workbook is null...");
+            }
+            User user = null;
+            Map map = new HashMap<>();
+            List list = new ArrayList<>();
+            System.out.println("sheet个数:"+workbook.getNumberOfSheets());
+            //循环excel sheet
+            for(int numSheet = 0; numSheet < 1; numSheet++){
+                Sheet sheet = workbook.getSheetAt(numSheet);
+                if(sheet == null){
+                    continue;
+                }
+                System.out.println("第"+(numSheet+1)+"个sheet的行数："+sheet.getLastRowNum());
+                //循环row，从第三行开始，第一行是表头
+                for(int rowNum = 0; rowNum <= sheet.getLastRowNum(); rowNum++){
+                    Row row = sheet.getRow(rowNum);
+                    if(row != null){
+                        user = new User();
+                        Cell cell_Name = row.getCell(0);
+                        Cell cell_newName = row.getCell(1);
+                        map.put(rowNum+"",cell_Name.getStringCellValue()+ cell_newName.getStringCellValue());
+                        //System.out.println(cell_Name.getStringCellValue());
+                        list.add(rowNum, cell_Name.getStringCellValue()+ cell_newName.getStringCellValue());
+                       // System.out.println(cell_newName.getStringCellValue());
+                        if(cell_Name != null){                         
+                            cell_Name.setCellType(Cell.CELL_TYPE_STRING);
+                            //System.out.println(cell_Name.getStringCellValue());
+                        }
+                        
+                        if(cell_newName != null){                          
+                            cell_newName.setCellType(Cell.CELL_TYPE_STRING);
+                            //System.out.println(cell_newName.getStringCellValue());
+                        }
+                       
+//                        if(user.getLogin_name() != null && user.getUser_name() != null){
+//                            userList.add(user);
+//                        }
+                    }
+                }
+                
+            }
+//            Collections.sort(list);
+//            for(int t=0;t<list.size();t++){
+//               
+//                
+//            }
+            System.out.println("@@@@@@"+map.size());
+            return ApiResponse.success("Excel read success!", map);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ApiResponse.fail(500, "Excel异常，请检查");
+    }
 	
-	/**@SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	public static  ApiResponse<List<Map<String, Object>>> readExcelToOrgs(InputStream inputStream){
 		
 		try {
@@ -143,7 +221,7 @@ public class ExcelUtil{
 							cell_name.setCellType(Cell.CELL_TYPE_STRING);
 							map.put("name", cell_name.getStringCellValue());
 						}*/
-					/**	if(cell_domain != null){
+						if(cell_domain != null){
 							cell_domain.setCellType(Cell.CELL_TYPE_STRING);
 							map.put("domain", cell_domain.getStringCellValue());
 						}
@@ -159,7 +237,7 @@ public class ExcelUtil{
 							cell_dbName.setCellType(Cell.CELL_TYPE_STRING);
 							map.put("db_name", cell_dbName.getStringCellValue());
 						}*/
-	             /**	orgList.add(map);
+						orgList.add(map);
 					}
 				}
 				
@@ -171,23 +249,22 @@ public class ExcelUtil{
 		}
 		return ApiResponse.fail(500, "Excel异常，请检查");
 	}
-	**/
+	
 	
 	/**
-	 * 导入机构专职人员
+	 * 导入试题
 	 * @param inputStream
 	 * @return
 	 */
-	 @SuppressWarnings("unused")
-	public static  ApiResponse<List<Map<String, Object>>> readExcelToStaffs(InputStream inputStream){
-		 
+	@SuppressWarnings("unused")
+	public static  ApiResponse<List<Map<String, Object>>> readExcelToQuestions(InputStream inputStream){
 		try {
 			Workbook workbook = WorkbookFactory.create(inputStream);
 			if(workbook == null){
 				return ApiResponse.fail(500, "Excel workbook is null...");
 			}
 			Map<String, Object> map = null;
-			List<Map<String, Object>> orgStaffList = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> questionList = new ArrayList<>();
 			System.out.println("sheet个数:" + workbook.getNumberOfSheets());
 			//循环excel sheet
 			for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++){
@@ -196,203 +273,175 @@ public class ExcelUtil{
 					continue;
 				}
 				System.out.println("第"+(numSheet+1)+"个sheet的行数："+sheet.getLastRowNum());
+				//循环row，从第三行开始，第一行是文件描述，第二行是标题
 				for(int rowNum = 3; rowNum <= sheet.getLastRowNum(); rowNum++){
 					Row row = sheet.getRow(rowNum);
 					if(row != null){
 						map = new HashMap<String, Object>();
-						//姓名
-						Cell cell_name = row.getCell(0);
-						//性别
-						Cell cell_sex = row.getCell(1);
-						// 身份证号
-						Cell cell_card = row.getCell(2);
-						// 开始工作时间
-						Cell cell_workStart = row.getCell(3);
-						// 毕业院校
-						Cell cell_university = row.getCell(4);
-						// 学历
-						Cell cell_degree= row.getCell(5);
-						// 职称
-						Cell cell_proTitle= row.getCell(6);
-						// 部门
-						Cell cell_dept= row.getCell(7);
-						// 劳动关系
-						Cell cell_workType= row.getCell(8);
-						//社会保险号
-						Cell cell_ssnType= row.getCell(9);
+						// 题型
+						Cell cell_questionType = row.getCell(0);
+						// 分数
+						Cell cell_score = row.getCell(1);
+						// 题目内容
+						Cell cell_name = row.getCell(2);
+						// 可选项
+						Cell cell_options = row.getCell(3);
+						// 答案
+						Cell cell_answer = row.getCell(4);
+						// 课程唯一标识
+						Cell cell_courseCode = row.getCell(5);
 						
-							if(cell_name != null){
-								cell_name.setCellType(Cell.CELL_TYPE_STRING);
-								map.put("name", cell_name.getStringCellValue());
+						if(cell_questionType != null){							
+							cell_questionType.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("question_type_str", cell_questionType.getStringCellValue());
+						}
+						if(cell_score != null){
+							cell_score.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("score", cell_score.getStringCellValue());
+						}
+						if(cell_name != null){
+							cell_name.setCellType(Cell.CELL_TYPE_STRING);
+							String tname = cell_name.getStringCellValue();
+							if(StringUtils.isNotEmpty(tname)){								
+								for(int i = 10; i < 14; i++){
+									tname = tname.replaceAll(String.valueOf((char)i), "");
 								}
-							if(cell_sex != null){
-							  cell_sex.setCellType(Cell.CELL_TYPE_STRING);
-							  map.put("sex", cell_sex.getStringCellValue());	  
 							}
-							if(cell_card != null){
-								cell_card.setCellType(Cell.CELL_TYPE_STRING);
-								map.put("card", cell_card.getStringCellValue());
-							}
-
-							if(cell_workStart != null){
-							cell_workStart.setCellType(Cell.CELL_TYPE_STRING);
-							map.put("workStart", cell_workStart.getStringCellValue());
-							}
-							if(cell_university != null){
-							cell_university.setCellType(Cell.CELL_TYPE_STRING);
-							map.put("university", cell_university.getStringCellValue());
-							}
-							if(cell_degree != null){
-							cell_degree.setCellType(Cell.CELL_TYPE_STRING);
-								map.put("degree", cell_degree.getStringCellValue());
-							}
-							if(cell_proTitle != null){
-							cell_proTitle.setCellType(Cell.CELL_TYPE_STRING);
-							map.put("proTitle", cell_proTitle.getStringCellValue());
-							}
-
-							if(cell_dept != null){
-							cell_dept.setCellType(Cell.CELL_TYPE_STRING);
-							map.put("dept", cell_dept.getStringCellValue());
-							}
-
-							if(cell_workType != null){
-							cell_workType.setCellType(Cell.CELL_TYPE_STRING);
-						      map.put("workType", cell_workType.getStringCellValue());
-							}
-							if(cell_ssnType != null){
-								cell_workType.setCellType(Cell.CELL_TYPE_STRING);
-							      map.put("ssn", cell_workType.getStringCellValue());
-								}
-						
-							if(map.get("name") != null && map.get("sex") != null && map.get("card") != null && map.get("workStart") != null && map.get("university") != null && map.get("degree") != null && map.get("proTitle") != null && map.get("dept") != null && map.get("workType") != null){
-								orgStaffList.add(map);
-								}
+							map.put("name", tname);
+						}
+						if(cell_options != null){
+							cell_options.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("options", cell_options.getStringCellValue());
+						}
+						if(cell_answer != null){
+							cell_answer.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("answer", cell_answer.getStringCellValue());
+						}
+						if(cell_courseCode != null){
+							cell_courseCode.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("course_code", cell_courseCode.getStringCellValue());
+						}
+						if(map.get("question_type_str") != null && map.get("name") != null){
+							questionList.add(map);
+						}
 					}
 				}
 			}
-			return ApiResponse.success("Excel read success!", orgStaffList);
+			return ApiResponse.success("Excel read success!", questionList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return ApiResponse.fail(500, "Excel异常，请检查");
 	}
-	 /**
-	  * 导入机构招标业绩明细
-	  * @param inputStream
-	  * @return
-	  */
-	 @SuppressWarnings("unused")
-	 public static  ApiResponse<List<Map<String, Object>>> readExcelToAchieve(InputStream inputStream){
-		 try {
-			 Workbook workbook = WorkbookFactory.create(inputStream);
-			 if(workbook == null){
-				 return ApiResponse.fail(500, "Excel workbook is null...");
-			 }
-			 Map<String, Object> map = null;
-			 List<Map<String, Object>> orgAchieveList = new ArrayList<Map<String, Object>>();
-			 System.out.println("sheet个数:" + workbook.getNumberOfSheets());
-			 //循环excel sheet
-			 for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++){
-				 Sheet sheet = workbook.getSheetAt(numSheet);
-				 if(sheet == null){
-					 continue;
-				 }
-				 System.out.println("第"+(numSheet+1)+"个sheet的行数："+sheet.getLastRowNum());
-				 for(int rowNum = 3; rowNum <= sheet.getLastRowNum(); rowNum++){
-					 Row row = sheet.getRow(rowNum);
-					 if(row != null){
-						 map = new HashMap<String, Object>();
-						 
-						 Cell c1 = row.getCell(0);
-						 Cell c2 = row.getCell(1);
-						 Cell c3 = row.getCell(2);
-						 Cell c4 = row.getCell(3); //是否中央投资项目
-						 Cell c5 = row.getCell(4);
-						 Cell c6= row.getCell(5);
-						 Cell c7= row.getCell(6);
-						 Cell c8= row.getCell(7);
-						 Cell c9= row.getCell(8);
-						 Cell c10= row.getCell(9);
-						 Cell c11 = row.getCell(10);
-						 
-						 if(c1 != null){
-							 c1.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("num", c1.getStringCellValue());
-						 }
-						 if(c2 != null){
-							 c2.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("name", c2.getStringCellValue());	  
-						 }
-						 if(c3 != null){
-							 c3.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("type", c3.getStringCellValue());
-						 }
-						 
-						 if(c4 != null){
-							 c4.setCellType(Cell.CELL_TYPE_STRING);
-							 Integer  isCenterTemp = 0;
-							 if(c4.getStringCellValue().equals("是")){
-								 isCenterTemp = 1;
-							 }
-							 map.put("isCenter", isCenterTemp);
-						 }
-						 if(c5 != null){
-							 c5.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("entrustUnit", c5.getStringCellValue());
-						 }
-						 if(c6 != null){
-							 c6.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("entrustMoney", c6.getStringCellValue());
-						 }
-						 if(c7 != null){
-							 c7.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("bidMoney", c7.getStringCellValue());
-						 }
-						 if(c8 != null){
-							 c8.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("tenderOpenTime", c8.getStringCellValue());
-						 }
-						 
-						 if(c9 != null){
-							 c9.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("bidTime", c9.getStringCellValue());
-						 }
-						 
-						 if(c10 != null){
-							 c10.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("noticeMedia", c10.getStringCellValue());
-						 }
-						 if(c11 != null){
-							 c11.setCellType(Cell.CELL_TYPE_STRING);
-							 map.put("noticeDate", c11.getStringCellValue());
-						 }
-						 boolean flag = true;
-						 if(map.get("name") != null && map.get("num") != null && map.get("type") != null && map.get("entrustUnit") != null 
-								 && map.get("entrustMoney") != null && map.get("bidMoney") != null 
-								 && map.get("tenderOpenTime") != null && map.get("bidTime") != null 
-								 && map.get("noticeMedia") != null && map.get("noticeDate") != null){
-							 orgAchieveList.add(map);
-						 }else{
-							 return ApiResponse.fail(500, "表格中数据不正确,请检查.");
-						 }
-					 }
-				 }
-			 }
-			 return ApiResponse.success("Excel read success!", orgAchieveList);
-		 } catch (Exception e) {
-			 e.printStackTrace();
-		 }
-		 return ApiResponse.fail(500, "Excel异常，请检查");
-	 }
-	 
+	
+	
+	/**
+	 * 课程导入试题
+	 * @param inputStream
+	 * @return
+	 */
+	@SuppressWarnings("unused")
+	public static  ApiResponse<List<Map<String, Object>>> readExcelToQuestion(InputStream inputStream){
+		try {
+			Workbook workbook = WorkbookFactory.create(inputStream);
+			if(workbook == null){
+				return ApiResponse.fail(500, "Excel workbook is null...");
+			}
+			Map<String, Object> map = null;
+			List<Map<String, Object>> questionList = new ArrayList<>();
+			//循环excel sheet
+			for(int numSheet = 0; numSheet < workbook.getNumberOfSheets(); numSheet++){
+				Sheet sheet = workbook.getSheetAt(numSheet);
+				if(sheet == null){
+					continue;
+				}
+				//System.out.println("第"+(numSheet+1)+"个sheet的行数："+sheet.getLastRowNum());
+				//循环row，从第三行开始，第一行是文件描述，第二行是标题
+				for(int rowNum = 3,t =sheet.getLastRowNum() ; rowNum <= t; rowNum++){
+					Row row = sheet.getRow(rowNum);
+					if(row != null){
+						map = new HashMap<String, Object>();
+						// 题型
+						Cell cell_questionType = row.getCell(0);
+						// 分数
+						Cell cell_score = row.getCell(1);
+						// 题目内容
+						Cell cell_name = row.getCell(2);
+						// 可选项5
+						Cell cell_options = row.getCell(3);
+						// 答案
+						Cell cell_answer = row.getCell(4);
+						// 课程唯一标识
+						//Cell cell_courseCode = row.getCell(5);
+						
+						
+						if(cell_questionType != null){							
+							cell_questionType.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("question_type_str", cell_questionType.getStringCellValue());
+						}
+						String score=null;
+						if(cell_score != null){
+							cell_score.setCellType(Cell.CELL_TYPE_STRING);
+							for(int j=10;j<14;j++){  
+		                		score = cell_score.getStringCellValue().replaceAll(String.valueOf((char)j), "");  
+		                    }
+							map.put("score",score);
+						}
+						String name=null;
+						if(cell_name != null){
+							cell_name.setCellType(Cell.CELL_TYPE_STRING);
+							String tname = cell_name.getStringCellValue();
+							if(StringUtils.isNotEmpty(tname)){								
+								for(int i = 10; i < 14; i++){
+									tname = tname.replaceAll(String.valueOf((char)i), "");
+								}
+							}
+							map.put("name", tname);
+						}
+						String options=null;
+						if(cell_options != null){
+							cell_options.setCellType(Cell.CELL_TYPE_STRING);
+							for(int j=10;j<14;j++){  
+		                		options = cell_options.getStringCellValue().replaceAll(String.valueOf((char)j), "");  
+		                    }
+							map.put("options",options);
+						}
+						String answer=null;
+						if(cell_answer != null){
+							
+							cell_answer.setCellType(Cell.CELL_TYPE_STRING);
+							for(int j=10;j<14;j++){  
+								answer = cell_answer.getStringCellValue().replaceAll(String.valueOf((char)j), "");  
+		                    }
+							map.put("answer", answer.toUpperCase());
+						}
+						/*if(cell_courseCode != null){
+							cell_courseCode.setCellType(Cell.CELL_TYPE_STRING);
+							map.put("course_code", cell_courseCode.getStringCellValue());
+						}*/
+						if(map.get("question_type_str") != null && map.get("name") != null){
+							questionList.add(map);
+						}
+					}
+				}
+			}
+			return ApiResponse.success("Excel read success!", questionList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ApiResponse.fail(500, "Excel异常，请检查");
+	}
+	
+	
+	
+	
 	/**
 	 * excle 读取课程返回List<Map<String,Object>> 集合，兼容2003-2007-2010excel
 	 * @param type :目标实体类型
 	 * @param path ：excel 文件
 	 * @return
 	 */
-	/**@SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	public static  ApiResponse<List<Map<String, Object>>> readExcelToCourses(InputStream inputStream){
 		
 		try {
@@ -417,11 +466,12 @@ public class ExcelUtil{
 						course = new HashMap<String, Object>();
 						Cell cell_name = row.getCell(0);
 						Cell cell_categoryName = row.getCell(1);
-						Cell cell_courseCode = row.getCell(2);
-						Cell cell_pptNum = row.getCell(3);
-						Cell cell_coverPath = row.getCell(4);
-						Cell cell_desc = row.getCell(5);
-						Cell cell_authorName = row.getCell(6);
+						Cell cell_publishTime = row.getCell(2);
+						Cell cell_courseCode = row.getCell(3);
+						Cell cell_pptNum = row.getCell(4);
+						Cell cell_coverPath = row.getCell(5);
+						Cell cell_desc = row.getCell(6);
+						Cell cell_authorName = row.getCell(7);
 						
 						// 课程名称
 						if(cell_name != null){							
@@ -432,6 +482,11 @@ public class ExcelUtil{
 						if(cell_categoryName != null){							
 							cell_categoryName.setCellType(Cell.CELL_TYPE_STRING);
 							course.put("category_name", cell_categoryName.getStringCellValue());
+						}
+						// 课程发布时间
+						if(cell_publishTime != null){							
+							cell_publishTime.setCellType(Cell.CELL_TYPE_STRING);
+							course.put("publish_time", cell_publishTime.getStringCellValue());
 						}
 						// 课程CODE
 						if(cell_courseCode != null){							
@@ -462,7 +517,7 @@ public class ExcelUtil{
 							course.put("author_name", cell_authorName.getStringCellValue());
 						}
 						
-						if(course != null && course.get("name") != null && course.get("course_code") != null){
+						if(course != null && course.get("name") != null){
 							courseList.add(course);
 						}
 					}
@@ -474,14 +529,14 @@ public class ExcelUtil{
 		}
 		return ApiResponse.fail(500, "Excel异常，请检查");
 	}
-	**/
+	
 	/**
 	 * excle 读取课件返回List<Map<String,Object>> 集合，兼容2003-2007-2010excel
 	 * @param type :目标实体类型
 	 * @param path ：excel 文件
 	 * @return
 	 */
-	/**@SuppressWarnings("unused")
+	@SuppressWarnings("unused")
 	public static  ApiResponse<List<Map<String, Object>>> readExcelToCoursewares(InputStream inputStream){
 		
 		try {
@@ -550,7 +605,59 @@ public class ExcelUtil{
 			e.printStackTrace();
 		}
 		return ApiResponse.fail(500, "Excel异常，请检查");
-	}**/
+	}
+	
+	@SuppressWarnings("unused")
+	public static  void writeUserToExcel(String path,List<Map> failUserList){
+		try {
+			
+	        FileInputStream in = new FileInputStream(path);
+	        Workbook  workbook = new HSSFWorkbook(in);
+			List<User> userList = new ArrayList<>();
+			System.out.println("sheet个数:"+workbook.getNumberOfSheets());
+			Sheet sheet = workbook.getSheetAt(0);
+			if(sheet.getLastRowNum()+1>=2){
+				sheet.shiftRows(sheet.getLastRowNum()+1, 2*sheet.getLastRowNum()-1, -(sheet.getLastRowNum()-1));
+			}
+			//写入数据
+			FileOutputStream  out =  new FileOutputStream(path);
+			workbook.write(out);
+			for (int j = 0; j < failUserList.size(); j++) {
+				Map user=failUserList.get(j);
+				// 创建一行：从第三行开始，跳过属性列
+                Row row = sheet.createRow(j + 2);	
+                String loginName=(user.get("loginName")==null?"":user.get("loginName")+"");
+                String userName=(user.get("userName")==null?"":user.get("userName")+"");
+                String email=(user.get("email")==null?"":user.get("email")+"");
+                String deptName=(user.get("deptName")==null?"":user.get("deptName")+"");
+                String telphone=(user.get("telphone")==null?"":user.get("telphone")+"");
+                String gender=(user.get("gender")==null?"":user.get("gender")+"");
+                String icard=(user.get("icard")==null?"":user.get("icard")+"");
+                String errorMsg=user.get("errorMsg")+"";
+                // 在一行内循环
+                Cell first = row.createCell(0);
+                first.setCellValue(loginName);
+                Cell second = row.createCell(1);
+                second.setCellValue(userName);
+                Cell third = row.createCell(2);
+                third.setCellValue(email);
+                Cell four = row.createCell(3);
+                four.setCellValue(deptName);
+                Cell five = row.createCell(4);
+                five.setCellValue(telphone);
+                Cell six = row.createCell(5);
+                six.setCellValue(gender);
+                Cell seven = row.createCell(6);
+                seven.setCellValue(icard);
+                Cell eight= row.createCell(7);
+                eight.setCellValue(errorMsg);
+			}
+			out =  new FileOutputStream(path);
+	        workbook.write(out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * excel xlsx高版本

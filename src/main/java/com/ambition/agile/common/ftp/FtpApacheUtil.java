@@ -12,6 +12,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.log4j.Logger;
 
+import com.ambition.agile.common.config.Global;
 import com.ambition.agile.common.util.ComUtil;
  
 
@@ -44,10 +45,11 @@ public class FtpApacheUtil {
 
 	static
 	{
-		ip = FtpConfigHolder.getFtpFileIp();
-		port = FtpConfigHolder.getFtpFilePort();
-		userName = FtpConfigHolder.getFtpFileUserName(); 
-		passWord = FtpConfigHolder.getFtpFilePassWord();
+		
+		ip = Global.getConfig("ftp.file.ip");
+		port = Integer.valueOf(Global.getConfig("ftp.file.port"));
+		userName = Global.getConfig("ftp.file.username"); 
+		passWord = Global.getConfig("ftp.file.password");
 		
 	}
 	/**
@@ -63,6 +65,8 @@ public class FtpApacheUtil {
 			if(null == ftpClient){
 				ftpClient = new FTPClient();
 			}
+			System.out.println("#######IP######"+ip);
+			System.out.println("#######PORT######"+port);
 			ftpClient.connect(ip, port);
 		}catch (Exception e){
 			logger.error("Failed to get connection :" + e.getMessage());
@@ -464,6 +468,21 @@ public class FtpApacheUtil {
 			}
 		}
 	 
+	 public boolean deleteFile(String ftpDirAndFileName) {
+		 if (!ftpClient.isConnected()) {
+			 return false;
+		 }
+        try {
+        	boolean flag=ftpClient.deleteFile(ftpDirAndFileName);
+        	ftpClient.logout();
+            return flag;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+	 
+	 
 	/*
 	 * 
 	 * @param args String[]
@@ -479,28 +498,32 @@ public class FtpApacheUtil {
 			
 			FtpApacheUtil ftpAppache1 = new FtpApacheUtil();
 			FTPClient ftpClient = new FTPClient();
-		 	ftpClient.connect("192.168.1.137",21 );
-			boolean blogin = ftpClient.login("ftp", "ftp");
+		 	ftpClient.connect("192.168.1.185",21 );
+			boolean blogin = ftpClient.login("ku", "ku1230");
 			if (!blogin) {
 				System.out.println("exit");
 				ftpClient.disconnect();
 				ftpClient = null;
 			}
-			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+			//ftpClient.dele("file/adjust/1536213947902.pdf");
+			//ftpClient.deleteFile("file/adjust/1536214020050.pdf");
+			FtpUtils.deleteFile("file/adjust/1536214020050.pdf");
+			System.out.println("12");
+			/*ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 			ftpClient.setControlEncoding("GBK");
 			ftpClient.setBufferSize(2048000);
 			ftpClient.setSendBufferSize(20480);
 			
 			long begin = System.currentTimeMillis();
-			String path = "/courseServer/course/";
+			String path = "/ipca/test/";
 			String id = "948022";
 			//String fullPath = "D:/tomcat6.0.37/webapps//ROOT/defaultCourseWareDepot/abc"; //947998
 			ftpAppache1.createDir(path);
 			//String fullPath = "D:/ftpWorkspace/video/948022";
-			String fullPath = "D:/tomcat6.0.37/webapps/ROOT/defaultCourseWareDepot/948022";
+			String fullPath = "E:/qiyeguanli2018.jpg";
 			ftpAppache1.uploadDirectory(path,id,new File(fullPath));
 			long end = System.currentTimeMillis();
-			System.out.println("耗时：" +(end -begin));
+			System.out.println("耗时：" +(end -begin));*/
 			
 			/*
 			String path = "/courseServer/course/";

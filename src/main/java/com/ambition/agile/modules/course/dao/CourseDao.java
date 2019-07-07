@@ -3,16 +3,16 @@
  */
 package com.ambition.agile.modules.course.dao;
 
-import com.ambition.agile.common.persistence.TreeDao;
+import com.ambition.agile.common.persistence.CrudDao;
 import com.ambition.agile.common.persistence.annotation.MyBatisDao;
-import com.ambition.agile.modules.course.entity.CourseCategory;
+import com.ambition.agile.modules.course.entity.Course;
 
 /**
- * 课程分类DAO接口
+ * 课程DAO接口
  * @author harry
  * @version 2019-07-05
  */
 @MyBatisDao
-public interface CourseCategoryDao extends TreeDao<CourseCategory> {
+public interface CourseDao extends CrudDao<Course> {
 	
 }

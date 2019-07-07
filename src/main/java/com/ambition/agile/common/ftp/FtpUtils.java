@@ -113,5 +113,25 @@ public class FtpUtils {
 		state = new BaseState(true);
 		return state;
 	}
-	
+
+	/**
+	 * 
+	 * @Title deleteFile
+	 * @Description:删除上传文件
+	 * @author xrl
+	 * @Date 2018年8月6日
+	 * @param ftpDirAndFileName  文件在ftp配置目录下的路径
+	 * @return
+	 */
+	public static boolean deleteFile(String ftpDirAndFileName) {
+        try {
+        	FtpApacheUtil ftpApache = new FtpApacheUtil();
+        	ftpApache.setClient();
+			ftpApache.login();
+            return ftpApache.deleteFile(ftpDirAndFileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
