@@ -89,6 +89,17 @@
 		</choose>
 	</select>
 	
+	<select id="getByCode" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		<where>
+			a.code = #{code}
+		</where>
+		limit 1
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO course(
 			name,

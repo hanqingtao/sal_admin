@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ambition.agile.common.persistence.Page;
 import com.ambition.agile.common.service.CrudService;
 import com.ambition.agile.modules.course.entity.Course;
+import com.ambition.agile.modules.course.entity.CourseCategory;
 import com.ambition.agile.modules.course.dao.CourseDao;
 
 /**
@@ -42,6 +43,12 @@ public class CourseService extends CrudService<CourseDao, Course> {
 	@Transactional(readOnly = false)
 	public void delete(Course course) {
 		super.delete(course);
+	}
+	
+	//根据 code 获取 课程 的信息
+	public List<Course> getByCode(String code) {
+		List<Course> couresList = dao.getByCode(code);
+		return couresList;
 	}
 	
 }

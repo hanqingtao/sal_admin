@@ -3,9 +3,12 @@
  */
 package com.ambition.agile.modules.course.dao;
 
+import java.util.List;
+
 import com.ambition.agile.common.persistence.CrudDao;
 import com.ambition.agile.common.persistence.annotation.MyBatisDao;
 import com.ambition.agile.modules.course.entity.Course;
+import com.ambition.agile.modules.course.entity.CourseCategory;
 
 /**
  * 课程DAO接口
@@ -14,5 +17,7 @@ import com.ambition.agile.modules.course.entity.Course;
  */
 @MyBatisDao
 public interface CourseDao extends CrudDao<Course> {
+	
+	public List<Course> getByCode(String code);
 	
 }

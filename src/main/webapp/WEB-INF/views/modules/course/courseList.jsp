@@ -20,7 +20,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/course/course/">课程列表</a></li>
 		<shiro:hasPermission name="course:course:edit"><li><a href="${ctx}/course/course/form">课程添加</a></li></shiro:hasPermission>
-		<shiro:hasPermission name="course:course:courseImport"><li><a href="${ctx}/course/course/courseImport">课程导入</a></li></shiro:hasPermission>
+		<shiro:hasPermission name="course:course:courseImport"><li><a href="${ctx}/course/course/toCourseImport">课程导入</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="course" action="${ctx}/course/course/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

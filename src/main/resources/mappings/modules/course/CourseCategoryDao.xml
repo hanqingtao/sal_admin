@@ -7,6 +7,7 @@
 		a.parent_id AS "parent.id",
 		a.parent_ids AS "parentIds",
 		a.name AS "name",
+		a.code AS "code",
 		a.sort AS "sort",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -78,11 +79,23 @@
 		ORDER BY a.sort ASC
 	</select>
 	
+	<select id="getByCode" resultType="CourseCategory">
+		SELECT 
+			<include refid="courseCategoryColumns"/>
+		FROM course_category a
+		<include refid="courseCategoryJoins"/>
+		<where>
+			a.code = #{code}
+		</where>
+		limit 1
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO course_category(
 			parent_id,
 			parent_ids,
 			name,
+			code,			
 			sort,
 			create_by,
 			create_date,
@@ -94,6 +107,7 @@
 			#{parent.id},
 			#{parentIds},
 			#{name},
+			#{code},
 			#{sort},
 			#{createBy.id},
 			#{createDate},
@@ -109,6 +123,7 @@
 			parent_id = #{parent.id},
 			parent_ids = #{parentIds},
 			name = #{name},
+			code = #{code},
 			sort = #{sort},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},

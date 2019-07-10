@@ -30,6 +30,9 @@ public class OSSConfig {
     private static String FilePath; //保存路径
 
     private static String RootDir; //文件夹上传根目录
+    
+    private static String videoUrl;//前端音频访问的地址
+    
 
     public static OSSConfig getOssConfigInstance() {
 
@@ -49,7 +52,7 @@ public class OSSConfig {
             this.AccessKeySecret = PropertiesFactory.getProperty("ossConfig.properties", "oss.AccessKeySecret");
             this.EndPoint = PropertiesFactory.getProperty("ossConfig.properties", "oss.EndPoint");
             this.BucketName = PropertiesFactory.getProperty("ossConfig.properties", "oss.BucketName");
-
+            this.videoUrl= PropertiesFactory.getProperty("ossConfig.properties", "oss.videoUrl");
             //初始化 ossClient
             ossClientInit();
         }
@@ -171,4 +174,11 @@ public class OSSConfig {
         RootDir = rootDir;
     }
 
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        RootDir = videoUrl;
+    }
 }

@@ -711,6 +711,15 @@ public class OSSUploadUtil {
         return ossConfig.getEndPoint();
     }
     
+    /**
+     * 
+     * @MethodName: getEndPoint
+     * @Description: 根据上传地址EndPoint
+     */
+    public static String getVideoUrl() {
+
+        return ossConfig.getVideoUrl();
+    }
     
     public static  boolean  isFileTrue(String fileUrl){
     	ossConfig = OSSConfig.getOssConfigInstance();

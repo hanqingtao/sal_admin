@@ -42,5 +42,10 @@ public class CourseCategoryService extends TreeService<CourseCategoryDao, Course
 	public void delete(CourseCategory courseCategory) {
 		super.delete(courseCategory);
 	}
+	//根据 code 获取 课程分类的信息
+	public List<CourseCategory> getByCode(String code) {
+		List<CourseCategory> couresCategoryList = dao.getByCode(code);
+		return couresCategoryList;
+	}
 	
 }
