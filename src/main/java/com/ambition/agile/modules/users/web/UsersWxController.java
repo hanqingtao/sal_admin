@@ -28,8 +28,8 @@ import com.ambition.agile.modules.users.service.UserConcernService;
  * @version 2018-03-31
  */
 @Controller
-@RequestMapping(value = "${adminPath}/users/userConcern")
-public class UserConcernController extends BaseController {
+@RequestMapping(value = "${adminPath}/users/usersWx")
+public class UsersWxController extends BaseController {
 
 	@Autowired
 	private UserConcernService userConcernService;
@@ -46,7 +46,7 @@ public class UserConcernController extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("users:userConcern:view")
+	//@RequiresPermissions("users:userConcern:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(UserConcern userConcern, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<UserConcern> page = userConcernService.findPage(new Page<UserConcern>(request, response), userConcern); 

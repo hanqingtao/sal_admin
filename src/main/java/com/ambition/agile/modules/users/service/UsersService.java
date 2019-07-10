@@ -14,9 +14,9 @@ import com.ambition.agile.modules.users.entity.Users;
 import com.ambition.agile.modules.users.dao.UsersDao;
 
 /**
- * 用户信息Service
+ * 学员信息Service
  * @author harry
- * @version 2018-03-31
+ * @version 2019-07-10
  */
 @Service
 @Transactional(readOnly = true)

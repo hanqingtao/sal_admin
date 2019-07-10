@@ -8,9 +8,9 @@ import com.ambition.agile.common.persistence.annotation.MyBatisDao;
 import com.ambition.agile.modules.users.entity.Users;
 
 /**
- * 用户信息DAO接口
+ * 学员信息DAO接口
  * @author harry
- * @version 2018-03-31
+ * @version 2019-07-10
  */
 @MyBatisDao
 public interface UsersDao extends CrudDao<Users> {

@@ -23,9 +23,9 @@ import com.ambition.agile.modules.users.entity.Users;
 import com.ambition.agile.modules.users.service.UsersService;
 
 /**
- * 用户信息Controller
+ * 学员信息Controller
  * @author harry
- * @version 2018-03-31
+ * @version 2019-07-10
  */
 @Controller
 @RequestMapping(value = "${adminPath}/users/users")
@@ -68,7 +68,7 @@ public class UsersController extends BaseController {
 			return form(users, model);
 		}
 		usersService.save(users);
-		addMessage(redirectAttributes, "保存用户信息成功");
+		addMessage(redirectAttributes, "保存学员信息成功");
 		return "redirect:"+Global.getAdminPath()+"/users/users/?repage";
 	}
 	
@@ -76,7 +76,7 @@ public class UsersController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(Users users, RedirectAttributes redirectAttributes) {
 		usersService.delete(users);
-		addMessage(redirectAttributes, "删除用户信息成功");
+		addMessage(redirectAttributes, "删除学员信息成功");
 		return "redirect:"+Global.getAdminPath()+"/users/users/?repage";
 	}
 
