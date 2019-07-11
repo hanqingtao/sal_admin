@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ambition.agile.common.persistence.Page;
 import com.ambition.agile.common.service.CrudService;
 import com.ambition.agile.modules.users.entity.Users;
+import com.ambition.agile.modules.course.entity.Course;
 import com.ambition.agile.modules.users.dao.UsersDao;
 
 /**
@@ -44,4 +45,8 @@ public class UsersService extends CrudService<UsersDao, Users> {
 		super.delete(users);
 	}
 	
+	public Users getByOpenId(String openId){
+		Users users = dao.getByOpenId(openId);
+		return users;
+	}
 }

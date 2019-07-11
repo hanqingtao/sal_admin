@@ -3,8 +3,11 @@
  */
 package com.ambition.agile.modules.users.dao;
 
+import java.util.List;
+
 import com.ambition.agile.common.persistence.CrudDao;
 import com.ambition.agile.common.persistence.annotation.MyBatisDao;
+import com.ambition.agile.modules.course.entity.CourseCategory;
 import com.ambition.agile.modules.users.entity.Users;
 
 /**
@@ -14,5 +17,8 @@ import com.ambition.agile.modules.users.entity.Users;
  */
 @MyBatisDao
 public interface UsersDao extends CrudDao<Users> {
+	
+	
+	public Users getByOpenId(String openId);
 	
 }

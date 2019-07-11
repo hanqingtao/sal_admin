@@ -76,6 +76,14 @@
 		</choose>
 	</select>
 	
+	<select id="getByOpenId" resultType="Users">
+		SELECT 
+			<include refid="usersColumns"/>
+		FROM users a
+		<include refid="usersJoins"/>
+		WHERE a.open_id = #{openId}
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO users(
 			open_id,

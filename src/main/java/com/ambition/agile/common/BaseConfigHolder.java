@@ -26,13 +26,20 @@ public class BaseConfigHolder {
 	public static String imgServer;
 	public static boolean singleRedis;
 	public static boolean clusterRedis;
+
+	//ai 应用的相关参数
+	public static String aiAppVhosturl;//AI_APP_VHOSTURL;  // 应用的 ai.app.vhostUrl
+	public static String aiAppAppid;//AI_APP_APPID; // 应用的 ai.app.appid
+	public static String aiAppAppkey;//AI_APP_APIKEY; // 应用的 ai.app.apiKey
+	public static String aiAppApisecret;//AI_APP_APISECRET ; // 应用的 ai.app.apiSecret
+	
+	public static String wxAppId;//小程序的appid 
+	public static String wxSecret;//小程序的 secret
+	public static String wxGrantType;//加密类型
+	public static String wxRequestUrl;//微信小程序后台请求接口地址
+	
 	public static String flvServer;
 	public static String scormServer;
-	public static String gradeSchooleWorkPath="/org";  // 存放班级论文、学员论文附件路径
-	public static String subjectUnitPath="/org"; // 存放机构主体图片
-	public static String qualificationPath="/org"; // 存放机构资格证书图片
-	public static String legalRepresentativePath ; // 存放公司法人图片
-	
 	public static boolean isMonitor;
 	public static String monitorTime;
 	
@@ -63,10 +70,17 @@ public class BaseConfigHolder {
 		getImgServer();
 		getSingleRedis();
 		getClusterRedis();
-		getGradeSchooleWorkPath();
-		getQualificationPath();
-		getSubjectUnitPath();
-		getGradeSchooleWorkPath();
+		
+		getAiAppVhosturl();
+		getAiAppAppid();
+		getAiAppApikey();
+		getAiAppApisecret();
+		
+		getWxAppID();
+		getWxSecret();
+		getWxGrantType();
+		getWxRequestUrl();
+		
 		getFlvServer();
 		getScormServer();
 		getIsMonitor();
@@ -184,43 +198,6 @@ public class BaseConfigHolder {
 		}
 	}
 	
-	/** 班级作业上传
-	 * @return
-	 */
-	public static String getGradeSchooleWorkPath(){
-		if(gradeSchooleWorkPath == null){
-			gradeSchooleWorkPath = new String(getProperties().getProperty("base.path.grade.schoolework"));
-		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-		return gradeSchooleWorkPath;
-	}
-	/** 机构单位主体上传
-	 * @return
-	 */
-	public static String getSubjectUnitPath(){
-		/*if(subjectUnitPath == null){
-			subjectUnitPath = new String(getProperties().getProperty("base.path.org.photo.subjectUnitPath"));*/
-	    subjectUnitPath=""; ;;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-		return subjectUnitPath;
-	}
-	/** 机构单位资格证书上传
-	 * @return
-	 */
-	public static String getQualificationPath(){
-		if(qualificationPath == null){
-			qualificationPath = new String(getProperties().getProperty("base.path.org.photo.qualificationPath"));
-		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-		return qualificationPath;
-	}
-	
-	/** 机构单位法人代表上传
-	 * @return
-	 */
-	public static String getLegalRepresentativePath(){
-		if(legalRepresentativePath == null){
-			legalRepresentativePath = new String(getProperties().getProperty("base.path.org.photo.legalRepresentativePath"));
-		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-		return legalRepresentativePath;
-	}
 	
 	public static String getFlvServer(){
 		if(flvServer == null){
@@ -424,7 +401,91 @@ public class BaseConfigHolder {
 		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 		return baseDomain;
 	}
+
+	/** 
+	 * @see 应用的 ai.app.vhostUrl
+	 * @return
+	 */
+	public static String getAiAppVhosturl(){
+		if(aiAppVhosturl == null){
+			aiAppVhosturl = new String(getProperties().getProperty("ai.app.vhostUrl"));
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		return aiAppVhosturl;
+	}
+	//ai 应用的相关参数
+	/** 
+	 * @see 应用的 ai.app.appid
+	 * @return       
+	 */
+	public static String getAiAppAppid(){
+		if(aiAppAppid == null){
+			aiAppAppid = new String(getProperties().getProperty("ai.app.appid"));
+		}
+		return aiAppAppid;
+	}
+	/** 
+	 * @see 应用的 ai.app.apiKey
+	 * @return
+	 */
+	public static String getAiAppApikey(){
+		if(aiAppAppkey == null){
+			aiAppAppkey = new String(getProperties().getProperty("ai.app.apiKey"));
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		return aiAppAppkey;
+	}
+	
+	/** 
+	 * @see 应用的 ai.app.apiSecret
+	 * @return
+	 */
+	public static String getAiAppApisecret(){
+		if(aiAppApisecret == null){
+			aiAppApisecret = new String(getProperties().getProperty("ai.app.apiSecret"));
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		return aiAppApisecret;
+	}
+	/**
+	 * @see 微信相关appi secret 
+	 * @author harry
+	 */
+	public static String getWxAppID(){
+		if(wxAppId == null){
+			wxAppId = new String(getProperties().getProperty("wx.appid"));
+		}
+		return wxAppId;
+	}
+	/**  
+	 * @see 微信相关 secret 
+	 * @return
+	 */
+	public static String getWxSecret(){
+		if(wxSecret == null){
+			wxSecret = new String(getProperties().getProperty("wx.secret"));
+		}
+		return wxSecret;
+	}
+	/**
+	 * @see 微信认证 类型 
+	 * @return
+	 */
+	public static String getWxGrantType(){
+		if(wxGrantType== null ){
+			wxGrantType = new String(getProperties().getProperty("wx.grant_type"));
+		}
+		return wxGrantType;
+	}
+	/**
+	 * @see 微信认证 类型 
+	 * @return
+	 */
+	public static String getWxRequestUrl(){
+		if(wxRequestUrl== null ){
+			wxRequestUrl = new String(getProperties().getProperty("wx.requestUrl"));
+		}
+		return wxRequestUrl;
+	}
+	
 	public static void main(String[] args) {
-		System.out.println(BaseConfigHolder.subjectUnitPath);
+		System.out.println("abc");
 	}
 }
