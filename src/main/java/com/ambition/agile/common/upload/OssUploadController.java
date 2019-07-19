@@ -30,13 +30,13 @@ import com.ambition.agile.common.web.BaseController;
 @RequestMapping(value = "${adminPath}/upload")
 public class OssUploadController extends BaseController {
 	
-	@RequestMapping(value = "upload")
+	@RequestMapping(value = "videoUpload")
 	@ResponseBody
-	public ApiResponse<?> upload(@RequestParam(value = "file", required = false) MultipartFile courseFile,String dir,String oldUrl,RedirectAttributes redirectAttributes) {
+	public ApiResponse<?> videoUpload(@RequestParam(value = "uploadFile", required = false) MultipartFile courseFile,String dir,String videoPath,RedirectAttributes redirectAttributes) {
 		 Map<String,String> map=new HashMap<String,String>();
 		 System.out.println("#a$:"+dir);
-		 if(dir==null || dir.equals("") | dir.equals("undefined") ){
-			 dir = "course";
+		 if(dir==null || dir.equals("") || dir.equals("undefined") ){
+			 dir = "course/";
 		 }
 		 System.out.println("#a$:"+dir);
 		 String mainPath = dir;
@@ -50,10 +50,13 @@ public class OssUploadController extends BaseController {
 				
 				// 获取文件类型
 				fileType = courseFile.getOriginalFilename();
+				System.out.println("#####fileType:+++++"+fileType);
+				map.put("fileName", fileType);
 				String type = fileType.substring(fileType.lastIndexOf(".") + 1, fileType.length());
 				String ossUrl=null;
-				if(ComUtil.isNullOrEmpty(oldUrl)){
+				if(ComUtil.isNullOrEmpty(videoPath)){
 					ossUrl=OSSUploadUtil.uploadFileNewName(courseFile.getInputStream(),type, dir);
+					System.out.println(" new ossUrl: creatnewname "+ossUrl);
 				}else{
 					String status=PropertiesFactory.getProperty("ossConfig.properties", "outernet.intranet");
 					String resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
@@ -62,18 +65,23 @@ public class OssUploadController extends BaseController {
 					}else{//没有外网的服务器
 						resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.file.replace");
 					}
-					System.out.println(type+"c:" +resource+"a:"+oldUrl+ "b:"+dir);
-					ossUrl=OSSUploadUtil.replaceFile(courseFile.getInputStream(), type, resource+oldUrl, dir);
+					System.out.println(type+"c:" +resource+"a:"+videoPath+ "b:"+dir);
+					ossUrl=OSSUploadUtil.replaceFile(courseFile.getInputStream(), type, resource+videoPath, dir);
+					System.out.println("update :"+ossUrl);
+
 				}
 				//try catch 不判空
 				if(ossUrl==null){
 					return ApiResponse.fail(404,"上传失败");
 				}
+				//暂时先用https//https://video-robot.oss-cn-beijing.aliyuncs.com/course248A0C83CC44443B9EA6E0246394FF53.png阿里的域名
+				map.put("fileUrl",ossUrl);
 				/*int index=ossUrl.indexOf("/");
 				index=ossUrl.indexOf(".", index+2);
 		        mainPath=ossUrl.substring(index,ossUrl.length()-1);*/
 		        mainPath=ossUrl.substring(ossUrl.lastIndexOf("/",ossUrl.lastIndexOf("/")-2), ossUrl.length());
-				/*String[] paths = ossUrl.split("/");
+				System.out.println("#########mainPath:"+mainPath);
+		        /*String[] paths = ossUrl.split("/");
 				mainPath= "/" + paths[paths.length - 2] + "/" + paths[paths.length - 1];*/
 				map.put("fileName",fileType);
 			}
@@ -83,12 +91,12 @@ public class OssUploadController extends BaseController {
 		} 
 		 
 		 map.put("code","200");
-		 mainPath = "http:/"+ mainPath;
-		 map.put("fileUrl",mainPath);
+		 //如果需要的话，可以用自己的域名进行替换。 replace 即可
+		 //mainPath = "http:/"+ mainPath;
+		 //map.put("fileUrl",mainPath);
 		 System.out.println("上传信息：文件类型"+fileType+"，文件路径fileUrl"+mainPath);
 		 return ApiResponse.success(map); 
 	}
-	
 	
 	/**
 	 * 公告上传文件

@@ -18,4 +18,5 @@
 <script src="${ctxStatic}/common/mustache.min.js" type="text/javascript"></script>
 <link href="${ctxStatic}/common/agile.css" type="text/css" rel="stylesheet" />
 <script src="${ctxStatic}/common/agile.js" type="text/javascript"></script>
+<script src="${ctxStatic}/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}';</script>

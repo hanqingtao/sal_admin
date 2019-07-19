@@ -74,7 +74,7 @@
 			<label class="control-label">选择文件上传：</label>
 			<div class="controls">
 				<input id="uploadFile" name="uploadFile" class="form-control eHide" 
-					name="file" onChange="checkCourseImportFile(this)"   type="file" />
+					 onChange="checkCourseImportFile(this)"   type="file" />
 				<!-- onChange="uploadCourseFile(this)"   
 				class="form-control required eHide" 
 				<a herf="javascript:;" id="toUpLoadFileFlag" class="btn btn-primary  setUploadWidth">上传</a>

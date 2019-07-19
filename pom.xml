@@ -42,6 +42,7 @@
 		<poi.version>3.9</poi.version>
 		<freemarker.version>2.3.20</freemarker.version>
 		<gson.version>2.3.1</gson.version>
+		<jmimemagic.version>0.1.5</jmimemagic.version>
 		
 		<!-- jdbc driver setting -->
 		<mysql.driver.version>5.1.30</mysql.driver.version>
@@ -639,6 +640,30 @@
 		    <groupId>com.squareup.okio</groupId>
 		    <artifactId>okio</artifactId>
 		    <version>1.15.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sf.jmimemagic</groupId>
+			<artifactId>jmimemagic</artifactId>
+			<version>${jmimemagic.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-xc</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- 自定义jar依赖包

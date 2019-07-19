@@ -20,12 +20,14 @@ function uploadCourseFile(obj) {
 	var file = $("input[name='uploadFile']").val();
 	var filename=file.replace(/.*(\/|\\)/, ""); 
 	var fileExt=(/[.]/.exec(filename)) ? /[^.]+$/.exec(filename.toLowerCase()) : ''; 
+	//暂时先不限制后缀 
 	//if (!/\.(mp3|mp4)$/.test(fileExt)) {
+	/*
 	if(!(fileExt == "mp3" || fileExt == "mp4")){
 		courseVideoFlag = false;
 		alert("请上传音频文件！");
 		return false;
-	}
+	}*/
 	/*
 	if (!/\.(jpg|JPG|png|PNG)$/.test(fileExt)) {
 		courseVideoFlag = false;
@@ -38,7 +40,7 @@ function uploadCourseFile(obj) {
 	//$("#toUpladAnimateEntry").click();
 	
 	jQuery.ajaxFileUpload({
-		url :ctx+"/upload/upload?r="+Math.random(),
+		url :ctx+"/upload/videoUpload?r="+Math.random(),
 		secureuri : false,
 		fileElementId : $(obj).attr("id"), //上传文件选择框的id属性  
 		dataType : 'text', //json，与后台对应，text和json
@@ -48,6 +50,9 @@ function uploadCourseFile(obj) {
 			if (data.body.code == "200") {
 				//alert(data.body.fileUrl);
 				$("#videoPath").val(data.body.fileUrl);
+				$("#videoName").val(data.body.fileName);
+				//alert(data.body.fileName+"#####"+data.body.fileUrl);
+				$("vName").val(data.body.fileName);
 				//modeInfoChange("上传成功！");
 				/*$("#closeTitleFlagAnimate").click();				
 				$("#fileNameContainer").val(data.body.fileName);

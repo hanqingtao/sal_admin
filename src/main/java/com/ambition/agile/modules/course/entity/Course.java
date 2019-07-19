@@ -28,6 +28,8 @@ public class Course extends DataEntity<Course> {
 	private Integer playNum;		// 课程的播放次数
 	private Integer orderNum;		// 推荐排序
 	private String videoPath;		// 视频路径
+	private String videoName;		// 视频路径
+
 	private Integer categoryId;		// 分类id
 	private String categoryIds;		// 分类ids
 	
@@ -135,13 +137,22 @@ public class Course extends DataEntity<Course> {
 		this.orderNum = orderNum;
 	}
 	
-	@Length(min=1, max=128, message="视频路径长度必须介于 1 和 128 之间")
+	@Length(min=1, max=256, message="视频路径长度必须介于 1 和 256 之间")
 	public String getVideoPath() {
 		return videoPath;
 	}
 
 	public void setVideoPath(String videoPath) {
 		this.videoPath = videoPath;
+	}
+	
+	@Length(min=1, max=64, message="视频名称 长度必须介于 1 和 64 之间")
+	public String getVideoName() {
+		return videoName;
+	}
+
+	public void setVideoName(String videoName) {
+		this.videoName = videoName;
 	}
 	
 	public Integer getCategoryId() {

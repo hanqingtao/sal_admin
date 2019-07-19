@@ -38,6 +38,8 @@ public class BaseConfigHolder {
 	public static String wxGrantType;//加密类型
 	public static String wxRequestUrl;//微信小程序后台请求接口地址
 	
+	public static String videoFFmpegFile;//ffmpeg 的工作路径
+	
 	public static String flvServer;
 	public static String scormServer;
 	public static boolean isMonitor;
@@ -80,6 +82,8 @@ public class BaseConfigHolder {
 		getWxSecret();
 		getWxGrantType();
 		getWxRequestUrl();
+		
+		getVideoFFmpegFile();
 		
 		getFlvServer();
 		getScormServer();
@@ -485,6 +489,17 @@ public class BaseConfigHolder {
 		return wxRequestUrl;
 	}
 	
+	/**
+	 * @see 微信认证 类型 
+	 * @return
+	 */
+	public static String getVideoFFmpegFile(){
+		if(videoFFmpegFile== null ){
+			videoFFmpegFile = new String(getProperties().getProperty("video.ffmpegFile"));
+		}
+		return videoFFmpegFile;
+		
+	}
 	public static void main(String[] args) {
 		System.out.println("abc");
 	}

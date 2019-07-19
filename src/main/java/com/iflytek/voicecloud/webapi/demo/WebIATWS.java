@@ -22,12 +22,12 @@ import java.util.*;
  */
 
 public class WebIATWS extends WebSocketListener {
-	
+	//https://openapi.xfyun.cn/v2/aiui
     private static final String hostUrl = "https://ws-api.xfyun.cn/v2/iat"; //http url 不支持解析 ws/wss schema
     private static final String apiKey = "c9904da38e38c59f4b4d873372102990"; //在控制台-我的应用-语音听写（流式版）获取
     private static final String apiSecret = "2e16b40276a745f3375578eb3abac48d"; //在控制台-我的应用-语音听写（流式版）获取
     private static final String appid = "5d14aa85"; //在控制台-我的应用获取
-    private static final String file = "/Users/harry/out/16k_10.pcm"; // 中文
+    private static final String file = "/Users/harry/out/b.pcm";//16k_10.pcm"; // 中文
     public static final int StatusFirstFrame = 0;
     public static final int StatusContinueFrame = 1;
     public static final int StatusLastFrame = 2;

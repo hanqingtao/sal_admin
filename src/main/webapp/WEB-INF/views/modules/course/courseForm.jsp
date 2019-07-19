@@ -77,9 +77,11 @@
 		<div class="control-group">
 			<label class="control-label">视频上传：</label>
 			<div class="controls">
-				<form:hidden id="videoPath" path="videoPath" htmlEscape="false" maxlength="128" class="input-xlarge"/>
+				<form:hidden id="videoPath" path="videoPath" />
+				<form:hidden id="videoName" path="videoName" />
 				<input id="uploadFile" class="form-control eHide" 
-					name="file" onChange="uploadCourseFile(this)"  type="file" />
+					name="uploadFile" onChange="uploadCourseFile(this)"  type="file" />&nbsp;&nbsp;
+					<div id="vName"> ${course.videoName}</div>
 				<!--  class="form-control required eHide" 
 				<a herf="javascript:;" id="toUpLoadFileFlag" class="btn btn-primary  setUploadWidth">上传</a>
 				-->

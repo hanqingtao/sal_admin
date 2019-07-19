@@ -22,6 +22,7 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.video_path AS "videoPath",
+		a.video_name AS "videoName",
 		a.category_id AS "categoryId",
 		a.category_ids AS "categoryIds"
 	</sql>
@@ -120,6 +121,7 @@
 			remarks,
 			del_flag,
 			video_path,
+			video_name,
 			category_id,
 			category_ids
 		) VALUES (
@@ -141,6 +143,7 @@
 			#{remarks},
 			#{delFlag},
 			#{videoPath},
+			#{videoName},
 			#{categoryId},
 			#{categoryIds}
 		)
@@ -163,6 +166,7 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			video_path = #{videoPath},
+			video_name = #{videoName},
 			category_id = #{categoryId},
 			category_ids = #{categoryIds}
 		WHERE id = #{id}
