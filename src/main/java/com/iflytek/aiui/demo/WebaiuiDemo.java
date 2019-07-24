@@ -27,7 +27,7 @@ import com.ambition.agile.open.entity.Intent;
  * AIUI WebAPI V2接口调用示例
  * 
  * 运行方法：直接运行 main()
- * 
+ * aiui 技能调用，进行语义分析，返回处理结果
  * 结果： 控制台输出接口返回值信息
  * 
  * @author iflytek_aiui
@@ -38,7 +38,7 @@ public class WebaiuiDemo {
 	private static final String AIUI_URL = "http://openapi.xfyun.cn/v2/aiui";
 	private static final String APPID = "5d14aa85";
 	private static final String API_KEY = "8e7f4eb3f67ab20582dc6b2af0023406";
-	private static final String DATA_TYPE = "audio";// data_type text 文本  audio音频 
+	private static final String DATA_TYPE = "text";// data_type text 文本  audio音频 
 	private static final String SCENE = "main_box";//main_box 测试 text 类型  audio 用  main即可
 	private static final String RESULT_LEVEL = "complete";
 	private static final String SAMPLE_RATE = "16000"; //默认 16000 16k采样率   8000 8K采样率 
@@ -50,10 +50,10 @@ public class WebaiuiDemo {
 	
 	public static void main(String[] args) throws IOException,ParseException, InterruptedException{
 		Map<String, String> header = buildHeader();
-		//String str = "你是谁？";//"北京明天的天气";
-		//byte[] dataByteArray = str.getBytes("utf-8");
-		byte[] dataByteArray = readFile(FILE_PATH);
-		System.out.println(dataByteArray.toString());
+		String str = "火落落，舞台礼仪？";//"北京明天的天气";
+		byte[] dataByteArray = str.getBytes("utf-8");
+		//byte[] dataByteArray = readFile(FILE_PATH);
+		//System.out.println(dataByteArray.toString());
 		String result = httpPost(AIUI_URL, header, dataByteArray);
 		System.out.println(result);
 		AIUIEntity aiuiEntity = JsonMapper.fromJson(result, AIUIEntity.class);

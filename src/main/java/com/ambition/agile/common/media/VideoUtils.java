@@ -21,8 +21,8 @@ import com.ambition.agile.common.lang.ObjectUtils;
 import com.ambition.agile.common.lang.StringUtils;
 import com.ambition.agile.common.lang.TimeUtils;
 
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.Thumbnails.Builder;
+//import net.coobird.thumbnailator.Thumbnails;
+//import net.coobird.thumbnailator.Thumbnails.Builder;
 
 /**
  * 视频工具类
@@ -126,19 +126,20 @@ public class VideoUtils {
 						if (StringUtils.isNotBlank(height)){
 							h = ObjectUtils.toInteger(height);
 						}
-						Builder<File> file = Thumbnails.of(imgFile);
+						//Builder<File> file = Thumbnails.of(imgFile);
+						Object file = null;
 						BufferedImage bufferedImage = ImageIO.read(imgfile);
 						if (bufferedImage.getWidth() <= w){
-							file.width(bufferedImage.getWidth());
+							//file.width(bufferedImage.getWidth());
 						}else{
-							file.width(w);
+							//file.width(w);
 						}
 						if (bufferedImage.getHeight() <= h){
-							file.height(bufferedImage.getHeight());
+							//file.height(bufferedImage.getHeight());
 						}else{
-							file.height(h);
+							//file.height(h);
 						}
-						file.toFile(imgFile);
+						//file.toFile(imgFile);
 					}
 				}else{
 					statusTemp = false;

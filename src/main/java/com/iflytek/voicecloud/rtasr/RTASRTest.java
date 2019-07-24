@@ -19,12 +19,13 @@ import org.java_websocket.handshake.ServerHandshake;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.iflytek.voicecloud.rtasr.util.EncryptUtil;
+//import com.iflytek.voicecloud.rtasr.util.EncryptUtil;
 
 /**
  * 实时转写调用demo
  * 此demo只是一个简单的调用示例，不适合用到实际生产环境中
- * 
+ * 实时语音听写 接口   以流的形式一段一段的发送，然后一段一段的解析，返回数据.
+ * 由于小程序不支持流式传输，故先不进行处理
  * @author white
  *
  */
@@ -33,7 +34,7 @@ public class RTASRTest {
     // appid
     private static final String APPID = "5d14aa85";
    // private static final String apiKey = "c9904da38e38c59f4b4d873372102990"; //在控制台-我的应用-语音听写（流式版）获取
-    // 实时语音转写 对应的secret_key
+    // 实时语音转写对应的secret_key
     private static final String SECRET_KEY = "f74012f6cdbec3717b3bed4c9c454d98";
 
     // 请求地址
@@ -44,7 +45,7 @@ public class RTASRTest {
     private static final String ORIGIN = "http://" + HOST;
 
     // 音频文件路径
-    private static final String AUDIO_PATH = "/Users/harry/out/test_1.pcm";
+    private static final String AUDIO_PATH = "/Users/harry/out/b.pcm";//"/Users/harry/out/test_1.pcm";
 
     // 每次发送的数据大小 1280 字节
     private static final int CHUNCKED_SIZE = 1280;
@@ -112,7 +113,7 @@ public class RTASRTest {
         String ts = System.currentTimeMillis()/1000 + "";
         String signa = "";
         try {
-            signa = EncryptUtil.HmacSHA1Encrypt(EncryptUtil.MD5(appId + ts), secretKey);
+            signa = null;//EncryptUtil.HmacSHA1Encrypt(EncryptUtil.MD5(appId + ts), secretKey);
             return "?appid=" + appId + "&ts=" + ts + "&signa=" + URLEncoder.encode(signa, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
