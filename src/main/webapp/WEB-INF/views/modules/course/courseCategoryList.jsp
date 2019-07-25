@@ -8,7 +8,7 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			var tpl = $("#treeTableTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-			var data = ${fns:toJson(list)}, ids = [], rootIds = [];
+			var data = ${lists}, ids = [], rootIds = [];
 			for (var i=0; i<data.length; i++){
 				ids.push(data[i].id);
 			}

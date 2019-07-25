@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ambition.agile.common.mapper.JsonMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,7 @@ public class CourseCategoryController extends BaseController {
 	public String list(CourseCategory courseCategory, HttpServletRequest request, HttpServletResponse response, Model model) {
 		List<CourseCategory> list = courseCategoryService.findList(courseCategory); 
 		model.addAttribute("list", list);
+		model.addAttribute("lists", JsonMapper.toJson(list));
 		return "modules/course/courseCategoryList";
 	}
 

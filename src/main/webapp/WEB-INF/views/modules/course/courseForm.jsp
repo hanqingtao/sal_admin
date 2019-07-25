@@ -56,7 +56,7 @@
 			<label class="control-label">课程类型：</label>
 			<div class="controls">
 				<form:select path="courseType" class="input-xlarge ">
-					<form:option value="" label=""/>
+					<%--<form:option value="" label=""/>--%>
 					<form:options items="${fns:getDictList('course_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>

@@ -96,7 +96,7 @@
 		FROM course a
 		<include refid="courseJoins"/>
 		<where>
-			a.code = #{code}
+			a.course_code = #{courseCode}
 		</where>
 		limit 1
 	</select>

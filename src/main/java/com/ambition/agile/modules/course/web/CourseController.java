@@ -34,6 +34,7 @@ import com.ambition.agile.modules.course.service.CourseService;
 
 /**
  * 课程Controller
+ *
  * @author harry
  * @version 2019-07-05
  */
@@ -43,26 +44,26 @@ public class CourseController extends BaseController {
 
 	@Autowired
 	private CourseService courseService;
-	
+
 	@Autowired
 	private CourseCategoryService courseCategoryService;
-	
+
 	@ModelAttribute
-	public Course get(@RequestParam(required=false) String id) {
+	public Course get(@RequestParam(required = false) String id) {
 		Course entity = null;
-		if (StringUtils.isNotBlank(id)){
+		if (StringUtils.isNotBlank(id)) {
 			entity = courseService.get(id);
 		}
-		if (entity == null){
+		if (entity == null) {
 			entity = new Course();
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("course:course:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = { "list", "" })
 	public String list(Course course, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<Course> page = courseService.findPage(new Page<Course>(request, response), course); 
+		Page<Course> page = courseService.findPage(new Page<Course>(request, response), course);
 		model.addAttribute("page", page);
 		return "modules/course/courseList";
 	}
@@ -73,74 +74,77 @@ public class CourseController extends BaseController {
 		model.addAttribute("course", course);
 		return "modules/course/courseForm";
 	}
-	
-	//@RequiresPermissions("course:course:toCourseImport")
+
+	// @RequiresPermissions("course:course:toCourseImport")
 	@RequestMapping(value = "toCourseImport")
-	public String courseImport(HttpServletRequest request,
-			HttpServletResponse response,Model model
-			) {
-		//response.setContentType("test/html;charset=UTF-8");
-		//model.addAttribute("course", course);
+	public String courseImport(HttpServletRequest request, HttpServletResponse response, Model model) {
+		// response.setContentType("test/html;charset=UTF-8");
+		// model.addAttribute("course", course);
 		return "modules/course/toCourseImport";
 	}
-	
+
 	@RequiresPermissions("course:course:courseImport")
 	@RequestMapping(value = "courseImport")
-	public String courseImport(@RequestParam(value="uploadFile",required=false) MultipartFile uploadFile,
-			HttpServletRequest request,
-			HttpServletResponse response,
-			Model model
-			) {
-		if(null != uploadFile){
+	public String courseImport(@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
+			HttpServletRequest request, HttpServletResponse response, Model model) {
+		if (null != uploadFile) {
 			InputStream inputStream = null;
-			try{
+			try {
 				inputStream = uploadFile.getInputStream();
-				if(null != inputStream){
-					ArrayList<Course> courseList = (ArrayList<Course>)ExcelUtil.readExcelToCourse(inputStream);
-					
-					if(null != courseList && courseList.size()>0){
-						for(int i=0;i<courseList.size();i++){
-							Course course= courseList.get(i);
-							if(null != course ){
+				if (null != inputStream) {
+					ArrayList<Course> courseList = (ArrayList<Course>) ExcelUtil.readExcelToCourse(inputStream);
+
+					if (null != courseList && courseList.size() > 0) {
+						for (int i = 0; i < courseList.size(); i++) {
+							Course course = courseList.get(i);
+							if (null != course) {
 								boolean flag = true;
 								String errorMsg = "";
-								//判断数据的正确性
-								if(null == course.getCategoryName() ||  course.getCategoryName().isEmpty()){
+								// 判断数据的正确性
+								if (null == course.getCategoryName() || course.getCategoryName().isEmpty()) {
 									flag = false;
-									errorMsg= "课程分类名称不能为空!";
+									errorMsg = "课程分类名称不能为空!";
 								}
-								//判断数据的正确性
-								if(null == course.getCategoryCode() || course.getCategoryCode().isEmpty()){
+								// 判断数据的正确性
+								if (null == course.getCategoryCode() || course.getCategoryCode().isEmpty()) {
 									flag = false;
-									errorMsg= "课程分类code不能为空!";
+									errorMsg = "课程分类code不能为空!";
 								}
-								//判断数据的正确性
-								if(null == course.getName() || course.getName().isEmpty()){
+								// 判断数据的正确性
+								if (null == course.getName() || course.getName().isEmpty()) {
 									flag = false;
-									errorMsg= "课程名称不能为空!";
+									errorMsg = "课程名称不能为空!";
 								}
-								//判断数据的正确性
-								if(null == course.getCourseCode() || course.getCourseCode().isEmpty()){
+								// 判断数据的正确性
+								if (null == course.getCourseCode() || course.getCourseCode().isEmpty()) {
 									flag = false;
-									errorMsg= "课程code不能为空!";
+									errorMsg = "课程code不能为空!";
 								}
-								List<Course> courseOld = (List<Course>)courseService.getByCode(course.getCourseCode());
-								if(null == courseOld || courseOld.size()<1){
-									continue;
-								}
-								//判断数据的正确性
-								if(null == course.getVideoPath() || course.getVideoPath().isEmpty()){
+								List<Course> courseOld = (List<Course>) courseService.getByCode(course.getCourseCode());
+
+								/*
+								 * if (null == courseOld || courseOld.size() < 1) { continue; }
+								 */
+
+								if (courseOld.size() > 0) {
 									flag = false;
-									errorMsg= "课程路径地址不能为空!";
+									errorMsg = "部分课程已经存在系统中!";
+								}
+
+								// 判断数据的正确性
+								if (null == course.getVideoPath() || course.getVideoPath().isEmpty()) {
+									flag = false;
+									errorMsg = "课程路径地址不能为空!";
 								}
 								OSSConfig ossConfig = OSSConfig.getOssConfigInstance();
-								course.setVideoPath(ossConfig.getVideoUrl()+course.getVideoPath());
-								//设置 课程 类型 1 默认
+								course.setVideoPath(ossConfig.getVideoUrl() + course.getVideoPath());
+								// 设置 课程 类型 1 默认
 								course.setCourseType("1");
-								if(null != course.getCategoryCode()){
-									List<CourseCategory> courseCategoryList = courseCategoryService.getByCode(course.getCategoryCode());
-									CourseCategory courseCategory = (CourseCategory)courseCategoryList.get(0);
-									if(null != courseCategory.getId() && !courseCategory.getId().isEmpty()){
+								if (null != course.getCategoryCode()) {
+									List<CourseCategory> courseCategoryList = courseCategoryService
+											.getByCode(course.getCategoryCode());
+									CourseCategory courseCategory = (CourseCategory) courseCategoryList.get(0);
+									if (null != courseCategory.getId() && !courseCategory.getId().isEmpty()) {
 										course.setCategoryName(courseCategory.getName());
 										course.setCategoryId(Integer.parseInt(courseCategory.getId()));
 										course.setCategoryCode(courseCategory.getCode());
@@ -148,54 +152,54 @@ public class CourseController extends BaseController {
 									}
 								}
 								courseService.save(course);
+							}
 						}
 					}
 				}
-			}
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
-				logger.info("import coures faile,message: "+ e.getMessage());
+				logger.info("import coures faile,message: " + e.getMessage());
 			}
 		}
-		//response.setContentType("test/html;charset=UTF-8");
-		//model.addAttribute("course", course);
+		// response.setContentType("test/html;charset=UTF-8");
+		// model.addAttribute("course", course);
 		return "modules/course/courseImport";
 	}
 
 	@RequiresPermissions("course:course:edit")
 	@RequestMapping(value = "save")
 	public String save(Course course, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, course)){
+		if (!beanValidator(model, course)) {
 			return form(course, model);
 		}
-		//System.out.println("###course.getCategoryId###"+course.getCategoryId());
-		if(null != course && course.getCategoryId() != null){
-			CourseCategory  courseCategory = courseCategoryService.get(course.getCategoryId()+"");
-			if(null != courseCategory && null != courseCategory.getParentIds()){
-				course.setCategoryIds( courseCategory.getParentIds());
+		// System.out.println("###course.getCategoryId###"+course.getCategoryId());
+		if (null != course && course.getCategoryId() != null) {
+			CourseCategory courseCategory = courseCategoryService.get(course.getCategoryId() + "");
+			if (null != courseCategory && null != courseCategory.getParentIds()) {
+				course.setCategoryIds(courseCategory.getParentIds());
 			}
-			//System.out.println("###courseCategory.getParentIds()###"+courseCategory.getParentIds());
-			if(null != courseCategory && null != courseCategory.getName()){
-				course.setCategoryName( courseCategory.getName());
+			// System.out.println("###courseCategory.getParentIds()###"+courseCategory.getParentIds());
+			if (null != courseCategory && null != courseCategory.getName()) {
+				course.setCategoryName(courseCategory.getName());
 			}
 
 //			if(null != courseCategory && null != courseCategory.getName()){
 //				course.setName( courseCategory.getName());
 //			}
 		}
-		//System.out.println("###courseCategory.getName()###"+course.getCategoryName());
+		// System.out.println("###courseCategory.getName()###"+course.getCategoryName());
 		courseService.save(course);
-		//System.out.println("####getCategoryIds##"+course.getCategoryIds());
+		// System.out.println("####getCategoryIds##"+course.getCategoryIds());
 		addMessage(redirectAttributes, "保存课程成功");
-		return "redirect:"+Global.getAdminPath()+"/course/course/?repage";
+		return "redirect:" + Global.getAdminPath() + "/course/course/?repage";
 	}
-	
+
 	@RequiresPermissions("course:course:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Course course, RedirectAttributes redirectAttributes) {
 		courseService.delete(course);
 		addMessage(redirectAttributes, "删除课程成功");
-		return "redirect:"+Global.getAdminPath()+"/course/course/?repage";
+		return "redirect:" + Global.getAdminPath() + "/course/course/?repage";
 	}
 
 }
