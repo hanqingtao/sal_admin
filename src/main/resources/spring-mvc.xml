@@ -7,6 +7,15 @@
     
     <description>Spring MVC Configuration</description>
     
+    	<!-- spring系统启动以后，会先加载该类 -->
+	<bean class="com.ambition.agile.common.listener.InitDataListener">
+	</bean>
+	
+		<!-- 配置路径 -->
+	<bean class="com.ambition.agile.common.SpringContextHolder" ></bean>
+	<bean id="systemGlobalsConfig" class="com.ambition.agile.common.BaseFrameworkConfig">
+   		<property name="location" value="/WEB-INF/classes/systemGlobals.properties"></property>
+   	</bean>
     <!-- 加载配置属性文件 -->
 	<context:property-placeholder ignore-unresolvable="true" location="classpath:system.properties" />
 	

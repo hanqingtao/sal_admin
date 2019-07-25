@@ -1,6 +1,8 @@
 package com.iflytek.voicecloud.webapi.demo;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import io.netty.handler.codec.http.websocketx.WebSocket00FrameDecoder;
 import okhttp3.*;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -23,16 +25,17 @@ import java.util.*;
 
 public class WebIATWS extends WebSocketListener {
 	//https://openapi.xfyun.cn/v2/aiui
-    private static final String hostUrl = "https://ws-api.xfyun.cn/v2/iat"; //http url 不支持解析 ws/wss schema
-    private static final String apiKey = "c9904da38e38c59f4b4d873372102990"; //在控制台-我的应用-语音听写（流式版）获取
-    private static final String apiSecret = "2e16b40276a745f3375578eb3abac48d"; //在控制台-我的应用-语音听写（流式版）获取
-    private static final String appid = "5d14aa85"; //在控制台-我的应用获取
-    private static final String file = "/Users/harry/out/b.pcm";//16k_10.pcm"; // 中文
+	public static final String hostUrl = "https://ws-api.xfyun.cn/v2/iat"; //http url 不支持解析 ws/wss schema
+	public static final String apiKey = "c9904da38e38c59f4b4d873372102990"; //在控制台-我的应用-语音听写（流式版）获取
+	public static final String apiSecret = "2e16b40276a745f3375578eb3abac48d"; //在控制台-我的应用-语音听写（流式版）获取
+	public static final String appid = "5d14aa85"; //在控制台-我的应用获取
+	public static String file = "/Users/harry/out/16k_10.pcm";//16k_10.pcm"; // 中文
     public static final int StatusFirstFrame = 0;
     public static final int StatusContinueFrame = 1;
     public static final int StatusLastFrame = 2;
     public static final Gson json = new Gson();
     Decoder decoder = new Decoder();
+    private String result = "";
     // 开始时间
     private static Date dateBegin = new Date();
     // 结束时间
@@ -106,6 +109,7 @@ public class WebIATWS extends WebSocketListener {
                             data2.addProperty("format", "audio/L16;rate=16000");
                             data2.addProperty("encoding", "raw");
                             frame2.add("data", data2);
+                            System.out.println("######last frame "+frame2.toString());
                             webSocket.send(frame2.toString());
                             System.out.println("sendlast");
                             break end;
@@ -139,7 +143,7 @@ public class WebIATWS extends WebSocketListener {
                     //System.out.println(te.toString());
                     try {
                         decoder.decode(te);
-                        System.out.println("中间识别结果 ==》" + decoder.toString());
+                        System.out.println("中间结果 ==》" + decoder.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -151,7 +155,7 @@ public class WebIATWS extends WebSocketListener {
                     System.out.println(sdf.format(dateBegin) + "开始");
                     System.out.println(sdf.format(dateEnd) + "结束");
                     System.out.println("耗时:" + (dateEnd.getTime() - dateBegin.getTime()) + "ms");
-                    System.out.println("最终识别结果 ==》" + decoder.toString());
+                    System.out.println("最终结果 ==》" + decoder.toString());
                     System.out.println("本次识别sid ==》" + resp.getSid());
                     decoder.discard();
                     webSocket.close(1000, "");
@@ -181,7 +185,7 @@ public class WebIATWS extends WebSocketListener {
     }
     public static void main(String[] args) throws Exception {
         // 构建鉴权url
-        String authUrl = getAuthUrl(hostUrl, apiKey, apiSecret);
+        String authUrl = WebIATWS.getAuthUrl(hostUrl, apiKey, apiSecret);
         OkHttpClient client = new OkHttpClient.Builder().build();
         //将url中的 schema http://和https://分别替换为ws:// 和 wss://
         String url = authUrl.toString().replace("http://", "ws://").replace("https://", "wss://");
@@ -348,4 +352,7 @@ public class WebIATWS extends WebSocketListener {
             }
         }
     }
+    
+    
+    
 }

@@ -2,8 +2,13 @@ package com.ambition.agile.common;
 
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ambition.agile.common.constant.Constants;
 import com.ambition.agile.common.util.ComUtil;
+import com.iflytek.util.WebaiuiUtil;
 
 
 
@@ -14,6 +19,8 @@ import com.ambition.agile.common.util.ComUtil;
  * @date: 2014-8-14 下午05:33:08
  */
 public class BaseConfigHolder {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BaseConfigHolder.class);
 	
 	private static BaseFrameworkConfig config ;
 	public static String CONFIG_FILE_NAME = "systemGlobalsConfig";
@@ -28,10 +35,11 @@ public class BaseConfigHolder {
 	public static boolean clusterRedis;
 
 	//ai 应用的相关参数
-	public static String aiAppVhosturl;//AI_APP_VHOSTURL;  // 应用的 ai.app.vhostUrl
+	public static String aiuiWebApiUrl;//AI_APP_VHOSTURL;  // 应用的 ai.app.vhostUrl
 	public static String aiAppAppid;//AI_APP_APPID; // 应用的 ai.app.appid
 	public static String aiAppAppkey;//AI_APP_APIKEY; // 应用的 ai.app.apiKey
 	public static String aiAppApisecret;//AI_APP_APISECRET ; // 应用的 ai.app.apiSecret
+	public static String aiAppAuthid;//AiAppAuthid 应用的测试 authId
 	
 	public static String wxAppId;//小程序的appid 
 	public static String wxSecret;//小程序的 secret
@@ -39,6 +47,9 @@ public class BaseConfigHolder {
 	public static String wxRequestUrl;//微信小程序后台请求接口地址
 	
 	public static String videoFFmpegFile;//ffmpeg 的工作路径
+	
+	public static String videoDialogPath;//video.dialog.path=
+	public static String videoDialogName;//video.dialog.name=dialog
 	
 	public static String flvServer;
 	public static String scormServer;
@@ -63,7 +74,8 @@ public class BaseConfigHolder {
 	
 	public static Integer halfHour;
 	
-	public static void intiSystemValues(){
+	public static void  intiSystemValues() {
+		logger.info("@@@@@@ intiSystemValues %%%%%%");
 		getAppName();
 		getAppKeyWord();
 		getAppDescription();
@@ -72,11 +84,16 @@ public class BaseConfigHolder {
 		getImgServer();
 		getSingleRedis();
 		getClusterRedis();
-		
-		getAiAppVhosturl();
+		//aiui webapi url 
+		getAiuiWebApiUrl();
+		//aiui 应用 appid
 		getAiAppAppid();
+		//aiui 应用 apikey
 		getAiAppApikey();
-		getAiAppApisecret();
+		//aiui 应用的调试 authId
+		getAiAppAuthid();
+		
+		//getAiAppApisecret();
 		
 		getWxAppID();
 		getWxSecret();
@@ -84,20 +101,22 @@ public class BaseConfigHolder {
 		getWxRequestUrl();
 		
 		getVideoFFmpegFile();
-		
-		getFlvServer();
-		getScormServer();
-		getIsMonitor();
-		getMonitorTime();
-		getHeartStart();
-		getHeartTime();
-		getIsMail();
-		getMailTo();
-		getMailFrom();
-		getLockCount();
-		getLockTimeOut();
-		getKey();
-		getServerDomain();
+		getVideoDialogPath();
+		getVideoDialogName();
+		logger.info("@@@@@@ intiSystemValues  end %%%%%%");
+//		getFlvServer();
+//		getScormServer();
+//		getIsMonitor();
+//		getMonitorTime();
+//		getHeartStart();
+//		getHeartTime();
+//		getIsMail();
+//		getMailTo();
+//		getMailFrom();
+//		getLockCount();
+//		getLockTimeOut();
+//		getKey();
+//		getServerDomain();
 	}
 	
 	public static Properties getProperties(){
@@ -410,11 +429,14 @@ public class BaseConfigHolder {
 	 * @see 应用的 ai.app.vhostUrl
 	 * @return
 	 */
-	public static String getAiAppVhosturl(){
-		if(aiAppVhosturl == null){
-			aiAppVhosturl = new String(getProperties().getProperty("ai.app.vhostUrl"));
-		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-		return aiAppVhosturl;
+	public static String getAiuiWebApiUrl(){
+		if(aiuiWebApiUrl == null){
+			aiuiWebApiUrl = new String(getProperties().getProperty("ai.aiui.webapi.url"));
+		}
+		if(null != aiuiWebApiUrl ){
+			aiuiWebApiUrl = StringUtils.trim(aiuiWebApiUrl);
+		}
+		return aiuiWebApiUrl;
 	}
 	//ai 应用的相关参数
 	/** 
@@ -423,8 +445,12 @@ public class BaseConfigHolder {
 	 */
 	public static String getAiAppAppid(){
 		if(aiAppAppid == null){
-			aiAppAppid = new String(getProperties().getProperty("ai.app.appid"));
+			aiAppAppid = getProperties().getProperty("ai.aiui.appid");
 		}
+		if(null != aiAppAppid){
+			aiAppAppid = StringUtils.trim(aiAppAppid);
+		}
+		System.out.println("#####BaseConfigHolder aiAppAppid"+aiAppAppid+"2222");
 		return aiAppAppid;
 	}
 	/** 
@@ -433,14 +459,30 @@ public class BaseConfigHolder {
 	 */
 	public static String getAiAppApikey(){
 		if(aiAppAppkey == null){
-			aiAppAppkey = new String(getProperties().getProperty("ai.app.apiKey"));
-		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+			aiAppAppkey = new String(getProperties().getProperty("ai.aiui.apikey"));
+		}
+		if(null != aiAppAppkey ){
+			aiAppAppkey = StringUtils.trim(aiAppAppkey);
+		}
 		return aiAppAppkey;
 	}
 	
 	/** 
+	 * @see 应用的 ai.app.authid
+	 * @return 已使用
+	 */
+	public static String getAiAppAuthid(){
+		if(aiAppAuthid == null){
+			aiAppAuthid = new String(getProperties().getProperty("ai.aiui.authid"));
+		}
+		if(null != aiAppAuthid ){
+			aiAppAuthid = StringUtils.trim(aiAppAuthid);
+		}
+		return aiAppAuthid;
+	}
+	/** 
 	 * @see 应用的 ai.app.apiSecret
-	 * @return
+	 * @return 暂时未用
 	 */
 	public static String getAiAppApisecret(){
 		if(aiAppApisecret == null){
@@ -500,6 +542,36 @@ public class BaseConfigHolder {
 		return videoFFmpegFile;
 		
 	}
+	
+	
+	/**
+	 * @see 音频文件的服务器路径 
+	 * @return
+	 */
+	public static String getVideoDialogPath(){
+		if(videoDialogPath == null){
+			videoDialogPath = new String(getProperties().getProperty("video.dialog.path"));
+		}
+		if(null != videoDialogPath ){
+			videoDialogPath = StringUtils.trim(videoDialogPath);
+		}
+		return videoDialogPath;
+	}
+	
+	/**
+	 * @see 音频文件的目录
+	 * @return
+	 */
+	public static String getVideoDialogName(){
+		if(videoDialogName == null){
+			videoDialogName = new String(getProperties().getProperty("video.dialog.name"));
+		}
+		if(null != videoDialogName ){
+			videoDialogName = StringUtils.trim(videoDialogName);
+		}
+		return videoDialogName;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println("abc");
 	}

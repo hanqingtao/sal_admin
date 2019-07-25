@@ -1,4 +1,4 @@
-package com.iflytek.aiui.demo;
+package com.iflytek.util;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -15,9 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.ambition.agile.common.BaseConfigHolder;
 import com.ambition.agile.common.mapper.JsonMapper;
 import com.ambition.agile.open.entity.AIUIEntity;
 import com.ambition.agile.open.entity.Data;
@@ -33,20 +37,76 @@ import com.ambition.agile.open.entity.Intent;
  * @author iflytek_aiui
  * 
  */
-public class WebaiuiDemo {
+public class WebaiuiUtil {
 	
-	private static final String AIUI_URL = "http://openapi.xfyun.cn/v2/aiui";
-	private static final String APPID = "5d14aa85";
-	private static final String API_KEY = "8e7f4eb3f67ab20582dc6b2af0023406";
+	private static final Logger logger = LoggerFactory.getLogger(WebaiuiUtil.class);
+	
+	private static  String AIUI_URL = "http://openapi.xfyun.cn/v2/aiui";
+	private static  String APPID = "5d14aa85";
+	private static  String API_KEY = "8e7f4eb3f67ab20582dc6b2af0023406";
+	private static  String AUTH_ID = "8b4373e169cc18e4c157d15b2749d5f4";//29f0b5211cb74caf5320fb0625d6fb98";
 	private static final String DATA_TYPE = "audio";// data_type text 文本  audio音频 
 	private static final String SCENE = "main_box";//main_box 测试 text 类型  audio 用  main即可
 	private static final String RESULT_LEVEL = "complete";
 	private static final String SAMPLE_RATE = "16000"; //默认 16000 16k采样率   8000 8K采样率 
-	private static final String AUTH_ID = "8b4373e169cc18e4c157d15b2749d5f4";//29f0b5211cb74caf5320fb0625d6fb98";
 	private static final String AUE = "raw";//可选值：raw（未压缩的pcm或wav格式）、speex（speex格式，即sample_rate=8000的speex音频）、speex-wb（宽频speex格式，即sample_rate=16000的speex音频），默认为 raw
 	private static final String FILE_PATH = "/Users/harry/out/nihao.pcm";//16k_10.pcm";////test.txt";//16k_10.pcm";//bj_weather.wav";////16k_10.pcm"; // 中文
 	// 个性化参数，需转义 个性化参数，json字符串，目前支持用户级（auth_id）、应用级（appid）和用户自定义级，不支持透传其他参数。
 	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"8b4373e169cc18e4c157d15b2749d5f4\\\"}";
+	
+	static {
+        try {        		//aiui 应用 appid
+        		APPID = BaseConfigHolder.getAiAppAppid();
+        		//aiui webapi url 
+        		AIUI_URL = BaseConfigHolder.getAiuiWebApiUrl();
+        		//aiui 应用的调试 authId
+        		AUTH_ID = BaseConfigHolder.getAiAppAuthid();
+        } catch (Exception e) {
+        		logger.error("load baseConfigHolder failed.", e);
+        }
+    }
+	/*
+	 * 公共方法，通过 文件路径调用 aiui webapi 返回相关数据
+	 * 
+	 */
+	public static String aiuiWebApiDealFile(String diagFilePath)  {
+		
+		String result ="";
+		 try {
+			Map<String, String> header = buildHeader();
+			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
+			//System.out.println(dataByteArray.toString());
+			result = httpPost(AIUI_URL, header, dataByteArray);
+			System.out.println(result);
+			AIUIEntity aiuiEntity = JsonMapper.fromJson(result, AIUIEntity.class);
+			if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
+				System.out.println("#####"+aiuiEntity.getSid());
+				List<Data> dataList = aiuiEntity.getData();
+				
+				for(Data data:dataList){
+					if(null != data && data.getAuth_id() != null){
+						String sub = data.getSub();
+						//业务类型：iat（识别）
+						if(null != sub && sub.equals("iat")){
+							System.out.println(data.getText());
+						}
+						//如果类型是 nlp 业务类型： nlp（语义），tpp（后处理），itrans（翻译）
+						if(null != sub && sub.equals("nlp")){
+							Intent intent = data.getIntent();
+							if(null != intent && intent.getAnswer() != null){
+								System.out.println(intent.getAnswer().getText());
+							}
+							
+						}
+					}
+				}
+			}
+		 }catch (Exception e) {
+		        	logger.error("load config.properties failed.", e);
+		        	return null;
+		 }
+		return result;
+	}
 	
 	public static void main(String[] args) throws IOException,ParseException, InterruptedException{
 		Map<String, String> header = buildHeader();

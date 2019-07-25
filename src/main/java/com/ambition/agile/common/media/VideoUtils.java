@@ -36,10 +36,12 @@ public class VideoUtils {
 	private static String mencoderFile;		//  mencoder.exe所放的路径
 	private static String qtFaststartFile;	//  qt-faststart.exe所放的路径
 	
+	public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+	
 	private String inputFile = "";				// 需转换的原始文件名称
 	private String inputFileExtension = "";		// 当前文件的文件后缀
 	
-	private String outputFile = "ab";				// 输出文件名称
+	private String outputFile = "";				// 输出文件名称
 	private String outputFileExtension = "pcm";	// 最终转换的文件格式 pcm
 	
 	//暂时不需要

@@ -29,8 +29,9 @@ public class BaseFrameworkConfig {
 
 		try {
         	props = new Properties();
-        	//logger.info("loading properties file :" + location.getFilename());
-        	InputStream is = new FileInputStream(location.getFile());;
+        	logger.info("loading properties file :" + location.getFilename());
+        	InputStream is = new FileInputStream(location.getFile());
+        	logger.info(location.getFile());
         	//new FileInputStream(location.getFile());;
 			props.load( is );
 			is.close();
