@@ -100,7 +100,23 @@
 		</where>
 		limit 1
 	</select>
-	
+		
+	<select id="getByName" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		<where>
+			1==1 
+			<if test="name != null and name != ''">
+			and a.name like
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		limit 1
+	</select>
 	<insert id="insert">
 		INSERT INTO course(
 			name,
