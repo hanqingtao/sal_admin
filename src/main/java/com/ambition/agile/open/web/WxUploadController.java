@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,13 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ambition.agile.common.ApiResponse;
-import com.ambition.agile.common.BaseConfigHolder;
+import com.ambition.agile.common.BaseFrameworkConfig;
 import com.ambition.agile.common.aliyun.oss.OSSUploadUtil;
 import com.ambition.agile.common.media.VideoUtils;
 import com.ambition.agile.common.util.PropertiesFactory;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
 import com.iflytek.util.WebaiuiUtil;
+import com.iflytek.voicecloud.webapi_tts.WebTtsUtil;
 
 /**
  * 上传公共Controller
@@ -38,6 +40,9 @@ import com.iflytek.util.WebaiuiUtil;
 @RequestMapping(value = "${frontPath}/wx/upload")
 public class WxUploadController extends BaseController {
 	
+	@Autowired
+	private BaseFrameworkConfig config;
+	
 	@RequestMapping(value = "audioUpload")
 	@ResponseBody
 	public ApiResponse<?> audioUpload(@RequestParam(value = "audioFile", required = false) MultipartFile audioFile,
@@ -46,8 +51,7 @@ public class WxUploadController extends BaseController {
 		Map<String,String> map=new HashMap<String,String>();
 		 //所有的音频文件进行分类存放 一级目录为  dialog
 		 if(dir==null || dir.equals("") || dir.equals("undefined") ){
-			 
-			 dir = "dialog"+ VideoUtils.FILE_SEPARATOR;
+			 dir = config.getConfig().getProperty("video.dialog.name")+ VideoUtils.FILE_SEPARATOR;//"dialog"
 		 }
 		 //二级目录存放在 openId 每个用户自己的目录下
 		 if(null != openId && !openId.equals("")  && !openId.equals("undefined") ){
@@ -56,7 +60,7 @@ public class WxUploadController extends BaseController {
 		 System.out.println("######openid"+openId);
 		 System.out.println("#audioUpload :"+dir);
 		 //设置本地路径
-		 String mainPath = "/Users/harry/out/";//BaseConfigHolder.getVideoDialogPath();//
+		 String mainPath = config.getConfig().getProperty("video.dialog.path");//"/Users/harry/out/";//BaseConfigHolder.getVideoDialogPath();//
 		 mainPath = mainPath  + dir;
 
 	     File mainPathDir = new File(mainPath);
@@ -121,8 +125,18 @@ public class WxUploadController extends BaseController {
 				System.out.println("$$$$$$$$ audioUpload  convert new ossUrl:  "+outPutFileMP3);
 				System.out.println("$$$$$$$$ audioUpload convert new outPath:  "+outPutFilePCM);
 				
-				String result = WebaiuiUtil.aiuiWebApiDealFile(outPutFilePCM);
-				System.out.println("########result wxupload file :"+ result);
+				Map mapAIUI = WebaiuiUtil.aiuiWebApiDealFile(outPutFilePCM);
+				System.out.println("########result wxupload file :"+ mapAIUI);
+				String iat = (String)mapAIUI.get("iat");
+				if(StringUtils.isNotEmpty(iat)){
+					map.put("quesion", iat);
+				}
+				String nlp = (String)mapAIUI.get("nlp");
+				if(StringUtils.isNotEmpty(nlp)){
+					map.put("answer", nlp);
+					String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
+					map.put("answerVoice",answerVoice);
+				}
 					//如果使用  video-robot.lianggehuangli.com 则使用以下方法进行过滤。
 					/*
 					String status=PropertiesFactory.getProperty("ossConfig.properties", "outernet.intranet");
@@ -139,18 +153,21 @@ public class WxUploadController extends BaseController {
 					return ApiResponse.fail(404,"上传失败");
 				}
 				//暂时先用https//https://video-robot.oss-cn-beijing.aliyuncs.com/course248A0C83CC44443B9EA6E0246394FF53.png阿里的域名
-				map.put("fileUrl",outPutFileMP3);
-				map.put("fileName",fileType);
+				//map.put("resResult",outPutFileMP3);
+				//map.put("fileName",fileType);
 				logger.info("上传信息：文件类型"+fileType+"，文件路径返回 fileUrl"+outPutFileMP3);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			return ApiResponse.fail(411,"上传失败");
 		} 
-		 map.put("code","200");
+		 //map.put("code","200");
 		 //如果需要的话，可以用自己的域名进行替换。 replace 即可
 		 //mainPath = "http:/"+ mainPath;
 		 //map.put("fileUrl",mainPath);
+		 
+		
+		 //map.put("answerVoice","abc.mp3");
 		 return ApiResponse.success(map); 
 	}
 	

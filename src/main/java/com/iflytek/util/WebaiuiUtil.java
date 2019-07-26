@@ -55,12 +55,16 @@ public class WebaiuiUtil {
 	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"8b4373e169cc18e4c157d15b2749d5f4\\\"}";
 	
 	static {
-        try {        		//aiui 应用 appid
+        try {
+        		//aiui 应用 appid
         		APPID = BaseConfigHolder.getAiAppAppid();
+        		logger.info("webaiuUtil APPID{}",APPID);
         		//aiui webapi url 
         		AIUI_URL = BaseConfigHolder.getAiuiWebApiUrl();
+        		logger.info("webaiuUtil AIUI_URL{}",AIUI_URL);
         		//aiui 应用的调试 authId
         		AUTH_ID = BaseConfigHolder.getAiAppAuthid();
+        		logger.info("webaiuUtil AUTH_ID{}",AUTH_ID);
         } catch (Exception e) {
         		logger.error("load baseConfigHolder failed.", e);
         }
@@ -69,12 +73,13 @@ public class WebaiuiUtil {
 	 * 公共方法，通过 文件路径调用 aiui webapi 返回相关数据
 	 * 
 	 */
-	public static String aiuiWebApiDealFile(String diagFilePath)  {
+	public static Map<String,String> aiuiWebApiDealFile(String diagFilePath)  {
 		
 		String result ="";
+		Map map = new HashMap();
 		 try {
 			Map<String, String> header = buildHeader();
-			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
+			byte[] dataByteArray = readFile(FILE_PATH);//diagFilePath
 			//System.out.println(dataByteArray.toString());
 			result = httpPost(AIUI_URL, header, dataByteArray);
 			System.out.println(result);
@@ -89,12 +94,18 @@ public class WebaiuiUtil {
 						//业务类型：iat（识别）
 						if(null != sub && sub.equals("iat")){
 							System.out.println(data.getText());
+							if(StringUtils.isNotEmpty(data.getText())){
+								map.put("iat", data.getText());
+							}
 						}
 						//如果类型是 nlp 业务类型： nlp（语义），tpp（后处理），itrans（翻译）
 						if(null != sub && sub.equals("nlp")){
 							Intent intent = data.getIntent();
 							if(null != intent && intent.getAnswer() != null){
 								System.out.println(intent.getAnswer().getText());
+								if(StringUtils.isNotEmpty(intent.getAnswer().getText())){
+									map.put("nlp", intent.getAnswer().getText());
+								}
 							}
 							
 						}
@@ -105,7 +116,7 @@ public class WebaiuiUtil {
 		        	logger.error("load config.properties failed.", e);
 		        	return null;
 		 }
-		return result;
+		return map;
 	}
 	
 	public static void main(String[] args) throws IOException,ParseException, InterruptedException{

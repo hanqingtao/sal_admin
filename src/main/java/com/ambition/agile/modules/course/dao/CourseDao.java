@@ -20,4 +20,6 @@ public interface CourseDao extends CrudDao<Course> {
 	
 	public List<Course> getByCode(String code);
 	
+	public List<Course> getByName(String name);
+	
 }

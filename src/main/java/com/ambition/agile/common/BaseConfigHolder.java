@@ -40,7 +40,10 @@ public class BaseConfigHolder {
 	public static String aiAppAppkey;//AI_APP_APIKEY; // 应用的 ai.app.apiKey
 	public static String aiAppApisecret;//AI_APP_APISECRET ; // 应用的 ai.app.apiSecret
 	public static String aiAppAuthid;//AiAppAuthid 应用的测试 authId
-	
+	//web tts 
+	public static String aiuiWebApiUrlTts;
+	public static String aiuiAppApikeyTts;
+
 	public static String wxAppId;//小程序的appid 
 	public static String wxSecret;//小程序的 secret
 	public static String wxGrantType;//加密类型
@@ -50,6 +53,7 @@ public class BaseConfigHolder {
 	
 	public static String videoDialogPath;//video.dialog.path=
 	public static String videoDialogName;//video.dialog.name=dialog
+	public static String videoDialogTtsName;//voice  tts 
 	
 	public static String flvServer;
 	public static String scormServer;
@@ -93,6 +97,9 @@ public class BaseConfigHolder {
 		//aiui 应用的调试 authId
 		getAiAppAuthid();
 		
+		getAiuiWebApiUrlTts();
+		
+		
 		//getAiAppApisecret();
 		
 		getWxAppID();
@@ -103,6 +110,7 @@ public class BaseConfigHolder {
 		getVideoFFmpegFile();
 		getVideoDialogPath();
 		getVideoDialogName();
+		getVideoDialogTtsName();
 		logger.info("@@@@@@ intiSystemValues  end %%%%%%");
 //		getFlvServer();
 //		getScormServer();
@@ -490,6 +498,27 @@ public class BaseConfigHolder {
 		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 		return aiAppApisecret;
 	}
+	
+	/** 
+	 * @see 应用的 ai. app. tts 
+	 * @return 
+	 */
+	public static String getAiuiWebApiUrlTts(){
+		if(aiuiWebApiUrlTts == null && getProperties()!= null){
+			aiuiWebApiUrlTts = new String(getProperties().getProperty("ai.aiui.webapi.ttsurl"));
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		return aiuiWebApiUrlTts;
+	}
+	/** 
+	 * @see 应用的 ai. app. tts 
+	 * @return 
+	 */
+	public static String getAiuiAppApikeyTts(){
+		if(aiuiAppApikeyTts == null && getProperties()!= null){
+			aiuiAppApikeyTts = new String(getProperties().getProperty("ai.aiui.tts.apikey"));
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		return aiuiAppApikeyTts;
+	}
 	/**
 	 * @see 微信相关appi secret 
 	 * @author harry
@@ -571,6 +600,21 @@ public class BaseConfigHolder {
 		}
 		return videoDialogName;
 	}
+	
+	/**
+	 * @see 音频文件的tts 目录
+	 * @return
+	 */
+	public static String getVideoDialogTtsName(){
+		if(videoDialogTtsName == null && getProperties() != null){
+			videoDialogTtsName = new String(getProperties().getProperty("video.dialog.tts.name"));
+		}
+		if(null != videoDialogTtsName ){
+			videoDialogTtsName = StringUtils.trim(videoDialogTtsName);
+		}
+		return videoDialogTtsName;
+	}
+	
 	
 	public static void main(String[] args) {
 		System.out.println("abc");

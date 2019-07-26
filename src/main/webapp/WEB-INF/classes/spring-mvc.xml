@@ -8,8 +8,10 @@
     <description>Spring MVC Configuration</description>
     
     	<!-- spring系统启动以后，会先加载该类 -->
+    	<!-- 
 	<bean class="com.ambition.agile.common.listener.InitDataListener">
 	</bean>
+	-->
 	
 		<!-- 配置路径 -->
 	<bean class="com.ambition.agile.common.SpringContextHolder" ></bean>
