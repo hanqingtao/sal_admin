@@ -136,6 +136,7 @@ public class WxUploadController extends BaseController {
 					map.put("answer", nlp);
 					String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 					map.put("answerVoice",answerVoice);
+					logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 				}
 					//如果使用  video-robot.lianggehuangli.com 则使用以下方法进行过滤。
 					/*
