@@ -102,8 +102,10 @@ public class WebTtsUtil {
 		if(StringUtils.isNotEmpty(voiceResultText)){
 			ttsText = voiceResultText;
 		}
+		logger.info("voiceResultText {}",voiceResultText);
 		Map<String, Object> resultMap = HttpUtil.doPost2(WEBTTS_URL, header, "text=" + URLEncoder.encode(ttsText, "utf-8"));
 		logger.info("占用内存大小：{} ", URLEncoder.encode(ttsText, "utf-8").getBytes().length);
+		logger.info("resultMap.get--Content-Type {} AUE {}" ,resultMap.get("Content-Type"),AUE);
 		if ("audio/mpeg".equals(resultMap.get("Content-Type"))) { // 合成成功
 			if ("raw".equals(AUE)) {
 				//暂时不需要合成 pcm wav 等格式 "/Users/harry/out/" 
@@ -121,7 +123,7 @@ public class WebTtsUtil {
 				logger.info(webttsResultUrl + "合成 WebAPI 调用成功，音频保存位置：resource\\" + resultMap.get("sid") + ".mp3");
 			}
 		} else { // 合成失败
-			logger.info("合成 WebAPI 调用失败，错误信息：" + resultMap.get("body").toString());//返回code为错误码时，请查询https://www.xfyun.cn/document/error-code解决方案
+			logger.info("合成 WebAPI 调用失败，错误信息：{} ,webttsResultUrl {}" + resultMap.get("body").toString(),webttsResultUrl);//返回code为错误码时，请查询https://www.xfyun.cn/document/error-code解决方案
 		}
 		return webttsResultUrl;
 	}

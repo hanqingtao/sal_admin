@@ -132,6 +132,7 @@ public class WxUploadController extends BaseController {
 					map.put("quesion", iat);
 				}
 				String nlp = (String)mapAIUI.get("nlp");
+				logger.info("#######nlp {} ",nlp);
 				if(StringUtils.isNotEmpty(nlp)){
 					map.put("answer", nlp);
 					String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
