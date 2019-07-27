@@ -107,9 +107,9 @@
 		FROM course a
 		<include refid="courseJoins"/>
 		<where>
-			1==1 
+			1=1 
 			<if test="name != null and name != ''">
-			and a.name like
+			AND a.name LIKE
 			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 			<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>

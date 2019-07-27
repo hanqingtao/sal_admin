@@ -56,8 +56,10 @@ public class AiuiWebController extends BaseController {
 		 if(null == courseName &&  StringUtils.isEmpty(courseName)){
 			 courseName = ""; 
 		 }
+		 Course courseQuery = new Course();
+		 courseQuery.setName(courseName);
 		 //设置本地路径
-		 List<Course> courseList = courseService.getByName(courseName);
+		 List<Course> courseList = courseService.getByName(courseQuery);
 		 if(null != courseList && courseList.size()>0){
 			 Course course = courseList.get(0);
 			 if(null != course && StringUtils.isNotEmpty(course.getId())){
@@ -67,12 +69,16 @@ public class AiuiWebController extends BaseController {
 				if(StringUtils.isNotEmpty(course.getVideoPath())){
 					map.put("voicePath", course.getVideoPath());
 				}
+				String duration = "";
 				if(StringUtils.isNotEmpty(course.getDuration())){
-					map.put("duration", course.getDuration());
+					duration = course.getDuration();
 				}
-				if(null != course.getDurationLong()){
-					map.put("durationLong", course.getDurationLong()+"");
+				map.put("duration", duration);
+				String durationLong = "0";
+				if(null != course.getDurationLong() && course.getDurationLong()>0){
+					durationLong = course.getDurationLong()+"";
 				}
+				map.put("durationLong", durationLong);
 			 }
 		 }
 		 //map.put("answerVoice","abc.mp3");

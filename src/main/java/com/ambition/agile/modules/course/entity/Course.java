@@ -4,7 +4,6 @@
 package com.ambition.agile.modules.course.entity;
 
 import org.hibernate.validator.constraints.Length;
-import com.ambition.agile.modules.sys.entity.Office;
 
 import com.ambition.agile.common.persistence.DataEntity;
 

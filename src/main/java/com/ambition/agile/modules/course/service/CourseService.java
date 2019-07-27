@@ -52,8 +52,8 @@ public class CourseService extends CrudService<CourseDao, Course> {
 	}
 	
 	//根据 code 获取 课程 的信息
-	public List<Course> getByName(String name) {
-		List<Course> couresList = dao.getByName(name);
+	public List<Course> getByName(Course course) {
+		List<Course> couresList = dao.getByName(course);
 		return couresList;
 	}
 	
