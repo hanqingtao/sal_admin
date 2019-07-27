@@ -82,7 +82,7 @@ public class WebaiuiUtil {
 			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
 			//System.out.println(dataByteArray.toString());
 			result = httpPost(AIUI_URL, header, dataByteArray);
-			System.out.println(result);
+			System.out.println("aiuiWebApiDealFile result "+result);
 			AIUIEntity aiuiEntity = JsonMapper.fromJson(result, AIUIEntity.class);
 			if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
 				logger.info("##### aiuiEntity.getSid()) ",aiuiEntity.getSid());

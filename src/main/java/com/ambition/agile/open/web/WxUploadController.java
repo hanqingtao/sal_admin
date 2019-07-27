@@ -124,40 +124,52 @@ public class WxUploadController extends BaseController {
 				
 				System.out.println("$$$$$$$$ audioUpload  convert new ossUrl:  "+outPutFileMP3);
 				System.out.println("$$$$$$$$ audioUpload convert new outPath:  "+outPutFilePCM);
-				
+				String iat = "";
+				String nlp = "";
 				Map mapAIUI = WebaiuiUtil.aiuiWebApiDealFile(outPutFilePCM);
 				System.out.println("########result wxupload file :"+ mapAIUI);
-				String iat = (String)mapAIUI.get("iat");
-				if(StringUtils.isNotEmpty(iat)){
-					map.put("quesion", iat);
-				}
-				String nlp = (String)mapAIUI.get("nlp");
-				logger.info("#######nlp {} ",nlp);
-				if(StringUtils.isNotEmpty(nlp)){
-					map.put("answer", nlp);
-					String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
-					map.put("answerVoice",answerVoice);
-					logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
-				}
-					//如果使用  video-robot.lianggehuangli.com 则使用以下方法进行过滤。
-					/*
-					String status=PropertiesFactory.getProperty("ossConfig.properties", "outernet.intranet");
-					String resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
-					if(Integer.valueOf(status)==1){//有外网的服务器 oss 存储
-						resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
-					}else{//没有外网的服务器 ftp 存储
-						resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.file.replace");
+				if(mapAIUI.isEmpty()){
+					iat = (String)mapAIUI.get("iat");
+					if(StringUtils.isNotEmpty(iat)){
+						map.put("quesion", iat);
 					}
-					//mainPath=ossUrl.substring(ossUrl.lastIndexOf("/",ossUrl.lastIndexOf("/")-2), ossUrl.length());
-					*/
-				//try catch 不判空
-				if(outPutFilePCM==null){
-					return ApiResponse.fail(404,"上传失败");
-				}
-				//暂时先用https//https://video-robot.oss-cn-beijing.aliyuncs.com/course248A0C83CC44443B9EA6E0246394FF53.png阿里的域名
-				//map.put("resResult",outPutFileMP3);
-				//map.put("fileName",fileType);
-				logger.info("上传信息：文件类型"+fileType+"，文件路径返回 fileUrl"+outPutFileMP3);
+					nlp = (String)mapAIUI.get("nlp");
+					logger.info("#######nlp {} ",nlp);
+					if(StringUtils.isNotEmpty(nlp)){
+						map.put("answer", nlp);
+						String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
+						map.put("answerVoice",answerVoice);
+						logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
+					}
+						//如果使用  video-robot.lianggehuangli.com 则使用以下方法进行过滤。
+						/*
+						String status=PropertiesFactory.getProperty("ossConfig.properties", "outernet.intranet");
+						String resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
+						if(Integer.valueOf(status)==1){//有外网的服务器 oss 存储
+							resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
+						}else{//没有外网的服务器 ftp 存储
+							resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.file.replace");
+						}
+						//mainPath=ossUrl.substring(ossUrl.lastIndexOf("/",ossUrl.lastIndexOf("/")-2), ossUrl.length());
+						*/
+					//try catch 不判空
+					if(outPutFilePCM==null){
+						return ApiResponse.fail(404,"上传失败");
+					}
+					//暂时先用https//https://video-robot.oss-cn-beijing.aliyuncs.com/course248A0C83CC44443B9EA6E0246394FF53.png阿里的域名
+					//map.put("resResult",outPutFileMP3);
+					//map.put("fileName",fileType);
+					logger.info("上传信息：文件类型"+fileType+"，文件路径返回 fileUrl"+outPutFileMP3);
+				}else{
+						iat ="";
+						nlp= "对不起，我没听清楚，请您再说一遍.";
+						map.put("quesion", iat);
+						map.put("answer", nlp);
+						String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
+						map.put("answerVoice",answerVoice);
+						System.out.println("nlp: "+nlp+"aaaaaaa"+answerVoice);
+					}
+					
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -167,8 +179,6 @@ public class WxUploadController extends BaseController {
 		 //如果需要的话，可以用自己的域名进行替换。 replace 即可
 		 //mainPath = "http:/"+ mainPath;
 		 //map.put("fileUrl",mainPath);
-		 
-		
 		 //map.put("answerVoice","abc.mp3");
 		 return ApiResponse.success(map); 
 	}

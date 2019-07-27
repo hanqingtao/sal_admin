@@ -31,12 +31,15 @@ public class HttpUtil {
 		try {
 			// 设置 url
 			URL realUrl = new URL(url);
+			System.out.println("$%%%%%%%%httputil  doPost 2 url"+ url );
 			URLConnection connection = realUrl.openConnection();
 			HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
 			// 设置 header
 			for (String key : header.keySet()) {
+				System.out.println("$%%%%%%%%httputil  doPost 2 "+ header.get(key) );
 				httpURLConnection.setRequestProperty(key, header.get(key));
 			}
+			//System.out.println(" @@@@httpURLConnection.getHeaderFieldContent-Type:"+httpURLConnection.getHeaderField("Content-Type"));
 			// 设置请求 body
 			httpURLConnection.setDoOutput(true);
 			httpURLConnection.setDoInput(true);
@@ -49,6 +52,7 @@ public class HttpUtil {
 				System.out.println("Http 请求失败，状态码：" + httpURLConnection.getResponseCode());
 				return null;
 			}
+			System.out.println(" @@@@httpURLConnection.getHeaderFieldContent-Type:"+httpURLConnection.getHeaderField("Content-Type"));
 			// 获取响应header
 			String responseContentType = httpURLConnection.getHeaderField("Content-Type");
 			if ("audio/mpeg".equals(responseContentType)) {

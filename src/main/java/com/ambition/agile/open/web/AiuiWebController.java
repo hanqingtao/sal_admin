@@ -50,7 +50,7 @@ public class AiuiWebController extends BaseController {
 	@ResponseBody
 	public ApiResponse<?> audioUpload(
 			String courseName, RedirectAttributes redirectAttributes) {
-		
+		logger.info(" voicenname {}",courseName);
 		Map<String,String> map=new HashMap<String,String>();
 		 //二级目录存放在 openId 每个用户自己的目录下 老鼠偷瓜
 		 if(null == courseName &&  StringUtils.isEmpty(courseName)){

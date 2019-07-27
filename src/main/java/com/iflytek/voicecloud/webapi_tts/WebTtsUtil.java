@@ -57,7 +57,7 @@ public class WebTtsUtil {
 	
 	private static String VideoDialogTtsName="tts";
 	// 待合成文本
-	private static  String ttsText = "我叫火落落，欢迎来到两个黄鹂，很高兴认识你";
+	private static  String ttsText = "我叫火落落，欢迎来到两个黄鹂，很高兴认识你，你在干什么？";
 	// 音频编码(raw合成的音频格式pcm、wav,lame合成的音频格式MP3)
 	private static final String AUE = "lame";//"raw";
 	// 采样率
@@ -78,14 +78,14 @@ public class WebTtsUtil {
 	static {
         try {
         		//aiui 应用 appid
-        		APPID = BaseConfigHolder.getAiAppAppid();
-        		logger.info("WebTtsUtil APPID{}",APPID);
-        		//aiui webapi url 
-        		WEBTTS_URL = BaseConfigHolder.getAiuiWebApiUrlTts();
-        		logger.info("WebTtsUtil WEBTTS_URL{}",WEBTTS_URL);
-        		//aiui 应用的调试 WebTtsUtil
-        		API_KEY = BaseConfigHolder.getAiuiAppApikeyTts();
-        		logger.info("WebTtsUtil API_KEY{}",API_KEY);
+//        		APPID = BaseConfigHolder.getAiAppAppid();
+//        		logger.info("WebTtsUtil APPID{}",APPID);
+//        		//aiui webapi url 
+//        		WEBTTS_URL = BaseConfigHolder.getAiuiWebApiUrlTts();
+//        		logger.info("WebTtsUtil WEBTTS_URL{}",WEBTTS_URL);
+//        		//aiui 应用的调试 WebTtsUtil
+//        		API_KEY = BaseConfigHolder.getAiuiAppApikeyTts();
+//        		logger.info("WebTtsUtil API_KEY{}",API_KEY);
         		videoDialogPath = BaseConfigHolder.getVideoDialogPath();
         		logger.info("WebTtsUtil videoDialogPath{}",videoDialogPath);
         		VideoDialogTtsName = BaseConfigHolder.getVideoDialogTtsName();
@@ -97,21 +97,26 @@ public class WebTtsUtil {
 	
 	public static String getWebTtsVoiceUrlByText(String voiceResultText) throws IOException {
 		
+		logger.info("getWebTtsVoiceUrlByText  {} begin ",voiceResultText);
 		Map<String, String> header = buildHttpHeader();
+		logger.info("getWebTtsVoiceUrlByText  {}  end  ",voiceResultText);
+		System.out.println("@@@@@@"+voiceResultText);
 		String webttsResultUrl = null;
 		if(StringUtils.isNotEmpty(voiceResultText)){
 			ttsText = voiceResultText;
 		}
 		logger.info("voiceResultText {}",voiceResultText);
-		Map<String, Object> resultMap = HttpUtil.doPost2(WEBTTS_URL, header, "text=" + URLEncoder.encode(ttsText, "utf-8"));
-		logger.info("占用内存大小：{} ", URLEncoder.encode(ttsText, "utf-8").getBytes().length);
+		Map<String, Object> resultMap = HttpUtil.doPost2(WEBTTS_URL, header, "text=" + URLEncoder.encode(voiceResultText, "utf-8"));
+		logger.info("占用内存大小：{} ", URLEncoder.encode(voiceResultText, "utf-8").getBytes().length);
 		logger.info("resultMap.get--Content-Type {} AUE {}" ,resultMap.get("Content-Type"),AUE);
+		System.out.println("@######"+resultMap.get("Content-Type")+"aaaaa:" +AUE);
 		if ("audio/mpeg".equals(resultMap.get("Content-Type"))) { // 合成成功
 			if ("raw".equals(AUE)) {
 				//暂时不需要合成 pcm wav 等格式 "/Users/harry/out/" 
 				FileUtil.save(videoDialogPath, resultMap.get("sid") + ".wav", (byte[]) resultMap.get("body"));
 				System.out.println("合成 WebAPI 调用成功，音频保存位置：resource\\" + resultMap.get("sid") + ".wav");
 			} else {
+				System.out.println("$$$$$$$$$$$$$$"+VideoDialogTtsName);
 				//FileUtil.save("/Users/harry/out/", resultMap.get("sid") + ".mp3", (byte[]) resultMap.get("body"));
 				InputStream inputStream = new ByteArrayInputStream((byte[]) resultMap.get("body")); 
 				//String mainget
