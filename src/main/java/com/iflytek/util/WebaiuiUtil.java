@@ -79,13 +79,13 @@ public class WebaiuiUtil {
 		Map map = new HashMap();
 		 try {
 			Map<String, String> header = buildHeader();
-			byte[] dataByteArray = readFile(FILE_PATH);//diagFilePath
+			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
 			//System.out.println(dataByteArray.toString());
 			result = httpPost(AIUI_URL, header, dataByteArray);
 			System.out.println(result);
 			AIUIEntity aiuiEntity = JsonMapper.fromJson(result, AIUIEntity.class);
 			if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
-				System.out.println("#####"+aiuiEntity.getSid());
+				logger.info("##### aiuiEntity.getSid()) ",aiuiEntity.getSid());
 				List<Data> dataList = aiuiEntity.getData();
 				
 				for(Data data:dataList){
