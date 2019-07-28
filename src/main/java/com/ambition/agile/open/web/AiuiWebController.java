@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +52,15 @@ public class AiuiWebController extends BaseController {
 	@RequestMapping(value = "getVoiceByName")
 	@ResponseBody
 	public ApiResponse<?> audioUpload(
-			String courseName, RedirectAttributes redirectAttributes) {
+			String courseName, HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttributes) {
+		System.out.println("##############courseName"+courseName);
+		if(StringUtils.isEmpty(courseName)){
+			courseName = request.getParameter("courseName");
+			System.out.println("##############courseName"+request.getParameter("courseName"));
+		}
 		logger.info(" voicenname {}",courseName);
+		
 		Map<String,String> map=new HashMap<String,String>();
 		 //二级目录存放在 openId 每个用户自己的目录下 老鼠偷瓜
 		 if(null == courseName &&  StringUtils.isEmpty(courseName)){

@@ -3,6 +3,7 @@
  */
 package com.ambition.agile.open.entity;
 
+import java.util.List;
 
 /**
  * Intent Entity
@@ -22,7 +23,8 @@ public class Intent {
 		private String text;
 		private String uuid;
 		private Answer answer;
-		
+		private Result data;
+		//private String data;
 		public int getNo_nlu_result() {
 			return no_nlu_result;
 		}
@@ -74,6 +76,19 @@ public class Intent {
 		public void setAnswer(Answer answer) {
 			this.answer = answer;
 		}
+		public Result getData() {
+			return data;
+		}
+
+		public void setData(Result data) {
+			this.data = data;
+		}
+//		public void setData(String data) {
+//			this.data = data;
+//		}
+//		public String getData() {
+//			return data;
+//		}
 		
 		
 	  

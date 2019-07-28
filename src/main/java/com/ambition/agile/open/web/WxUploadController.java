@@ -95,7 +95,7 @@ public class WxUploadController extends BaseController {
 			if(audioFile !=null){
 				// 获取文件类型
 				fileType = audioFile.getOriginalFilename();
-				map.put("fileName", fileType);
+				//map.put("fileName", fileType);
 				String type = fileType.substring(fileType.lastIndexOf(".") + 1, fileType.length());
 				//原来的思路是上传oss ,在 oss 上进行文件转换，但oss 不支持 mp3 转成pcm 只有服务器端进行存储，然后调用转换接口。
 				//dir = "dialog";
@@ -103,24 +103,8 @@ public class WxUploadController extends BaseController {
 				
 				SaveFileFromInputStream(audioFile,outPutFileMP3);
 				
-				//outPutFileMP3;"/Users/harry/out/nihao.mp3";//
-				//String outPath = outPutFile.replace(".mp3", ".pcm");//"/Users/harry/out/nihao.pcm";//
 				final VideoUtils v = new VideoUtils(outPutFileMP3,outPutFilePCM,null);
 				v.convert();
-				// 开启进程，在转换视频文件
-				/*new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								Thread.sleep(100);
-								v.convert();
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
-					}).start(); 
-				*/
-				
 				
 				System.out.println("$$$$$$$$ audioUpload  convert new ossUrl:  "+outPutFileMP3);
 				System.out.println("$$$$$$$$ audioUpload convert new outPath:  "+outPutFilePCM);
@@ -128,7 +112,16 @@ public class WxUploadController extends BaseController {
 				String nlp = "";
 				Map mapAIUI = WebaiuiUtil.aiuiWebApiDealFile(outPutFilePCM);
 				System.out.println("########result wxupload file :"+ mapAIUI);
-				if(mapAIUI.isEmpty()){
+				if(!mapAIUI.isEmpty()){
+					
+					String answerType = (String)mapAIUI.get("answerType");
+					logger.info("####### answerType {} ",answerType);
+					System.out.println(" #######result answerType  before ::"+answerType);
+					if(StringUtils.isEmpty(answerType)){
+						answerType = "1";
+					}
+					map.put("answerType", answerType);
+					
 					iat = (String)mapAIUI.get("iat");
 					if(StringUtils.isNotEmpty(iat)){
 						map.put("quesion", iat);
@@ -141,17 +134,36 @@ public class WxUploadController extends BaseController {
 						map.put("answerVoice",answerVoice);
 						logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 					}
-						//如果使用  video-robot.lianggehuangli.com 则使用以下方法进行过滤。
-						/*
-						String status=PropertiesFactory.getProperty("ossConfig.properties", "outernet.intranet");
-						String resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
-						if(Integer.valueOf(status)==1){//有外网的服务器 oss 存储
-							resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.resource");
-						}else{//没有外网的服务器 ftp 存储
-							resource=PropertiesFactory.getProperty("ossConfig.properties", "oss.file.replace");
-						}
-						//mainPath=ossUrl.substring(ossUrl.lastIndexOf("/",ossUrl.lastIndexOf("/")-2), ossUrl.length());
-						*/
+					
+					String courseName = (String)mapAIUI.get("courseName");
+					logger.info("#######result courseName  {} ",courseName);
+					if(StringUtils.isNotEmpty(courseName)){
+						map.put("courseName", courseName);
+					}
+					
+					//answerType  2 
+					String voicePath  = (String)mapAIUI.get("voicePath");
+					if(StringUtils.isNotEmpty(voicePath)){
+						map.put("voicePath", voicePath);
+					}
+					String couseName = (String)mapAIUI.get("couseName");
+					if(StringUtils.isNotEmpty(couseName)){
+						map.put("couseName", couseName);
+					}
+					System.out.println("#######result answerType  after  ::"+answerType);
+					String duration = (String)mapAIUI.get("duration");
+					System.out.println("#######duration {} "+duration);
+					if(StringUtils.isEmpty(duration)){
+						duration = "00:00:00";
+					}
+					map.put("duration", duration);
+					
+					String durationLong  = (String)mapAIUI.get("durationLong");
+					if(StringUtils.isEmpty(durationLong)){
+						durationLong = "0";
+					}
+					map.put("durationLong", durationLong);
+					
 					//try catch 不判空
 					if(outPutFilePCM==null){
 						return ApiResponse.fail(404,"上传失败");
@@ -165,11 +177,11 @@ public class WxUploadController extends BaseController {
 						nlp= "对不起，我没听清楚，请您再说一遍.";
 						map.put("quesion", iat);
 						map.put("answer", nlp);
+						map.put("answerType", "1");//给出类型 1 正常问答的方式  
 						String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 						map.put("answerVoice",answerVoice);
 						System.out.println("nlp: "+nlp+"aaaaaaa"+answerVoice);
 					}
-					
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -177,9 +189,7 @@ public class WxUploadController extends BaseController {
 		} 
 		 //map.put("code","200");
 		 //如果需要的话，可以用自己的域名进行替换。 replace 即可
-		 //mainPath = "http:/"+ mainPath;
-		 //map.put("fileUrl",mainPath);
-		 //map.put("answerVoice","abc.mp3");
+		 System.out.println("#####map "+map);
 		 return ApiResponse.success(map); 
 	}
 	

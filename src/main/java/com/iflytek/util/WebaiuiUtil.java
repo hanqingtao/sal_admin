@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +26,11 @@ import com.ambition.agile.common.mapper.JsonMapper;
 import com.ambition.agile.open.entity.AIUIEntity;
 import com.ambition.agile.open.entity.Data;
 import com.ambition.agile.open.entity.Intent;
+import com.ambition.agile.open.entity.Result;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * AIUI WebAPI V2接口调用示例
@@ -75,25 +80,29 @@ public class WebaiuiUtil {
 	 */
 	public static Map<String,String> aiuiWebApiDealFile(String diagFilePath)  {
 		
-		String result ="";
+		String resultHttpPost ="";
 		Map map = new HashMap();
 		 try {
 			Map<String, String> header = buildHeader();
 			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
 			//System.out.println(dataByteArray.toString());
-			result = httpPost(AIUI_URL, header, dataByteArray);
-			System.out.println("aiuiWebApiDealFile result "+result);
-			AIUIEntity aiuiEntity = JsonMapper.fromJson(result, AIUIEntity.class);
+			resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
+			System.out.println("aiuiWebApiDealFile resultHttpPost "+resultHttpPost);
+			//AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
+			Gson gson = new Gson();
+			AIUIEntity aiuiEntity  = gson.fromJson(resultHttpPost, AIUIEntity.class);
 			if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
 				logger.info("##### aiuiEntity.getSid()) ",aiuiEntity.getSid());
 				List<Data> dataList = aiuiEntity.getData();
-				
+				//默认是  type 1 是问答形式
+				map.put("answerType", "1");
+				boolean is_skill = false;
 				for(Data data:dataList){
 					if(null != data && data.getAuth_id() != null){
 						String sub = data.getSub();
 						//业务类型：iat（识别）
 						if(null != sub && sub.equals("iat")){
-							System.out.println(data.getText());
+							System.out.println("webaiuiUTil: iat "+data.getText());
 							if(StringUtils.isNotEmpty(data.getText())){
 								map.put("iat", data.getText());
 							}
@@ -101,21 +110,112 @@ public class WebaiuiUtil {
 						//如果类型是 nlp 业务类型： nlp（语义），tpp（后处理），itrans（翻译）
 						if(null != sub && sub.equals("nlp")){
 							Intent intent = data.getIntent();
-							if(null != intent && intent.getAnswer() != null){
-								System.out.println(intent.getAnswer().getText());
-								if(StringUtils.isNotEmpty(intent.getAnswer().getText())){
-									map.put("nlp", intent.getAnswer().getText());
+//							//区分 nlp 知识回答，还是 后处理 逻辑  
+							if(null != intent && intent.getService()!= null  ){
+								String service = intent.getService();
+								if(service.equals("OS7485603678.talk")){
+									is_skill  = true;
 								}
+								if(!service.equals("OS7485603678.talk")){
+									if(null != intent && intent.getAnswer() != null){
+										System.out.println("webaiuiUtil  nlp: "+intent.getAnswer().getText());
+										if(StringUtils.isNotEmpty(intent.getAnswer().getText())){
+											map.put("nlp", intent.getAnswer().getText());
+										}
+									}
+////									map.put("answerType", "2");
+////									Result result = null;//intent.getData();
+////									System.out.println("######  intentData"+result);
+//////									if( null != result){
+//////										if(!result.getCourseName().isEmpty()){
+//////											map.put("couseName",result.getCourseName() );
+//////											
+//////										}
+//////										if(!result.getDuration().isEmpty()){
+//////											map.put("duration",result.getDuration() );
+//////										}
+//////										map.put("durationLong",result.getDurationLong() );
+//////										if(!result.getVoicePath().isEmpty()){
+//////											map.put("voicePath",result.getVoicePath() );
+//////										}
+//////										if(result.getCourseName().isEmpty() || result.getVoicePath().isEmpty()){
+//////											System.out.println("intent.getAnswer().getText() "+intent.getAnswer().getText());
+//////											map.put("nlp",intent.getAnswer().getText());
+//////										}
+////									
+////										map.put("nlp",intent.getAnswer().getText());
+////									}
+//								}else{
+								
 							}
-							
 						}
 					}
 				}
+				
+				
+				}
+				
+				//由于  data.intent.data.result 解析不出来，存在问题， begin
+				if(is_skill){
+				JsonParser parser=new JsonParser();  //创建JSON解析器
+				 JsonObject object=(JsonObject) parser.parse(resultHttpPost);  //创建JsonObject对象
+				 JsonArray arrays=object.get("data").getAsJsonArray();
+				 //System.out.println(arrays);
+				 Result result = null;
+				 for(int i=0;i<arrays.size();i++){
+		             System.out.println("---------------");
+		             JsonObject subObject=arrays.get(i).getAsJsonObject();
+		             String subType = subObject.get("sub").getAsString();
+		             if(null != subType && subType.equals("nlp") && null != subObject.get("intent") && 
+		            		 !subObject.get("intent").toString().equals("{}")){
+		            	 	
+		            	 	System.out.println(subObject.get("intent").toString());
+		            	 	String intentStr = subObject.get("intent").toString();
+		            	 	JsonObject intentObject=(JsonObject) parser.parse(intentStr);
+		            	 	if(null == intentObject.get("data")){
+		            	 		continue;
+		            	 	}
+		            	 	String   intentDataStr = intentObject.get("data").toString();
+		            	 	if(null == intentObject.get("service") ){
+		            	 		continue;
+		            	 	}
+		            	 	String intentService = intentObject.get("service").toString();
+		            	 	if(null != intentService ){
+		            	 		intentService = intentService.replace("\"", "");
+		            	 	}
+		        	 		System.out.print("intentService ####"+intentService);
+		        	 		//此时是技能方法
+		        	 		if(intentService.equals("OS7485603678.talk")){
+		        	 			System.out.println("OS intentDataStr :"+intentDataStr);
+		                	 	intentDataStr = intentDataStr.replace("[", "").replace("]", "");
+		                	 	System.out.println("OS intentDataStr replace :"+intentDataStr);
+		                		JsonObject intentDataObject=(JsonObject) parser.parse(intentDataStr);
+		                		String intentDataResultStr = intentDataObject.get("result").toString();
+		                		System.out.println("OS intentDataResultStr  :"+intentDataResultStr);
+		                		if(null != intentDataResultStr){
+		                			JsonObject intentDataResultObject=(JsonObject) parser.parse(intentDataResultStr);
+		                			result = gson.fromJson(intentDataResultObject,Result.class);
+		                			System.out.println("OS7485603678.talk @@@@@"+result.toString());
+		                		}
+		        	 		}
+		             }
+				 }
+				 //System.out.println("######"+result.getCourseName()+"abc"+result.getVoicePath());
+				 if(null != result && result.getCourseName()!= null && result.getVoicePath()!= null){
+					 map.put("answerType", "2");
+					 map.put("couseName", result.getCourseName());
+					 map.put("duration", result.getDuration());
+					 map.put("voicePath", result.getVoicePath());
+					 map.put("durationLong", result.getDurationLong()+"");
+				 }
+				}
+				 //以上为通过 技能返回结果 end
 			}
 		 }catch (Exception e) {
 		        	logger.error("load config.properties failed.", e);
 		        	return null;
 		 }
+		 System.out.println("webaiuiUtil   map ;"+map);
 		return map;
 	}
 	
@@ -125,9 +225,9 @@ public class WebaiuiUtil {
 		//byte[] dataByteArray = str.getBytes("utf-8");
 		byte[] dataByteArray = readFile(FILE_PATH);
 		//System.out.println(dataByteArray.toString());
-		String result = httpPost(AIUI_URL, header, dataByteArray);
-		System.out.println(result);
-		AIUIEntity aiuiEntity = JsonMapper.fromJson(result, AIUIEntity.class);
+		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
+		System.out.println(resultHttpPost);
+		AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
 		if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
 			System.out.println("#####"+aiuiEntity.getSid());
 			List<Data> dataList = aiuiEntity.getData();
