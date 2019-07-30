@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,12 @@ public class AiuiWebController extends BaseController {
 			courseName = request.getParameter("courseName");
 			System.out.println("##############courseName"+request.getParameter("courseName"));
 		}
+		try{
+			courseName = java.net.URLDecoder.decode(courseName, "UTF-8");
+		}catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		
 		logger.info(" voicenname {}",courseName);
 		
 		Map<String,String> map=new HashMap<String,String>();

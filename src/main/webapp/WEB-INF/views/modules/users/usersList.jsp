@@ -19,7 +19,9 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/users/users/">学员信息列表</a></li>
+		<!-- 
 		<shiro:hasPermission name="users:users:edit"><li><a href="${ctx}/users/users/form">学员信息添加</a></li></shiro:hasPermission>
+		 -->
 	</ul>
 	<form:form id="searchForm" modelAttribute="users" action="${ctx}/users/users/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
