@@ -59,7 +59,6 @@
 			</div>
 		</div>
 		-->
-		<!-- 
 		<div class="control-group">
 			<label class="control-label">归属机构:</label>
 			<div class="controls">
@@ -67,9 +66,7 @@
 					title="公司" url="/sys/office/treeData?type=1" cssClass="required"/>
 			</div>
 		</div>
-		-->
 		<!--  部门 id 与 机构id 暂时一样   先不显示出来  便于以后扩展 -->
-		<input type="hidden" name="company.id" value="1" />
 		<input type="hidden" name="office.id" value="${user.office.id}" />
 		<!-- 
 		<div class="control-group">
