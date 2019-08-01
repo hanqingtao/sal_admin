@@ -1,7 +1,12 @@
 package com.iflytek;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.ambition.agile.common.util.WxHttpClientUtil;
 import com.ambition.agile.open.entity.AIUIEntity;
 import com.ambition.agile.open.entity.Result;
 import com.google.gson.Gson;
@@ -13,8 +18,6 @@ import com.google.gson.reflect.TypeToken;
 public class Test {
 
 	public static void main(String[] args)  throws Exception {
-		
-		
 		String a = "{\"data\":[{\"sub\":\"iat\",\"auth_id\":\"779705c3e4cfd0a279fb7cf1da752663\",\"text\":\"给我讲3\",\"result_id\":1},{\"sub\":\"iat\",\"auth_id\":\"8b4373e169cc18e4c157d15b2749d5f4\",\"text\":\"\",\"result_id\":2},{\"sub\":\"nlp\",\"auth_id\":\"8b4373e169cc18e4c157d15b2749d5f4\",\"intent\":{},\"result_id\":2},{\"sub\":\"nlp\",\"auth_id\":\"8b4373e169cc18e4c157d15b2749d5f4\",\"intent\":{\"answer\":{\"text\":\"请欣赏3222\",\"type\":\"T\"},\"category\":\"OS7596127858.2huanglispeak\",\"data\":{\"result\":[{\"courseName\":\"3222\",\"duration\":\"\",\"durationLong\":\"0\",\"voicePath\":\"http://video-robot.oss-cn-beijing.aliyuncs.com/courseCC0B0BFBFC954271B918FCACA417B3F2.jpg\"}]},\"intentType\":\"custom\",\"rc\":0,\"semantic\":[{\"entrypoint\":\"ent\",\"intent\":\"query\",\"score\":0.8545160293579102,\"slots\":[{\"begin\":3,\"end\":4,\"name\":\"bizName\",\"normValue\":\"3\",\"value\":\"3\"}],\"template\":\"你能给我讲{bizName}吗\"}],\"semanticType\":1,\"service\":\"OS7596127858.2huanglispeak\",\"sessionIsEnd\":\"false\",\"shouldEndSession\":true,\"sid\":\"atn050199f7@dx000710989c50782d01\",\"state\":null,\"text\":\"给我讲3\",\"uuid\":\"atn050199f7@dx000710989c50782d01\",\"vendor\":\"OS7485603678\",\"version\":\"3.0\"},\"result_id\":1}],\"sid\":\"ara05fe7ea7@dx000110989c5f094000\",\"code\":\"0\",\"desc\":\"success\"}";
 		Gson gson = new Gson();
 		//AIUIEntity aiuiEntity = JsonMapper.fromJson(a, AIUIEntity.class);
@@ -64,7 +67,6 @@ public class Test {
                 		result = gson.fromJson(intentDataResultObject,Result.class);
                 		System.out.println(result.toString());
         	 		}
-            	 	
              }
          }
 		//AIUIEntity aiuiEntity = gson.fromJson(a, AIUIEntity.class);
@@ -81,6 +83,10 @@ public class Test {
 			//storageState.putInfo(\\"type\\", \\".\\" + v.getOutputFileExtension());
 			//storageState.putInfo(\\"original\\", originFileName +\\".\\"+ v.getInputFileExtension());
 			//return storageState;
+		 
+		
+		 
+		 
 	}
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ambition.agile.common.ApiResponse;
+import com.ambition.agile.common.BaseConfigHolder;
 import com.ambition.agile.common.util.WxHttpClientUtil;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
@@ -61,15 +62,16 @@ public class UserApiController extends BaseController {
 	    //Locale locale = new Locale("en", "US");
 	    //ResourceBundle resource = ResourceBundle.getBundle("config/wx-config",locale);   //读取属性文件
 	    //String requestUrl = resource.getString("url");  //请求地址 https://api.weixin.qq.com/sns/jscode2session
-	    /*
-	    String requestUrl = BaseConfigHolder.getWxRequestUrl();
-	    String wxAppId = BaseConfigHolder.getWxAppID();
-	    String wxSecret = BaseConfigHolder.getWxSecret();
-	    String wxGrantType = BaseConfigHolder.getWxGrantType();
-	    */
+	    
+//	    String requestUrl = BaseConfigHolder.getWxRequestUrl();
+//	    String wxAppId = BaseConfigHolder.getWxAppID();
+//	    String wxSecret = BaseConfigHolder.getWxSecret();
+//	    String wxGrantType = BaseConfigHolder.getWxGrantType();
+	    //System.out.println("requestUrl @@@@"+ requestUrl +"appId:"+wxAppId + "wxSecret："+ wxSecret +"wxGrantType："+wxGrantType+"code："+wxCode);
+	    
 	    String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
-	    String wxAppId = "wxaa6536bb52e66d04";
-	    String wxSecret = "fc95808e8f55b896b142e645f75e1cf4";
+	    String wxAppId = "wx3bfbcc616d044410";
+	    String wxSecret = "d2f1423075b2c441f785062bc218b08f";
 	    String wxGrantType = "authorization_code";
 	    
 	    Map<String, String> requestUrlParam = new HashMap<String, String>();
@@ -77,7 +79,7 @@ public class UserApiController extends BaseController {
 	    requestUrlParam.put("secret", wxSecret);//resource.getString("appSecret")); //开发者设置中的appSecret
 	    requestUrlParam.put("js_code", wxCode); //小程序调用wx.login返回的code
 	    requestUrlParam.put("grant_type", wxGrantType);//resource.getString("grantType"));    //默认参数 authorization_code
-	    
+	    System.out.println("requestUrlParam:"+requestUrlParam);
 	    //发送post请求读取调用微信 https://api.weixin.qq.com/sns/jscode2session 接口获取openid用户唯一标识
 	    JSONObject jsonObject = JSON.parseObject(WxHttpClientUtil.sendPost(requestUrl, requestUrlParam));
 	    //{"openid":"oaL5V4-2b7M5_ih5aYIipBvL0fRo","session_key":"wgOhV7khu4KCDR9VGgG3lA=="}
