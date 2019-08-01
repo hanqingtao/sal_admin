@@ -112,7 +112,7 @@ public class WxUploadController extends BaseController {
 				String nlp = "";
 				Map mapAIUI = WebaiuiUtil.aiuiWebApiDealFile(outPutFilePCM);
 				System.out.println("########result wxupload file :"+ mapAIUI);
-				if(!mapAIUI.isEmpty()){
+				if(null != mapAIUI && !mapAIUI.isEmpty()){
 					
 					String answerType = (String)mapAIUI.get("answerType");
 					logger.info("####### answerType {} ",answerType);
@@ -128,13 +128,24 @@ public class WxUploadController extends BaseController {
 					}
 					nlp = (String)mapAIUI.get("nlp");
 					logger.info("#######nlp {} ",nlp);
+					if(StringUtils.isEmpty(nlp)){
+						//如果没有返回 nlp
+						nlp = "对不起，请您再说一遍.";
+					}
 					if(StringUtils.isNotEmpty(nlp)){
 						map.put("answer", nlp);
 						String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 						map.put("answerVoice",answerVoice);
 						logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 					}
-					
+					//返回 第二种问答的  前部分音频 地址
+					String reply = (String)mapAIUI.get("reply");
+					if(StringUtils.isNotEmpty(reply)){
+						System.out.println("answerType 2 "+ reply);
+						String preVidePath =  WebTtsUtil.getWebTtsVoiceUrlByText(reply);
+						System.out.println("answerType 2 reply  url  "+ preVidePath);
+						map.put("preVidePath", preVidePath);
+					}
 					String courseName = (String)mapAIUI.get("courseName");
 					logger.info("#######result courseName  {} ",courseName);
 					if(StringUtils.isNotEmpty(courseName)){

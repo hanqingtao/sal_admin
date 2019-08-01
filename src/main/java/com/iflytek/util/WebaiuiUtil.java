@@ -39,6 +39,7 @@ import com.google.gson.JsonParser;
  * aiui 技能调用，进行语义分析，返回处理结果
  * 结果： 控制台输出接口返回值信息
  * 
+ * 
  * @author iflytek_aiui
  * 
  */
@@ -47,9 +48,9 @@ public class WebaiuiUtil {
 	private static final Logger logger = LoggerFactory.getLogger(WebaiuiUtil.class);
 	
 	private static  String AIUI_URL = "http://openapi.xfyun.cn/v2/aiui";
-	private static  String APPID = "5d14aa85";
-	private static  String API_KEY = "8e7f4eb3f67ab20582dc6b2af0023406";
-	private static  String AUTH_ID = "8b4373e169cc18e4c157d15b2749d5f4";//29f0b5211cb74caf5320fb0625d6fb98";
+	private static  String APPID = "5d3d95ea";
+	private static  String API_KEY = "5fd24cbae0bd5917660afaa479929669";
+	private static  String AUTH_ID = "779705c3e4cfd0a279fb7cf1da752663";//29f0b5211cb74caf5320fb0625d6fb98";
 	private static final String DATA_TYPE = "audio";// data_type text 文本  audio音频 
 	private static final String SCENE = "main_box";//main_box 测试 text 类型  audio 用  main即可
 	private static final String RESULT_LEVEL = "complete";
@@ -57,7 +58,7 @@ public class WebaiuiUtil {
 	private static final String AUE = "raw";//可选值：raw（未压缩的pcm或wav格式）、speex（speex格式，即sample_rate=8000的speex音频）、speex-wb（宽频speex格式，即sample_rate=16000的speex音频），默认为 raw
 	private static final String FILE_PATH = "/Users/harry/out/nihao.pcm";//16k_10.pcm";////test.txt";//16k_10.pcm";//bj_weather.wav";////16k_10.pcm"; // 中文
 	// 个性化参数，需转义 个性化参数，json字符串，目前支持用户级（auth_id）、应用级（appid）和用户自定义级，不支持透传其他参数。
-	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"8b4373e169cc18e4c157d15b2749d5f4\\\"}";
+	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"779705c3e4cfd0a279fb7cf1da752663\\\"}";
 	
 	static {
         try {
@@ -113,10 +114,10 @@ public class WebaiuiUtil {
 //							//区分 nlp 知识回答，还是 后处理 逻辑  
 							if(null != intent && intent.getService()!= null  ){
 								String service = intent.getService();
-								if(service.equals("OS7485603678.talk")){
+								if(service.equals("OS7596127858.2huanglispeak")){
 									is_skill  = true;
 								}
-								if(!service.equals("OS7485603678.talk")){
+								if(!service.equals("OS7596127858.2huanglispeak")){
 									if(null != intent && intent.getAnswer() != null){
 										System.out.println("webaiuiUtil  nlp: "+intent.getAnswer().getText());
 										if(StringUtils.isNotEmpty(intent.getAnswer().getText())){
@@ -185,17 +186,17 @@ public class WebaiuiUtil {
 		            	 	}
 		        	 		System.out.print("intentService ####"+intentService);
 		        	 		//此时是技能方法
-		        	 		if(intentService.equals("OS7485603678.talk")){
+		        	 		if(intentService.equals("OS7596127858.2huanglispeak")){
 		        	 			System.out.println("OS intentDataStr :"+intentDataStr);
 		                	 	intentDataStr = intentDataStr.replace("[", "").replace("]", "");
 		                	 	System.out.println("OS intentDataStr replace :"+intentDataStr);
 		                		JsonObject intentDataObject=(JsonObject) parser.parse(intentDataStr);
 		                		String intentDataResultStr = intentDataObject.get("result").toString();
 		                		System.out.println("OS intentDataResultStr  :"+intentDataResultStr);
-		                		if(null != intentDataResultStr){
+		                		if(null != intentDataResultStr && intentDataResultStr.equals("null")){
 		                			JsonObject intentDataResultObject=(JsonObject) parser.parse(intentDataResultStr);
 		                			result = gson.fromJson(intentDataResultObject,Result.class);
-		                			System.out.println("OS7485603678.talk @@@@@"+result.toString());
+		                			System.out.println("OS7596127858.2huanglispeak @@@@@"+result.toString());
 		                		}
 		        	 		}
 		             }
@@ -206,6 +207,7 @@ public class WebaiuiUtil {
 					 map.put("couseName", result.getCourseName());
 					 map.put("duration", result.getDuration());
 					 map.put("voicePath", result.getVoicePath());
+					 map.put("reply", result.getReply());
 					 map.put("durationLong", result.getDurationLong()+"");
 				 }
 				}

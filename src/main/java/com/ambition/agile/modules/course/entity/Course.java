@@ -20,6 +20,7 @@ public class Course extends DataEntity<Course> {
 	private String courseType;		// 课程类型
 	private String categoryName;		// 所属分类名称
 	private String categoryCode;		// 视频分类
+	private String replay;			//答案
 	private String coverPath;		// 课程封面
 	private String duration;		// 时长 **:**:**
 	private Integer durationLong;		// 时长
@@ -136,7 +137,7 @@ public class Course extends DataEntity<Course> {
 		this.orderNum = orderNum;
 	}
 	
-	@Length(min=1, max=256, message="视频路径长度必须介于 1 和 256 之间")
+	//@Length(min=1, max=256, message="视频路径长度必须介于 1 和 256 之间")
 	public String getVideoPath() {
 		return videoPath;
 	}
@@ -145,7 +146,7 @@ public class Course extends DataEntity<Course> {
 		this.videoPath = videoPath;
 	}
 	
-	@Length(min=1, max=64, message="视频名称 长度必须介于 1 和 64 之间")
+	//@Length(min=1, max=64, message="视频名称 长度必须介于 1 和 64 之间")
 	public String getVideoName() {
 		return videoName;
 	}
@@ -169,6 +170,14 @@ public class Course extends DataEntity<Course> {
 
 	public void setCategoryIds(String categoryIds) {
 		this.categoryIds = categoryIds;
+	}
+
+	public String getReplay() {
+		return replay;
+	}
+
+	public void setReplay(String replay) {
+		this.replay = replay;
 	}
 	
 }

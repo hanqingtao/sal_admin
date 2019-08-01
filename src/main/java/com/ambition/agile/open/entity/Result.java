@@ -23,6 +23,8 @@ public class Result {
 	    
 	    private String voicePath;
 	    
+	    private String reply;
+	    
 		public String getCourseName() {
 			return courseName;
 		}
@@ -46,6 +48,12 @@ public class Result {
 		}
 		public void setVoicePath(String voicePath) {
 			this.voicePath = voicePath;
+		}
+		public String getReply() {
+			return reply;
+		}
+		public void setReply(String reply) {
+			this.reply = reply;
 		}
 
 	

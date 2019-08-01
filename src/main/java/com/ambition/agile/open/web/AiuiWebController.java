@@ -66,7 +66,7 @@ public class AiuiWebController extends BaseController {
 			e.printStackTrace();
 		}
 		
-		logger.info(" voicenname {}",courseName);
+		System.out.println(" voicenname {}"+courseName);
 		
 		Map<String,String> map=new HashMap<String,String>();
 		 //二级目录存放在 openId 每个用户自己的目录下 老鼠偷瓜
@@ -90,6 +90,10 @@ public class AiuiWebController extends BaseController {
 				if(StringUtils.isNotEmpty(course.getDuration())){
 					duration = course.getDuration();
 				}
+				String reply = "";
+				if(StringUtils.isNotEmpty(course.getReplay())){
+					reply = course.getReplay();
+				}
 				map.put("duration", duration);
 				String durationLong = "0";
 				if(null != course.getDurationLong() && course.getDurationLong()>0){
@@ -98,6 +102,7 @@ public class AiuiWebController extends BaseController {
 				map.put("durationLong", durationLong);
 			 }
 		 }
+		 System.out.println("getcode map:"+map);
 		 //map.put("answerVoice","abc.mp3");
 		 return ApiResponse.success(map);
 	}

@@ -74,13 +74,15 @@ public class OssUploadController extends BaseController {
 				if(ossUrl==null){
 					return ApiResponse.fail(404,"上传失败");
 				}
+				ossUrl = ossUrl.replace("video-robot.oss-cn-beijing.aliyuncs.com", "video-robot.lianggehuangli.com");
 				//暂时先用https//https://video-robot.oss-cn-beijing.aliyuncs.com/course248A0C83CC44443B9EA6E0246394FF53.png阿里的域名
+				System.out.println("ossUrl ::"+ossUrl);
 				map.put("fileUrl",ossUrl);
 				/*int index=ossUrl.indexOf("/");
 				index=ossUrl.indexOf(".", index+2);
 		        mainPath=ossUrl.substring(index,ossUrl.length()-1);*/
-		        mainPath=ossUrl.substring(ossUrl.lastIndexOf("/",ossUrl.lastIndexOf("/")-2), ossUrl.length());
-				System.out.println("#########mainPath:"+mainPath);
+		        //mainPath=ossUrl.substring(ossUrl.lastIndexOf("/",ossUrl.lastIndexOf("/")-2), ossUrl.length());
+				//System.out.println("#########mainPath:"+mainPath);
 		        /*String[] paths = ossUrl.split("/");
 				mainPath= "/" + paths[paths.length - 2] + "/" + paths[paths.length - 1];*/
 				map.put("fileName",fileType);
@@ -94,7 +96,7 @@ public class OssUploadController extends BaseController {
 		 //如果需要的话，可以用自己的域名进行替换。 replace 即可
 		 //mainPath = "http:/"+ mainPath;
 		 //map.put("fileUrl",mainPath);
-		 System.out.println("上传信息：文件类型"+fileType+"，文件路径fileUrl"+mainPath);
+		 //System.out.println("上传信息：文件类型"+fileType+"，文件路径fileUrl"+mainPath);
 		 return ApiResponse.success(map); 
 	}
 	

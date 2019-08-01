@@ -34,11 +34,11 @@ import com.ambition.agile.common.aliyun.oss.OSSUploadUtil;
 public class WebTTs {
 	
 	// 合成webapi接口地址
-	private static final String WEBTTS_URL = "http://api.xfyun.cn/v1/service/v1/tts";
+	private static final String WEBTTS_URL = "https://api.xfyun.cn/v1/service/v1/tts";
 	// 应用APPID（必须为webapi类型应用，并开通语音合成服务，参考帖子如何创建一个webapi应用：http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=36481）
-	private static final String APPID = "5d14aa85";
+	private static final String APPID = "5d3d95ea";
 	// 接口密钥（webapi类型应用开通合成服务后，控制台--我的应用---语音合成---相应服务的apikey）
-	private static final String API_KEY = "de0d1fa2a95b7c6b76ec93048486a3da";
+	private static final String API_KEY = "e24ffb6e714013fa778f30d2834a635b";
 	// 待合成文本
 	private static final String TEXT = "我叫火落落，欢迎来到两个黄鹂，很高兴认识你";
 	// 音频编码(raw合成的音频格式pcm、wav,lame合成的音频格式MP3)

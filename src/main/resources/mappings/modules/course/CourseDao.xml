@@ -9,6 +9,7 @@
 		a.course_type AS "courseType",
 		a.category_name AS "categoryName",
 		a.category_code AS "categoryCode",
+		a.reply as "reply",
 		a.cover_path AS "coverPath",
 		a.duration AS "duration",
 		a.duration_long AS "durationLong",
@@ -26,7 +27,16 @@
 		a.category_id AS "categoryId",
 		a.category_ids AS "categoryIds"
 	</sql>
-	
+	<sql id="courseSkillColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.reply as "reply",
+		a.cover_path AS "coverPath",
+		a.duration AS "duration",
+		a.duration_long AS "durationLong",
+		a.video_path AS "videoPath",
+		a.video_name AS "videoName"
+	</sql>
 	<sql id="courseJoins">
 		LEFT JOIN sys_office o20 ON o20.id = a.category_id
 	</sql>
@@ -103,9 +113,8 @@
 		
 	<select id="getByName" resultType="Course">
 		SELECT 
-			<include refid="courseColumns"/>
+			<include refid="courseSkillColumns"/>
 		FROM course a
-		<include refid="courseJoins"/>
 		<where>
 			1=1 
 			<if test="name != null and name != ''">
@@ -124,6 +133,7 @@
 			course_type,
 			category_name,
 			category_code,
+			reply,
 			cover_path,
 			duration,
 			duration_long,
@@ -146,6 +156,7 @@
 			#{courseType},
 			#{categoryName},
 			#{categoryCode},
+			#{reply},
 			#{coverPath},
 			#{duration},
 			#{durationLong},
@@ -172,6 +183,7 @@
 			course_type = #{courseType},
 			category_name = #{categoryName},
 			category_code = #{categoryCode},
+			reply = #{reply},
 			cover_path = #{coverPath},
 			duration = #{duration},
 			duration_long = #{durationLong},

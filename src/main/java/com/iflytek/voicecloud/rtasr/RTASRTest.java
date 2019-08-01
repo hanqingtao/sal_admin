@@ -32,7 +32,7 @@ import com.alibaba.fastjson.JSONObject;
 public class RTASRTest {
 
     // appid
-    private static final String APPID = "5d14aa85";
+    private static final String APPID = "5d3d95ea";
    // private static final String apiKey = "c9904da38e38c59f4b4d873372102990"; //在控制台-我的应用-语音听写（流式版）获取
     // 实时语音转写对应的secret_key
     private static final String SECRET_KEY = "f74012f6cdbec3717b3bed4c9c454d98";

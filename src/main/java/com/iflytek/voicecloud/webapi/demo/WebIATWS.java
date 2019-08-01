@@ -28,7 +28,7 @@ public class WebIATWS extends WebSocketListener {
 	public static final String hostUrl = "https://ws-api.xfyun.cn/v2/iat"; //http url 不支持解析 ws/wss schema
 	public static final String apiKey = "c9904da38e38c59f4b4d873372102990"; //在控制台-我的应用-语音听写（流式版）获取
 	public static final String apiSecret = "2e16b40276a745f3375578eb3abac48d"; //在控制台-我的应用-语音听写（流式版）获取
-	public static final String appid = "5d14aa85"; //在控制台-我的应用获取
+	public static final String appid = "5d3d95ea"; //在控制台-我的应用获取
 	public static String file = "/Users/harry/out/16k_10.pcm";//16k_10.pcm"; // 中文
     public static final int StatusFirstFrame = 0;
     public static final int StatusContinueFrame = 1;

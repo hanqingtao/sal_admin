@@ -187,10 +187,10 @@ public class CourseController extends BaseController {
 //				course.setName( courseCategory.getName());
 //			}
 		}
-		// System.out.println("###courseCategory.getName()###"+course.getCategoryName());
+		System.out.println("###courseCategory.getName()###"+course.getVideoName() +"video Path :" + course.getVideoPath());
 		courseService.save(course);
-		// System.out.println("####getCategoryIds##"+course.getCategoryIds());
 		addMessage(redirectAttributes, "保存课程成功");
+		System.out.println("####get course   Id##"+course.getId());
 		return "redirect:" + Global.getAdminPath() + "/course/course/?repage";
 	}
 
