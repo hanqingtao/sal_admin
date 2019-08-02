@@ -59,6 +59,7 @@
 			<tr>
 				<th>名称</th>
 				<th>更新时间</th>
+				<th>唯一编码</th>
 				<th>备注信息</th>
 				<shiro:hasPermission name="course:courseCategory:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -72,6 +73,9 @@
 			</a></td>
 			<td>
 				{{row.updateDate}}
+			</td>
+			<td>	
+				{{row.code}}
 			</td>
 			<td>
 				{{row.remarks}}

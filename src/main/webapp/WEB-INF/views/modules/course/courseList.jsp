@@ -49,7 +49,7 @@
 				<th>课程类型</th>
 				<th>所属分类名称</th>
 				<th>视频状态</th>
-				<th>创建者</th>
+				<!-- <th>创建者</th>-->
 				<th>创建时间</th>
 				<th>视频路径</th>
 				<shiro:hasPermission name="course:course:edit"><th>操作</th></shiro:hasPermission>
@@ -70,9 +70,11 @@
 				<td>
 					${fns:getDictLabel(course.status, 'course_status', '')}
 				</td>
+				<!-- 
 				<td>
 					${course.createBy.id}
 				</td>
+				-->
 				<td>
 					<fmt:formatDate value="${course.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>

@@ -3,6 +3,8 @@
  */
 package com.ambition.agile.modules.course.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +93,20 @@ public class CourseCategoryController extends BaseController {
 	public String save(CourseCategory courseCategory, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, courseCategory)){
 			return form(courseCategory, model);
+		}
+		//对于课程分类 code 为空时，则进行 code 的创建
+		if(null != courseCategory){
+			if(StringUtils.isEmpty(courseCategory.getCode())){
+				Date d = new Date();
+		        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		        String code = format.format(d);
+				courseCategory.setCode(code);
+			}
+//	        String str = "";
+//	        for(int i=0 ;i <5; i++){
+//	            int n = (int)(Math.random()*90)+10;
+//	            str += n;
+//	        }
 		}
 		courseCategoryService.save(courseCategory);
 		addMessage(redirectAttributes, "保存课程分类成功");

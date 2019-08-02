@@ -52,7 +52,7 @@ public class WebaiuiUtil {
 	private static  String API_KEY = "5fd24cbae0bd5917660afaa479929669";
 	private static  String AUTH_ID = "779705c3e4cfd0a279fb7cf1da752663";//29f0b5211cb74caf5320fb0625d6fb98";
 	private static final String DATA_TYPE = "audio";// data_type text 文本  audio音频 
-	private static final String SCENE = "main_box";//main_box 测试 text 类型  audio 用  main即可
+	private static final String SCENE = "main";//_box";//_box";//main_box 测试 text 类型  audio 用  main即可
 	private static final String RESULT_LEVEL = "complete";
 	private static final String SAMPLE_RATE = "16000"; //默认 16000 16k采样率   8000 8K采样率 
 	private static final String AUE = "raw";//可选值：raw（未压缩的pcm或wav格式）、speex（speex格式，即sample_rate=8000的speex音频）、speex-wb（宽频speex格式，即sample_rate=16000的speex音频），默认为 raw
@@ -193,7 +193,7 @@ public class WebaiuiUtil {
 		                		JsonObject intentDataObject=(JsonObject) parser.parse(intentDataStr);
 		                		String intentDataResultStr = intentDataObject.get("result").toString();
 		                		System.out.println("OS intentDataResultStr  :"+intentDataResultStr);
-		                		if(null != intentDataResultStr && intentDataResultStr.equals("null")){
+		                		if(null != intentDataResultStr && !intentDataResultStr.equals("null")){
 		                			JsonObject intentDataResultObject=(JsonObject) parser.parse(intentDataResultStr);
 		                			result = gson.fromJson(intentDataResultObject,Result.class);
 		                			System.out.println("OS7596127858.2huanglispeak @@@@@"+result.toString());
@@ -222,10 +222,11 @@ public class WebaiuiUtil {
 	}
 	
 	public static void main(String[] args) throws IOException,ParseException, InterruptedException{
+		System.out.println("######");
 		Map<String, String> header = buildHeader();
-		//String str = "火落落，舞台礼仪？";//"北京明天的天气";
-		//byte[] dataByteArray = str.getBytes("utf-8");
-		byte[] dataByteArray = readFile(FILE_PATH);
+		String str = "你好，你能给我讲五十步笑百步吗？";//火落落，舞台礼仪？";//"北京明天的天气";
+		byte[] dataByteArray = str.getBytes("utf-8");
+		//byte[] dataByteArray = readFile(FILE_PATH);
 		//System.out.println(dataByteArray.toString());
 		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
 		System.out.println(resultHttpPost);

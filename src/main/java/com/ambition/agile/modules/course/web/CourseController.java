@@ -130,7 +130,10 @@ public class CourseController extends BaseController {
 									flag = false;
 									errorMsg = "部分课程已经存在系统中!";
 								}
-
+								// 判断 是否为空
+								if (null == course.getReply() || course.getReply().isEmpty()) {
+									course.setReply("请欣赏");
+								}
 								// 判断数据的正确性
 								if (null == course.getVideoPath() || course.getVideoPath().isEmpty()) {
 									flag = false;

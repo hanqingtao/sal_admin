@@ -32,6 +32,7 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/course/course/">课程列表</a></li>
 		<li class="active"><a href="${ctx}/course/course/form?id=${course.id}">课程<shiro:hasPermission name="course:course:edit">${not empty course.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="course:course:edit">查看</shiro:lacksPermission></a></li>
+		<shiro:hasPermission name="course:course:courseImport"><li><a href="${ctx}/course/course/toCourseImport">课程导入</a></li></shiro:hasPermission>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="course" action="${ctx}/course/course/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -70,13 +71,13 @@
 				</form:select>
 			</div>
 		</div>
-		
 		<div class="control-group">
 			<label class="control-label">回答：</label>
 			<div class="controls">
 				<form:textarea path="reply" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		
 		<div class="control-group">
 			<label class="control-label">视频上传：</label>
 			<div class="controls">

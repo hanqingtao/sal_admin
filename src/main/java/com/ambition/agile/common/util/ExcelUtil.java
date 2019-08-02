@@ -62,7 +62,7 @@ public class ExcelUtil{
 						Cell courseName = row.getCell(2);
 						Cell courseCode = row.getCell(3);
 						Cell courseVideoPath = row.getCell(4);
-						
+						Cell courseReply = row.getCell(5);
 						if(courseCatalgoName != null){							
 							courseCatalgoName.setCellType(Cell.CELL_TYPE_STRING);
 							course.setCategoryName(courseCatalgoName.getStringCellValue());
@@ -83,6 +83,10 @@ public class ExcelUtil{
 						if(courseVideoPath != null){
 							courseVideoPath.setCellType(Cell.CELL_TYPE_STRING);
 							course.setVideoPath(courseVideoPath.getStringCellValue());
+						}
+						if(courseReply != null){
+							courseReply.setCellType(Cell.CELL_TYPE_STRING);
+							course.setReply(courseReply.getStringCellValue());
 						}
 						courseList.add(course);
 					}

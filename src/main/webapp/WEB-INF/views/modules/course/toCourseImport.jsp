@@ -88,7 +88,7 @@
 			<shiro:hasPermission name="course:course:courseImport">
 				<input id="btnSubmit" class="btn btn-primary" 
 					type="button" onclick="submitImport();"  value="确 定"/>&nbsp;</shiro:hasPermission>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+			<!--   <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>   -->
 		</div>
 	</form:form>
 </body>

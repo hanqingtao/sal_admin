@@ -79,6 +79,7 @@ public class AiuiWebController extends BaseController {
 		 List<Course> courseList = courseService.getByName(courseQuery);
 		 if(null != courseList && courseList.size()>0){
 			 Course course = courseList.get(0);
+			 System.out.println("#### course : "+course.toString());
 			 if(null != course && StringUtils.isNotEmpty(course.getId())){
 				if(StringUtils.isNotEmpty(course.getName())){
 					map.put("courseName", course.getName());
@@ -90,11 +91,12 @@ public class AiuiWebController extends BaseController {
 				if(StringUtils.isNotEmpty(course.getDuration())){
 					duration = course.getDuration();
 				}
-				String reply = "";
-				if(StringUtils.isNotEmpty(course.getReplay())){
-					reply = course.getReplay();
-				}
 				map.put("duration", duration);
+				String reply = "请欣赏";
+				if(StringUtils.isNotEmpty(course.getReply())){
+					reply = course.getReply();
+				}
+				map.put("reply", reply);
 				String durationLong = "0";
 				if(null != course.getDurationLong() && course.getDurationLong()>0){
 					durationLong = course.getDurationLong()+"";

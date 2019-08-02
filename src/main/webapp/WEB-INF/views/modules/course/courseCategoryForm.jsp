@@ -54,6 +54,18 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		<c:if test ="${ not empty courseCategory.id}">
+		<div class="control-group">
+			<label class="control-label">唯一编码：</label>
+			<div class="controls">
+				${ courseCategory.code }
+				<!-- 
+				<form:input path="code" htmlEscape="false" 
+				 readonly="true"/>-->
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		 </c:if>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">

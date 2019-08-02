@@ -20,7 +20,7 @@ public class Course extends DataEntity<Course> {
 	private String courseType;		// 课程类型
 	private String categoryName;		// 所属分类名称
 	private String categoryCode;		// 视频分类
-	private String replay;			//答案
+	private String reply;			//答案
 	private String coverPath;		// 课程封面
 	private String duration;		// 时长 **:**:**
 	private Integer durationLong;		// 时长
@@ -172,12 +172,12 @@ public class Course extends DataEntity<Course> {
 		this.categoryIds = categoryIds;
 	}
 
-	public String getReplay() {
-		return replay;
+	public String getReply() {
+		return reply;
 	}
 
-	public void setReplay(String replay) {
-		this.replay = replay;
+	public void setReply(String reply) {
+		this.reply = reply;
 	}
 	
 }
