@@ -28,6 +28,7 @@ import com.ambition.agile.common.media.VideoUtils;
 import com.ambition.agile.common.util.PropertiesFactory;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
+import com.iflytek.util.WebaiuiTtsUtil;
 import com.iflytek.util.WebaiuiUtil;
 import com.iflytek.voicecloud.webapi_tts.WebTtsUtil;
 
@@ -134,7 +135,7 @@ public class WxUploadController extends BaseController {
 					}
 					if(StringUtils.isNotEmpty(nlp)){
 						map.put("answer", nlp);
-						String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
+						String answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);// WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 						map.put("answerVoice",answerVoice);
 						logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 					}
@@ -142,7 +143,7 @@ public class WxUploadController extends BaseController {
 					String reply = (String)mapAIUI.get("reply");
 					if(StringUtils.isNotEmpty(reply)){
 						System.out.println("answerType 2 "+ reply);
-						String preVidePath =  WebTtsUtil.getWebTtsVoiceUrlByText(reply);
+						String preVidePath =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);//WebTtsUtil.getWebTtsVoiceUrlByText(reply);
 						System.out.println("answerType 2 reply  url  "+ preVidePath);
 						map.put("preVidePath", preVidePath);
 					}
@@ -189,7 +190,7 @@ public class WxUploadController extends BaseController {
 						map.put("quesion", iat);
 						map.put("answer", nlp);
 						map.put("answerType", "1");//给出类型 1 正常问答的方式  
-						String answerVoice =  WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
+						String answerVoice =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);//WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 						map.put("answerVoice",answerVoice);
 						System.out.println("nlp: "+nlp+"aaaaaaa"+answerVoice);
 					}

@@ -9,7 +9,7 @@ package com.ambition.agile.open.entity;
  * @author harry
  * @version 2019-07-05
  */
-public class Data {
+public class TtsData {
 	
 	private static final long serialVersionUID = 1L;
 	/**
@@ -17,10 +17,8 @@ public class Data {
 	  */
 	    private String sub;
 	    private String auth_id;
-	    private String text;
 	    private String content;
 	    private int result_id;
-	    private Intent intent;
 	    
 	    public void setSub(String sub) {
 	         this.sub = sub;
@@ -36,11 +34,11 @@ public class Data {
 	         return auth_id;
 	     }
 
-	    public void setText(String text) {
-	         this.text = text;
+	    public void setContent(String content) {
+	         this.content = content;
 	     }
-	     public String getText() {
-	         return text;
+	     public String getContent() {
+	         return content;
 	     }
 
 	    public void setResult_id(int result_id) {
@@ -49,17 +47,5 @@ public class Data {
 	     public int getResult_id() {
 	         return result_id;
 	     }
-		public Intent getIntent() {
-			return intent;
-		}
-		public void setIntent(Intent intent) {
-			this.intent = intent;
-		}
-		public String getContent() {
-			return content;
-		}
-		public void setContent(String content) {
-			this.content = content;
-		}
 	
 }

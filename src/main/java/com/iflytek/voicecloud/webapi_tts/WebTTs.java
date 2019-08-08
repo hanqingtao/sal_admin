@@ -52,7 +52,7 @@ public class WebTTs {
 	// 音调（取值范围0-100）
 	private static final String PITCH = "50";
 	// 发音人（登陆开放平台https://www.xfyun.cn/后--我的应用（必须为webapi类型应用）--添加在线语音合成（已添加的不用添加）--发音人管理---添加发音人--修改发音人参数）
-	private static final String VOICE_NAME = "aisjinger";
+	private static final String VOICE_NAME = "x_nannan";//"aisjinger";
 	// 引擎类型
 	private static final String ENGINE_TYPE = "intp65";
 	// 文本类型（webapi是单次只支持1000个字节，具体看您的编码格式，计算一下具体支持多少文字）
