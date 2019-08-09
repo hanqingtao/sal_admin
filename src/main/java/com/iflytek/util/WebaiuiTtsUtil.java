@@ -61,7 +61,7 @@ public class WebaiuiTtsUtil {
 	private static final String RESULT_LEVEL = "complete";
 	private static String VideoDialogTtsName="tts";
 	private static final String VCN = "x_nannan";
-	private static final String SPEED = "50";
+	private static final String SPEED = "60";
 	private static final String VOLUME ="50";
 	private static final String PITCH ="50";
 	private static final String AUE = "lame";//可选值：raw（未压缩的pcm或wav格式）、speex（speex格式，即sample_rate=8000的speex音频）、speex-wb（宽频speex格式，即sample_rate=16000的speex音频），默认为 raw
