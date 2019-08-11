@@ -48,7 +48,8 @@ public class WxUploadController extends BaseController {
 	@ResponseBody
 	public ApiResponse<?> audioUpload(@RequestParam(value = "audioFile", required = false) MultipartFile audioFile,
 			String dir,String openId, RedirectAttributes redirectAttributes) {
-		
+		long beginTime = System.currentTimeMillis();
+		System.out.println("#################### audioUpload "+beginTime);
 		Map<String,String> map=new HashMap<String,String>();
 		 //所有的音频文件进行分类存放 一级目录为  dialog
 		 if(dir==null || dir.equals("") || dir.equals("undefined") ){
@@ -141,9 +142,13 @@ public class WxUploadController extends BaseController {
 					}
 					//返回 第二种问答的  前部分音频 地址
 					String reply = (String)mapAIUI.get("reply");
+					if(StringUtils.isEmpty(reply)){
+						reply = "请欣赏";
+					}
 					if(StringUtils.isNotEmpty(reply)){
-						System.out.println("answerType 2 "+ reply);
-						String preVidePath =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);//WebTtsUtil.getWebTtsVoiceUrlByText(reply);
+						System.out.println("replay content "+ reply);
+						map.put("reply", reply);
+						String preVidePath =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(reply);//WebTtsUtil.getWebTtsVoiceUrlByText(reply);
 						System.out.println("answerType 2 reply  url  "+ preVidePath);
 						map.put("preVidePath", preVidePath);
 					}
@@ -183,7 +188,7 @@ public class WxUploadController extends BaseController {
 					//暂时先用https//https://video-robot.oss-cn-beijing.aliyuncs.com/course248A0C83CC44443B9EA6E0246394FF53.png阿里的域名
 					//map.put("resResult",outPutFileMP3);
 					//map.put("fileName",fileType);
-					logger.info("上传信息：文件类型"+fileType+"，文件路径返回 fileUrl"+outPutFileMP3);
+					//logger.info("上传信息：文件类型"+fileType+"，文件路径返回 fileUrl"+outPutFileMP3);
 				}else{
 						iat ="";
 						nlp= "对不起，我没听清楚，请您再说一遍.";
@@ -202,6 +207,9 @@ public class WxUploadController extends BaseController {
 		 //map.put("code","200");
 		 //如果需要的话，可以用自己的域名进行替换。 replace 即可
 		 System.out.println("#####map "+map);
+		 long endTime = System.currentTimeMillis();
+		 System.out.println("#################### audioUpload deal end time  "+beginTime);
+		 System.out.println("#################### total time seconds  "+(endTime -beginTime)/1000);
 		 return ApiResponse.success(map); 
 	}
 	

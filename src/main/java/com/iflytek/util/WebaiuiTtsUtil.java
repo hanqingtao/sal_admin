@@ -101,7 +101,7 @@ public class WebaiuiTtsUtil {
 		//byte[] dataByteArray = readFile(FILE_PATH);
 		//System.out.println(dataByteArray.toString());
 		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
-		System.out.println(resultHttpPost);
+		//System.out.println(resultHttpPost);
 		
 		AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
 		if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
@@ -115,10 +115,10 @@ public class WebaiuiTtsUtil {
 					if(null != sub && sub.equals("tts")){
 						String content = data.getContent();
 						byte[] audio = Base64.decodeBase64(content.getBytes("UTF-8"));
-						System.out.println("解析完合成音频字节流");
+						//System.out.println("解析完合成音频字节流");
 						//FileUtil.save("/Users/harry/out/", resultMap.get("sid") + ".mp3", (byte[]) resultMap.get("body"));
 						InputStream inputStream = new ByteArrayInputStream(audio); 
-						FileUtil.save("/Users/harry/out/", "22211.mp3", audio);
+						//FileUtil.save("/Users/harry/out/", "22211.mp3", audio);
 						webttsResultUrl = OSSUploadUtil.uploadFileNewName(inputStream,"mp3", VideoDialogTtsName+"/");
 						break;
 						//String ossUrl=OSSUploadUtil.uploadFileNewName(inputStream,"mp3", "qa/");
@@ -158,7 +158,7 @@ public class WebaiuiTtsUtil {
 						System.out.println("解析完合成音频字节流");
 						//FileUtil.save("/Users/harry/out/", resultMap.get("sid") + ".mp3", (byte[]) resultMap.get("body"));
 						InputStream inputStream = new ByteArrayInputStream(audio); 
-						FileUtil.save("/Users/harry/out/", "22211.mp3", audio);
+						//FileUtil.save("/Users/harry/out/", "22211.mp3", audio);
 						System.out.println("addddd");
 						break;
 						//String ossUrl=OSSUploadUtil.uploadFileNewName(inputStream,"mp3", "qa/");

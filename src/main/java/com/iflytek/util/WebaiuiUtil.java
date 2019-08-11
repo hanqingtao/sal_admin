@@ -88,7 +88,7 @@ public class WebaiuiUtil {
 			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
 			//System.out.println(dataByteArray.toString());
 			resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
-			System.out.println("aiuiWebApiDealFile resultHttpPost "+resultHttpPost);
+			//System.out.println("aiuiWebApiDealFile resultHttpPost "+resultHttpPost);
 			//AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
 			Gson gson = new Gson();
 			AIUIEntity aiuiEntity  = gson.fromJson(resultHttpPost, AIUIEntity.class);
@@ -164,13 +164,13 @@ public class WebaiuiUtil {
 				 //System.out.println(arrays);
 				 Result result = null;
 				 for(int i=0;i<arrays.size();i++){
-		             System.out.println("---------------");
+		            // System.out.println("---------------");
 		             JsonObject subObject=arrays.get(i).getAsJsonObject();
 		             String subType = subObject.get("sub").getAsString();
 		             if(null != subType && subType.equals("nlp") && null != subObject.get("intent") && 
 		            		 !subObject.get("intent").toString().equals("{}")){
 		            	 	
-		            	 	System.out.println(subObject.get("intent").toString());
+		            	 	//System.out.println(subObject.get("intent").toString());
 		            	 	String intentStr = subObject.get("intent").toString();
 		            	 	JsonObject intentObject=(JsonObject) parser.parse(intentStr);
 		            	 	if(null == intentObject.get("data")){
