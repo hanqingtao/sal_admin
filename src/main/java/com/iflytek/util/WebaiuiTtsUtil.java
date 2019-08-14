@@ -99,13 +99,18 @@ public class WebaiuiTtsUtil {
 		//byte[] dataByteArray = str.getBytes("utf-8");
 		byte[] dataByteArray = text.getBytes("utf-8");
 		//byte[] dataByteArray = readFile(FILE_PATH);
-		//System.out.println(dataByteArray.toString());
+		long beginTime = System.currentTimeMillis();
+		System.out.println(" #####WebaiuiTtsUtil  getWebTtsVoiceUrlByText  "+ beginTime);
 		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
-		//System.out.println(resultHttpPost);
+		long gethttpPoseTime = System.currentTimeMillis();
+		System.out.println("#################### WebaiuiTtsUtil  gethttpPostTime  "+(gethttpPoseTime -beginTime)  + "##" +(gethttpPoseTime -beginTime)/1000);
 		
 		AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
+		long getaiuiEntityTime = System.currentTimeMillis();
+		System.out.println(aiuiEntity.getSid() +" :sid#################### WebaiuiTtsUtil  getaiuiEntityTime  "+(getaiuiEntityTime-gethttpPoseTime)  + "##" +(getaiuiEntityTime-gethttpPoseTime)/1000);
+		
 		if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
-			//System.out.println("22222"+aiuiEntity.getSid());
+			//System.out.println("22222"+);
 			List<Data> dataList = aiuiEntity.getData();
 
 			for(Data data:dataList){
@@ -127,6 +132,10 @@ public class WebaiuiTtsUtil {
 				}
 			}
 		}
+		long getUploadFileNewNameTime = System.currentTimeMillis();
+		System.out.println("#################### WebaiuiTtsUtil  getUploadFileNewNameTime  "+(getUploadFileNewNameTime-getaiuiEntityTime)  + "##" +(getUploadFileNewNameTime-getaiuiEntityTime)/1000);
+		
+		
 		}catch(Exception e ){
 			e.printStackTrace();
 		}
@@ -134,15 +143,17 @@ public class WebaiuiTtsUtil {
 	}
 	
 	public static void main(String[] args) throws IOException,ParseException, InterruptedException{
-		System.out.println("######");
+		long beginTime = System.currentTimeMillis();
+		System.out.println("######"+beginTime);
 		Map<String, String> header = buildHeader();
-		String str = "你好，你能给我讲五十步笑百步吗？非常感谢您!";//火落落，舞台礼仪？";//"北京明天的天气";
+		String str = "坐姿通常是指人体在坐着时候的姿态。正确坐姿，除了遵循以下技巧摆放双腿外，还应时时保持上半身挺直的姿势，也就是颈、胸、腰都要保持平直。被测者挺胸坐在被调节到腓骨头高度的平面上，头部以眼耳平面定位，眼睛平视前方，左、右大腿大致平行，膝弯屈大致成直角，足平放在地面上，手轻放在大腿上。!";//火落落，舞台礼仪？";//"北京明天的天气";
 		byte[] dataByteArray = str.getBytes("utf-8");
 		//byte[] dataByteArray = readFile(FILE_PATH);
 		//System.out.println(dataByteArray.toString());
 		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
 		System.out.println(resultHttpPost);
-		
+		long endTime = System.currentTimeMillis();
+		System.out.println("点点滴滴#########"+(endTime-beginTime)+"@@@@@#"+(endTime-beginTime)/1000);
 		AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
 		if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
 			//System.out.println("22222"+aiuiEntity.getSid());

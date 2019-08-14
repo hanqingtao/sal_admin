@@ -13,6 +13,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +28,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ambition.agile.common.ApiResponse;
 import com.ambition.agile.common.BaseFrameworkConfig;
 import com.ambition.agile.common.aliyun.oss.OSSUploadUtil;
+import com.ambition.agile.common.guava.service.LocalCacheToNlp;
 import com.ambition.agile.common.media.VideoUtils;
 import com.ambition.agile.common.util.PropertiesFactory;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
 import com.iflytek.util.WebaiuiTtsUtil;
 import com.iflytek.util.WebaiuiUtil;
-import com.iflytek.voicecloud.webapi_tts.WebTtsUtil;
 
 /**
  * 上传公共Controller
@@ -43,6 +47,9 @@ public class WxUploadController extends BaseController {
 	
 	@Autowired
 	private BaseFrameworkConfig config;
+	
+	@Resource
+	private LocalCacheToNlp localCacheToNlp;
 	
 	@RequestMapping(value = "audioUpload")
 	@ResponseBody
@@ -104,15 +111,21 @@ public class WxUploadController extends BaseController {
 				//String ossUrl=OSSUploadUtil.uploadFileNewName(audioFile.getInputStream(),type, dir);
 				
 				SaveFileFromInputStream(audioFile,outPutFileMP3);
-				
+				long saveFileTime = System.currentTimeMillis();
+				System.out.println("#################### audioUpload  saveFileTime "+(saveFileTime-beginTime)  + "##" +(saveFileTime-beginTime)/1000);
 				final VideoUtils v = new VideoUtils(outPutFileMP3,outPutFilePCM,null);
 				v.convert();
+				long convertPcmTime = System.currentTimeMillis();
+				System.out.println("#################### audioUpload  convertPcmTime "+(convertPcmTime -saveFileTime)  + "##" +(convertPcmTime -saveFileTime)/1000);
 				
 				System.out.println("$$$$$$$$ audioUpload  convert new ossUrl:  "+outPutFileMP3);
 				System.out.println("$$$$$$$$ audioUpload convert new outPath:  "+outPutFilePCM);
 				String iat = "";
 				String nlp = "";
 				Map mapAIUI = WebaiuiUtil.aiuiWebApiDealFile(outPutFilePCM);
+				long getAiuiMapTime = System.currentTimeMillis();
+				System.out.println("#################### audioUpload  getAiuiMapTime "+(getAiuiMapTime -convertPcmTime)  + "##" +(getAiuiMapTime -convertPcmTime)/1000);
+				
 				System.out.println("########result wxupload file :"+ mapAIUI);
 				if(null != mapAIUI && !mapAIUI.isEmpty()){
 					
@@ -134,16 +147,20 @@ public class WxUploadController extends BaseController {
 						//如果没有返回 nlp
 						nlp = "对不起，请您再说一遍.";
 					}
-					if(StringUtils.isNotEmpty(nlp)){
+					//当对话类型为1 时，才返回answerVoice
+					if(StringUtils.isNotEmpty(nlp) && answerType.equals("1")){
 						map.put("answer", nlp);
 						String answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);// WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 						map.put("answerVoice",answerVoice);
 						logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 					}
+					long getNlpTime = System.currentTimeMillis();
+					System.out.println("#################### audioUpload  getNlpTime "+(getNlpTime -getAiuiMapTime)  + "##" +(getNlpTime-getAiuiMapTime)/1000);
+					
 					//返回 第二种问答的  前部分音频 地址
 					String reply = (String)mapAIUI.get("reply");
 					if(StringUtils.isEmpty(reply)){
-						reply = "请欣赏";
+						reply = "对不起，请您再说一遍.";
 					}
 					if(StringUtils.isNotEmpty(reply)){
 						System.out.println("replay content "+ reply);
@@ -152,10 +169,18 @@ public class WxUploadController extends BaseController {
 						System.out.println("answerType 2 reply  url  "+ preVidePath);
 						map.put("preVidePath", preVidePath);
 					}
+					long getReplyTime = System.currentTimeMillis();
+					System.out.println("#################### audioUpload  getReplyTime "+(getReplyTime- getNlpTime)  + "##" +(getReplyTime- getNlpTime)/1000);
+					
 					String courseName = (String)mapAIUI.get("courseName");
 					logger.info("#######result courseName  {} ",courseName);
 					if(StringUtils.isNotEmpty(courseName)){
 						map.put("courseName", courseName);
+					}
+					String author = (String)mapAIUI.get("author");
+					logger.info("#######result author  {} ",author);
+					if(StringUtils.isNotEmpty(author)){
+						map.put("author", author);
 					}
 					
 					//answerType  2 
@@ -171,7 +196,7 @@ public class WxUploadController extends BaseController {
 					String duration = (String)mapAIUI.get("duration");
 					System.out.println("#######duration {} "+duration);
 					if(StringUtils.isEmpty(duration)){
-						duration = "00:00:00";
+						duration = "00:00";
 					}
 					map.put("duration", duration);
 					
@@ -210,7 +235,23 @@ public class WxUploadController extends BaseController {
 		 long endTime = System.currentTimeMillis();
 		 System.out.println("#################### audioUpload deal end time  "+beginTime);
 		 System.out.println("#################### total time seconds  "+(endTime -beginTime)/1000);
+		 //add by hqt 时间戳 orderTime
+		 map.put("timeStamp", endTime+"");
 		 return ApiResponse.success(map); 
+	}
+	
+	
+	@RequestMapping(value = "getTtsUrlByNlpId")
+	@ResponseBody
+	public ApiResponse<?> getTtsUrlByNlp(String nlpId, 
+			HttpServletRequest request, HttpServletResponse response,
+			RedirectAttributes redirectAttributes) {
+		
+		if(StringUtils.isNotEmpty(nlpId)){
+			String nlp = localCacheToNlp.get(nlpId);
+		}
+		
+		return null;
 	}
 	
 	 /**
@@ -235,6 +276,8 @@ public class WxUploadController extends BaseController {
 		fileInput.close(); 
     }
 	
+	
+    
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public boolean delete(String fileUrl,RedirectAttributes redirectAttributes) {

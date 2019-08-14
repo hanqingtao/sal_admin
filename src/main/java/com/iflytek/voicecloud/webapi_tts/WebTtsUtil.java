@@ -78,14 +78,6 @@ public class WebTtsUtil {
 	static {
         try {
         		//aiui 应用 appid
-//        		APPID = BaseConfigHolder.getAiAppAppid();
-//        		logger.info("WebTtsUtil APPID{}",APPID);
-//        		//aiui webapi url 
-//        		WEBTTS_URL = BaseConfigHolder.getAiuiWebApiUrlTts();
-//        		logger.info("WebTtsUtil WEBTTS_URL{}",WEBTTS_URL);
-//        		//aiui 应用的调试 WebTtsUtil
-//        		API_KEY = BaseConfigHolder.getAiuiAppApikeyTts();
-//        		logger.info("WebTtsUtil API_KEY{}",API_KEY);
         		videoDialogPath = BaseConfigHolder.getVideoDialogPath();
         		logger.info("WebTtsUtil videoDialogPath{}",videoDialogPath);
         		VideoDialogTtsName = BaseConfigHolder.getVideoDialogTtsName();
@@ -145,10 +137,12 @@ public class WebTtsUtil {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		
+		long beginTime = System.currentTimeMillis();
+		System.out.println("######"+beginTime);
 		Map<String, String> header = buildHttpHeader();
 		
 		Map<String, Object> resultMap = HttpUtil.doPost2(WEBTTS_URL, header, "text=" + URLEncoder.encode(ttsText, "utf-8"));
+		
 		System.out.println("占用内存大小： "+ URLEncoder.encode(ttsText, "utf-8").getBytes().length);
 		if ("audio/mpeg".equals(resultMap.get("Content-Type"))) { // 合成成功
 			if ("raw".equals(AUE)) {

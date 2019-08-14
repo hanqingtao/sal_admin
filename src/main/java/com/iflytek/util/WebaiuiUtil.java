@@ -21,6 +21,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ambition.agile.common.BaseConfigHolder;
 import com.ambition.agile.common.mapper.JsonMapper;
 import com.ambition.agile.open.entity.AIUIEntity;
@@ -75,6 +77,7 @@ public class WebaiuiUtil {
         		logger.error("load baseConfigHolder failed.", e);
         }
     }
+	
 	/*
 	 * 公共方法，通过 文件路径调用 aiui webapi 返回相关数据
 	 * 
@@ -88,8 +91,193 @@ public class WebaiuiUtil {
 			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
 			//System.out.println(dataByteArray.toString());
 			resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
-			//System.out.println("aiuiWebApiDealFile resultHttpPost "+resultHttpPost);
+			System.out.println("aiuiWebApiDealFile resultHttpPost "+resultHttpPost);
 			//AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
+			JSONObject aiuiData = (JSONObject) JSONObject.parse(resultHttpPost);
+			String code = aiuiData.getString("code");
+			System.out.println("sid&&&&&&&&^^ "+aiuiData.getString("sid")+" ^########aiuiData code:" +code);
+			//默认是  type 1 是问答形式
+			map.put("answerType", "1");
+			//code 为0 表明处理正确
+			if(null != code && code.equals("0")){
+				JSONArray dataArray = aiuiData.getJSONArray("data");
+				if(null != dataArray && dataArray.size()>0){
+					  for(int i=0;i<dataArray.size();i++){
+							 // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+							JSONObject subData = dataArray.getJSONObject(i); 
+							// 得到 每个对象中的属性值
+							String sub = subData.getString("sub");
+							System.out.println("#######sub type:"+sub);
+							if(null != sub &&  sub.equals("iat")){
+								if(subData.containsKey("text")){
+									//获取 sub = iat 时的  text 答案.
+									String text = subData.getString("text");
+									if(StringUtils.isNotEmpty(text)){
+										map.put("iat", text);
+										System.out.println("#######sub iat text :"+text);
+									}
+								}
+							}
+							if(null != sub &&  sub.equals("nlp")){
+								if(subData.containsKey("intent")){
+									JSONObject intent = subData.getJSONObject("intent");
+									String service = intent.getString("service");
+									
+									System.out.println("@@#@#@#@#@#@#intent @#@operation: "+intent.getString("operation")
+										+"^^^^^^intent serviceName ^^^^^"+intent.getString("serviceName")+
+										"&&&&&&"+intent.getString("service"));
+									if(null != intent && intent.containsKey("answer")){
+										JSONObject answer = intent.getJSONObject("answer");
+										if(null != answer && answer.containsKey("text")){
+											String nlp = answer.getString("text");
+											if(StringUtils.isNotEmpty(nlp)){
+												map.put("nlp", nlp);
+												System.out.println("#######sub nlp text :"+nlp);
+											}
+										}
+									}
+									//如果是调用 自定义技能库赋值为2 
+									//如果 intent data 不为空,且是自定义的技能时的处理
+									if(intent.containsKey("data") && null != service  ){
+										//如果是自定义技能
+										if( service.equals("OS7596127858.2huanglispeak")){
+											map.put("answerType", "2");
+												JSONObject data = intent.getJSONObject("data");
+												if(null != data && data.containsKey("result") ){
+													JSONArray resultArray = data.getJSONArray("result");
+													if(null != resultArray &&  resultArray.size()>0){
+													JSONObject resultJSON = resultArray.getJSONObject(0);
+													System.out.println("intent data result nlp"+resultJSON.toString());
+													Gson gson = new Gson();
+													Result result = gson.fromJson(resultJSON.toString(),Result.class);
+													 if(null != result && result.getCourseName()!= null &&
+															 result.getVoicePath()!= null){
+														 //map.put("answerType", "2");
+														 map.put("couseName", result.getCourseName());
+														 map.put("duration", result.getDuration());
+														 map.put("voicePath", result.getVoicePath());
+														 map.put("reply", result.getReply());
+														 map.put("durationLong", "");//此参数暂时没用
+														 map.put("author", "佚名");
+														 System.out.println("OS7596127858.2huanglispeak @@@@@"+resultJSON.toString());
+													 }
+													}
+												}
+										}else{
+											//调用第三方技能
+											JSONObject intentData = intent.getJSONObject("data");
+											String reply = "";
+//												JSONObject intentData = intentData.getJSONArray("result");
+												if(null != intentData && intentData.containsKey("result")){
+													
+													JSONArray resultArray  = intentData.getJSONArray("result");
+													if(null != resultArray && resultArray.size()>0){
+														map.put("answerType", "2");
+														System.out.println("answerType  22222");
+													JSONObject result = resultArray.getJSONObject(0);
+													String replay = result.getString("source");
+													if(result.containsKey("source")){
+														String source = result.getString("source");
+														if(StringUtils.isNotEmpty(source)){
+															 map.put("author","第三方");
+															 System.out.println("other iflyos ####### sub author  :"+source);
+														}
+													}//正常普通的技能
+													if(result.containsKey("url")){
+														String url = result.getString("url");
+														if(StringUtils.isNotEmpty(url)){
+															 map.put("voicePath",url);
+															 System.out.println("other iflyos #######sub voicePath text :"+url);
+														}
+													}//"service": "story"  讲故事
+													if(result.containsKey("playUrl")){
+														String playUrl = result.getString("playUrl");
+														if(StringUtils.isNotEmpty(playUrl)){
+															 map.put("voicePath",playUrl);
+															 System.out.println("other iflyos #######sub voicePath text :"+playUrl);
+														}
+													}
+													if(null != intent && intent.containsKey("answer")){
+														JSONObject answer = intent.getJSONObject("answer");
+														if(null != answer && answer.containsKey("text")){
+															reply = answer.getString("text");
+															if(StringUtils.isNotEmpty(reply)){
+																map.put("reply", reply);
+																System.out.println("other iflyos #######sub reply text :"+reply);
+															}
+														}
+													}
+													//讲笑话时的 service joke 
+													if(null != service && service.equals("joke")){
+														//map.put("reply", "为您找到笑话");
+														// mp3Url  讲笑话"service": "joke", 
+														String mp3Url = result.getString("mp3Url");
+														if(result.containsKey("mp3Url") && StringUtils.isNotEmpty(mp3Url)){
+															 map.put("voicePath",mp3Url);
+															 System.out.println("other iflyos #######sub voicePath text :"+mp3Url);
+														}else{
+															if(StringUtils.isNotEmpty(reply)){
+																String playUrl =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(reply);
+																map.put("voicePath",playUrl);
+																map.put("reply", "为您找到笑话");
+															}
+														}
+													}
+													//讲笑话时的 service joke 
+													if(null != service && service.equals("weather")){
+														//map.put("reply", "为您找到笑话");
+														// mp3Url  讲笑话"service": "joke", 
+														//String mp3Url = result.getString("mp3Url");
+														if(StringUtils.isNotEmpty(reply)){
+															String playUrl =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(reply);
+															map.put("voicePath",playUrl);
+															map.put("reply", "现在播报天气");
+														}
+													}
+													//讲笑话时的 service poetry  朗诵古诗  
+													if(null != service && service.equals("poetry")){
+														if(StringUtils.isNotEmpty(reply)){
+															String playUrl =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(reply);
+															map.put("voicePath",playUrl);
+															map.put("reply", "请欣赏");
+														}
+													}
+													
+												}
+										}
+												
+										}
+									}
+								}
+							}
+					  }
+				}
+			}
+	
+		 }catch (Exception e) {
+		        	logger.error("load config.properties failed.", e);
+		        	return null;
+		 }
+		 System.out.println("webaiuiUtil   map ;"+map);
+		return map;
+	}
+	/*
+	 * 公共方法，通过 文件路径调用 aiui webapi 返回相关数据
+	 * 
+	 */
+	public static Map<String,String> aiuiWebApiDealFileOld(String diagFilePath)  {
+		
+		String resultHttpPost ="";
+		Map map = new HashMap();
+		 try {
+			Map<String, String> header = buildHeader();
+			byte[] dataByteArray = readFile(diagFilePath);//FILE_PATH
+			//System.out.println(dataByteArray.toString());
+			resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
+			System.out.println("aiuiWebApiDealFile resultHttpPost "+resultHttpPost);
+			//AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
+			
+			
 			Gson gson = new Gson();
 			AIUIEntity aiuiEntity  = gson.fromJson(resultHttpPost, AIUIEntity.class);
 			if(null != aiuiEntity && aiuiEntity.getCode() !=null && aiuiEntity.getCode().equals("0")){
@@ -124,36 +312,10 @@ public class WebaiuiUtil {
 											map.put("nlp", intent.getAnswer().getText());
 										}
 									}
-////									map.put("answerType", "2");
-////									Result result = null;//intent.getData();
-////									System.out.println("######  intentData"+result);
-//////									if( null != result){
-//////										if(!result.getCourseName().isEmpty()){
-//////											map.put("couseName",result.getCourseName() );
-//////											
-//////										}
-//////										if(!result.getDuration().isEmpty()){
-//////											map.put("duration",result.getDuration() );
-//////										}
-//////										map.put("durationLong",result.getDurationLong() );
-//////										if(!result.getVoicePath().isEmpty()){
-//////											map.put("voicePath",result.getVoicePath() );
-//////										}
-//////										if(result.getCourseName().isEmpty() || result.getVoicePath().isEmpty()){
-//////											System.out.println("intent.getAnswer().getText() "+intent.getAnswer().getText());
-//////											map.put("nlp",intent.getAnswer().getText());
-//////										}
-////									
-////										map.put("nlp",intent.getAnswer().getText());
-////									}
-//								}else{
-								
 							}
 						}
 					}
 				}
-				
-				
 				}
 				
 				//由于  data.intent.data.result 解析不出来，存在问题， begin
