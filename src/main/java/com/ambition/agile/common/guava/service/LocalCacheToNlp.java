@@ -1,6 +1,7 @@
 package com.ambition.agile.common.guava.service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
 //mport com.adks.dubbo.api.data.Title;
 import com.ambition.agile.common.guava.GuavaAbstractLoadingCache;
 import com.ambition.agile.common.guava.ILocalCache;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 /**
  * 本地缓存：parent -> Title
@@ -17,6 +20,9 @@ import com.ambition.agile.common.guava.ILocalCache;
 @Component
 public class LocalCacheToNlp extends GuavaAbstractLoadingCache<String, String> 
 					implements ILocalCache<String, String> { 
+	
+	Cache<String, String> cache = CacheBuilder.newBuilder().maximumSize(100).expireAfterAccess(3, TimeUnit.SECONDS).build();
+
 	
 	private LocalCacheToNlp(){    
         setMaximumSize(300); // 最大缓存条数    

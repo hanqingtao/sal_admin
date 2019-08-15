@@ -26,18 +26,9 @@ public class Constants {
 	
 	public static final String CACHE_CONTROL_CONTENT = "cache-Control.content";
 	
-	//前台使用 名字
-	public static final String APP_NAME = "app.name";
-	//前台 keywords 
-	public static final String APP_KEYWORS = "app.keywords";
-	//前台 描述
-	public static final String APP_DESCRIPTION = "app.description";
+	public static final String RETURN_FALSE = "2";
 	
-	public static final String IMG_SERVER = "img.server";
-	
-	//public static String WX_APPID;//小程序的appid 
-	
-	//public static String WX_SECRET;//小程序的 secret
+	public static final String TRUE= "1";
 	
 	//精度值
 	public static final Integer precisionNum = 100;

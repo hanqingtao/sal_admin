@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ambition.agile.common.ApiResponse;
 import com.ambition.agile.common.BaseFrameworkConfig;
 import com.ambition.agile.common.aliyun.oss.OSSUploadUtil;
-import com.ambition.agile.common.guava.service.LocalCacheToNlp;
+import com.ambition.agile.common.guava.GuavaCacheUtil;
 import com.ambition.agile.common.media.VideoUtils;
 import com.ambition.agile.common.util.PropertiesFactory;
 import com.ambition.agile.common.utils.StringUtils;
@@ -48,8 +47,8 @@ public class WxUploadController extends BaseController {
 	@Autowired
 	private BaseFrameworkConfig config;
 	
-	@Resource
-	private LocalCacheToNlp localCacheToNlp;
+//	@Resource
+//	private LocalCacheToNlp localCacheToNlp;
 	
 	@RequestMapping(value = "audioUpload")
 	@ResponseBody
@@ -149,10 +148,22 @@ public class WxUploadController extends BaseController {
 					}
 					//当对话类型为1 时，才返回answerVoice
 					if(StringUtils.isNotEmpty(nlp) && answerType.equals("1")){
-						map.put("answer", nlp);
-						String answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);// WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
-						map.put("answerVoice",answerVoice);
-						logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
+						//如果当前 answerType 为 1 时，
+						
+						if(nlp.length()<=30){
+							//小于 30字时，一次性显示
+							map.put("answer", nlp);
+							map.put("answerReturn", "2");
+							String answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);// WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
+							map.put("answerVoice",answerVoice);
+							logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
+						}else{
+							//如果 nlp 大于30字时，就进行两次显示.
+							map.put("answerReturn", "1");
+							
+						}
+						
+						
 					}
 					long getNlpTime = System.currentTimeMillis();
 					System.out.println("#################### audioUpload  getNlpTime "+(getNlpTime -getAiuiMapTime)  + "##" +(getNlpTime-getAiuiMapTime)/1000);
@@ -241,17 +252,28 @@ public class WxUploadController extends BaseController {
 	}
 	
 	
-	@RequestMapping(value = "getTtsUrlByNlpId")
+	@RequestMapping(value = "getTtsUrlByNlp")
 	@ResponseBody
-	public ApiResponse<?> getTtsUrlByNlp(String nlpId, 
+	public ApiResponse<?> getTtsUrlByNlp(String timeStamp, 
 			HttpServletRequest request, HttpServletResponse response,
 			RedirectAttributes redirectAttributes) {
 		
-		if(StringUtils.isNotEmpty(nlpId)){
-			String nlp = localCacheToNlp.get(nlpId);
+		System.out.println("###########getTtsUrlByNlp@@@@@@@"+timeStamp);
+		String nlp = null;
+		String answerVoice =null;
+		Map<String,String> map=new HashMap<String,String>();
+		if(StringUtils.isNotEmpty(timeStamp)){
+			 nlp = (String)GuavaCacheUtil.getIfPresent(timeStamp);
+			 if(StringUtils.isNotEmpty(nlp)){
+				answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);
+			 }
 		}
-		
-		return null;
+		map.put("answerVoice",answerVoice);
+		long nowTime = System.currentTimeMillis();
+		//add by hqt 时间戳 orderTime
+		map.put("timeStamp", nowTime+"");
+		System.out.println(" ######## ApiResponse.success %%%%"+map.toString());
+		return ApiResponse.success(map); 
 	}
 	
 	 /**
