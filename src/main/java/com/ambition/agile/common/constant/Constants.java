@@ -26,9 +26,11 @@ public class Constants {
 	
 	public static final String CACHE_CONTROL_CONTENT = "cache-Control.content";
 	
-	public static final String RETURN_FALSE = "2";
+	public static final String ANSWER_TYPE_ONE_ONE = "1";
 	
-	public static final String TRUE= "1";
+	public static final String ANSWER_TYPE_ONE_TWO= "2";
+	
+	public static final Integer ANSWER_TYPE_LENGTH= 70;
 	
 	//精度值
 	public static final Integer precisionNum = 100;

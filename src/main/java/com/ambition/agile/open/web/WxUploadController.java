@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ambition.agile.common.ApiResponse;
 import com.ambition.agile.common.BaseFrameworkConfig;
 import com.ambition.agile.common.aliyun.oss.OSSUploadUtil;
+import com.ambition.agile.common.constant.Constants;
 import com.ambition.agile.common.guava.GuavaCacheUtil;
 import com.ambition.agile.common.media.VideoUtils;
 import com.ambition.agile.common.util.PropertiesFactory;
@@ -150,20 +151,20 @@ public class WxUploadController extends BaseController {
 					if(StringUtils.isNotEmpty(nlp) && answerType.equals("1")){
 						//如果当前 answerType 为 1 时，
 						
-						if(nlp.length()<=30){
-							//小于 30字时，一次性显示
+						if(nlp.length()<=Constants.ANSWER_TYPE_LENGTH){
+							//小于 70字时， 耗时 2秒一次性显示
 							map.put("answer", nlp);
-							map.put("answerReturn", "2");
+							map.put("answerOneFlag", Constants.ANSWER_TYPE_ONE_ONE);//1
 							String answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);// WebTtsUtil.getWebTtsVoiceUrlByText(nlp);
 							map.put("answerVoice",answerVoice);
 							logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 						}else{
-							//如果 nlp 大于30字时，就进行两次显示.
-							map.put("answerReturn", "1");
-							
+							//如果 nlp 大于70字时， 3秒以上的耗时，就进行两次显示.
+							map.put("answerOneFlag", Constants.ANSWER_TYPE_ONE_TWO);//2
+							map.put("answerVoice",null);
+							//调用缓存，以程序执行时间开始时，为key 将nlp 暂存.
+							GuavaCacheUtil.put(beginTime+"",nlp);
 						}
-						
-						
 					}
 					long getNlpTime = System.currentTimeMillis();
 					System.out.println("#################### audioUpload  getNlpTime "+(getNlpTime -getAiuiMapTime)  + "##" +(getNlpTime-getAiuiMapTime)/1000);
@@ -247,7 +248,7 @@ public class WxUploadController extends BaseController {
 		 System.out.println("#################### audioUpload deal end time  "+beginTime);
 		 System.out.println("#################### total time seconds  "+(endTime -beginTime)/1000);
 		 //add by hqt 时间戳 orderTime
-		 map.put("timeStamp", endTime+"");
+		 map.put("timeStamp", beginTime+"");
 		 return ApiResponse.success(map); 
 	}
 	
