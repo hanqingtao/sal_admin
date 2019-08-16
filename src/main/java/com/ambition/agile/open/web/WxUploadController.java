@@ -165,6 +165,7 @@ public class WxUploadController extends BaseController {
 							map.put("answerVoice",null);
 							//调用缓存，以程序执行时间开始时，为key 将nlp 暂存.
 							GuavaCacheUtil.put(beginTime+"",nlp);
+							System.out.println("GuavaCacheUtil get "+"key:"+beginTime+"value:"+GuavaCacheUtil.get(beginTime+""));
 						}
 					}
 					long getNlpTime = System.currentTimeMillis();
@@ -266,6 +267,7 @@ public class WxUploadController extends BaseController {
 		Map<String,String> map=new HashMap<String,String>();
 		if(StringUtils.isNotEmpty(timeStamp)){
 			 nlp = (String)GuavaCacheUtil.getIfPresent(timeStamp);
+			 System.out.println("###GuavaCacheUtil.getIfPresent ###:"+timeStamp+"&nlp:"+nlp);
 			 if(StringUtils.isNotEmpty(nlp)){
 				answerVoice = WebaiuiTtsUtil.getWebTtsVoiceUrlByText(nlp);
 			 }

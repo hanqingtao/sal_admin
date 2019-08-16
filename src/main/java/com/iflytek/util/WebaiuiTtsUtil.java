@@ -97,12 +97,15 @@ public class WebaiuiTtsUtil {
 		Map<String, String> header = buildHeader();
 		//String str = "你好，你能给我讲五十步笑百步吗？非常感谢您!";//火落落，舞台礼仪？";//"北京明天的天气";
 		//byte[] dataByteArray = str.getBytes("utf-8");
+		System.out.println("##getWebTtsVoiceUrlByText ##"+text);
 		byte[] dataByteArray = text.getBytes("utf-8");
 		//byte[] dataByteArray = readFile(FILE_PATH);
 		long beginTime = System.currentTimeMillis();
 		System.out.println(" #####WebaiuiTtsUtil  getWebTtsVoiceUrlByText  "+ beginTime);
+		System.out.println("####header :"+header);
 		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
 		long gethttpPoseTime = System.currentTimeMillis();
+		System.out.println("httpPost resultHttpPost:"+resultHttpPost);
 		System.out.println("#################### WebaiuiTtsUtil  gethttpPostTime  "+(gethttpPoseTime -beginTime)  + "##" +(gethttpPoseTime -beginTime)/1000);
 		
 		AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
