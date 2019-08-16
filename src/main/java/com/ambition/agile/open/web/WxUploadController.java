@@ -160,6 +160,7 @@ public class WxUploadController extends BaseController {
 							logger.info("nlp,answerVoice {},{}",nlp,answerVoice);
 						}else{
 							//如果 nlp 大于70字时， 3秒以上的耗时，就进行两次显示.
+							map.put("answer", nlp);
 							map.put("answerOneFlag", Constants.ANSWER_TYPE_ONE_TWO);//2
 							map.put("answerVoice",null);
 							//调用缓存，以程序执行时间开始时，为key 将nlp 暂存.
