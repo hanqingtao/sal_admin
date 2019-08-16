@@ -93,11 +93,12 @@ public class WebaiuiTtsUtil {
 		
 		String webttsResultUrl = null;
 		try{
-			
+		//System.out.println("## before getWebTtsVoiceUrlByText ##"+text);
+		//text = "坐姿通常是指人体在坐着时候的姿态。正确坐姿，除了遵循以下技巧摆放双腿外，还应时时保持上半身挺直的姿势，也就是颈、胸、腰都要保持平直。被测者挺胸坐在被调节到腓骨头高度的平面上，头部以眼耳平面定位，眼睛平视前方，左、右大腿大致平行，膝弯屈大致成直角，足平放在地面上，手轻放在大腿上。!";//火落落，舞台礼仪？";//"北京明天的天气";
 		Map<String, String> header = buildHeader();
 		//String str = "你好，你能给我讲五十步笑百步吗？非常感谢您!";//火落落，舞台礼仪？";//"北京明天的天气";
 		//byte[] dataByteArray = str.getBytes("utf-8");
-		System.out.println("##getWebTtsVoiceUrlByText ##"+text);
+		System.out.println("## after getWebTtsVoiceUrlByText ##"+text);
 		byte[] dataByteArray = text.getBytes("utf-8");
 		//byte[] dataByteArray = readFile(FILE_PATH);
 		long beginTime = System.currentTimeMillis();
@@ -105,7 +106,7 @@ public class WebaiuiTtsUtil {
 		System.out.println("####header :"+header);
 		String resultHttpPost = httpPost(AIUI_URL, header, dataByteArray);
 		long gethttpPoseTime = System.currentTimeMillis();
-		System.out.println("httpPost resultHttpPost:"+resultHttpPost);
+		//System.out.println("httpPost resultHttpPost:"+resultHttpPost);
 		System.out.println("#################### WebaiuiTtsUtil  gethttpPostTime  "+(gethttpPoseTime -beginTime)  + "##" +(gethttpPoseTime -beginTime)/1000);
 		
 		AIUIEntity aiuiEntity = JsonMapper.fromJson(resultHttpPost, AIUIEntity.class);
