@@ -54,6 +54,8 @@ public class BaseConfigHolder {
 	public static String videoDialogPath;//video.dialog.path=
 	public static String videoDialogName;//video.dialog.name=dialog
 	public static String videoDialogTtsName;//voice  tts 
+	public static String mainAudioTtsName;// audio.tts.main
+	public static String audioUrlPre;// auio url pre
 	
 	public static String flvServer;
 	public static String scormServer;
@@ -111,6 +113,7 @@ public class BaseConfigHolder {
 		getVideoDialogPath();
 		getVideoDialogName();
 		getVideoDialogTtsName();
+		getAudioUrlPre();
 		logger.info("@@@@@@ intiSystemValues  end %%%%%%");
 //		getFlvServer();
 //		getScormServer();
@@ -599,6 +602,29 @@ public class BaseConfigHolder {
 			videoDialogName = StringUtils.trim(videoDialogName);
 		}
 		return videoDialogName;
+	}
+	/**
+	 * @see 音频文件的tts 目录
+	 * @return
+	 */
+	public static String getMainAudioTtsName(){
+		if(mainAudioTtsName == null && getProperties() != null){
+			mainAudioTtsName = new String(getProperties().getProperty("audio.tts.main"));
+		}
+		if(null != mainAudioTtsName ){
+			mainAudioTtsName = StringUtils.trim(mainAudioTtsName);
+		}
+		return mainAudioTtsName;
+	}
+	
+	public static String getAudioUrlPre(){
+		if(audioUrlPre == null && getProperties() != null){
+			audioUrlPre = new String(getProperties().getProperty("audioUrlPre"));
+		}
+		if(null != audioUrlPre ){
+			audioUrlPre = StringUtils.trim(audioUrlPre);
+		}
+		return audioUrlPre;
 	}
 	
 	/**

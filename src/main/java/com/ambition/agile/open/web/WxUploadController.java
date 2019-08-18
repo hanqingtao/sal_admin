@@ -66,6 +66,8 @@ public class WxUploadController extends BaseController {
 		 if(null != openId && !openId.equals("")  && !openId.equals("undefined") ){
 			 dir = dir +  openId + VideoUtils.FILE_SEPARATOR; 
 		 }
+		 String ttsDir = config.getConfig().getProperty("video.dialog.tts.name")+ VideoUtils.FILE_SEPARATOR;//"dialog"
+		 
 		 System.out.println("######openid"+openId);
 		 System.out.println("#audioUpload :"+dir);
 		 //设置本地路径
@@ -176,7 +178,7 @@ public class WxUploadController extends BaseController {
 					if(StringUtils.isEmpty(reply)){
 						reply = "对不起，请您再说一遍.";
 					}
-					if(StringUtils.isNotEmpty(reply)){
+					if(StringUtils.isNotEmpty(reply) && answerType.equals("2") ){
 						System.out.println("replay content "+ reply);
 						map.put("reply", reply);
 						String preVidePath =  WebaiuiTtsUtil.getWebTtsVoiceUrlByText(reply);//WebTtsUtil.getWebTtsVoiceUrlByText(reply);

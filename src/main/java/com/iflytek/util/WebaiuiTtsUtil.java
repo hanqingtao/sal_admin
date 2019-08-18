@@ -12,6 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.ambition.agile.common.BaseConfigHolder;
 import com.ambition.agile.common.aliyun.oss.OSSUploadUtil;
 import com.ambition.agile.common.mapper.JsonMapper;
+import com.ambition.agile.common.media.VideoUtils;
 import com.ambition.agile.open.entity.AIUIEntity;
 import com.ambition.agile.open.entity.AIUITtsEntity;
 import com.ambition.agile.open.entity.Data;
@@ -69,6 +72,10 @@ public class WebaiuiTtsUtil {
 	private static final String FILE_PATH = "/Users/harry/out/nihao.pcm";//16k_10.pcm";////test.txt";//16k_10.pcm";//bj_weather.wav";////16k_10.pcm"; // 中文
 	// 个性化参数，需转义 个性化参数，json字符串，目前支持用户级（auth_id）、应用级（appid）和用户自定义级，不支持透传其他参数。
 	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"779705c3e4cfd0a279fb7cf1da752663\\\"}";
+	private static String mainAudioTtsPath = "/opt/tools/apache-tomcat-7.0.54/webapps/ROOT/";
+			//"/opt/tools/apache-tomcat-7.0.54/webapps/ROOT";
+	private static String audioUrlPre = "https://robot.lianggehuangli.com/tts/";
+	//"http://127.0.0.1/sal/tts/";
 	
 	static {
         try {
@@ -81,6 +88,13 @@ public class WebaiuiTtsUtil {
         		//aiui 应用的调试 authId
         		AUTH_ID = BaseConfigHolder.getAiAppAuthid();
         		logger.info("webaiuUtil AUTH_ID{}",AUTH_ID);
+        		if(StringUtils.isNotEmpty(BaseConfigHolder.getMainAudioTtsName())){
+        			mainAudioTtsPath = BaseConfigHolder.getMainAudioTtsName();
+        		}
+        		 if(StringUtils.isNotEmpty(BaseConfigHolder.getAudioUrlPre())){
+        			 audioUrlPre =BaseConfigHolder.getAudioUrlPre();
+        		 }
+        		System.out.println("WebaiuiTtsUtil static mainAudioTtsPath : "+mainAudioTtsPath);
         } catch (Exception e) {
         		logger.error("load baseConfigHolder failed.", e);
         }
@@ -128,8 +142,29 @@ public class WebaiuiTtsUtil {
 						//FileUtil.save("/Users/harry/out/", resultMap.get("sid") + ".mp3", (byte[]) resultMap.get("body"));
 						InputStream inputStream = new ByteArrayInputStream(audio); 
 						//FileUtil.save("/Users/harry/out/", "22211.mp3", audio);
-						webttsResultUrl = OSSUploadUtil.uploadFileNewName(inputStream,"mp3", VideoDialogTtsName+"/");
-						break;
+						 Date d = new Date();
+					     SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+					     String formatDate = format.format(d);
+					     String str = "";
+					     for(int i=0 ;i <5; i++){
+					            int n = (int)(Math.random()*90)+10;
+					            str += n;
+					     }
+					     logger.info("@@@@@@str random ::",str);
+					     String fileMp3Name = formatDate+str+".mp3";
+					     // mainAudioTtsPath + VideoDialogTtsName +VideoUtils.FILE_SEPARATOR;
+					     //所有的音频文件进行分类存放 一级目录为  dialog
+						 //设置本地路径
+//						 String mainPath = config.getConfig().getProperty("video.dialog.path");//"/Users/harry/out/";//BaseConfigHolder.getVideoDialogPath();//
+//						 mainPath = mainPath  + dir;
+					     System.out.println("before fileUtil save mainAudioTtsPath"+mainAudioTtsPath
+					    		 +"@@fileMp3Nmae^^"+fileMp3Name );
+						 FileUtil.save( mainAudioTtsPath + VideoDialogTtsName +VideoUtils.FILE_SEPARATOR,fileMp3Name,audio);
+						 //webttsResultUrl = "https://robot.lianggehuangli.com/tts/"+fileMp3Name;
+						 webttsResultUrl =audioUrlPre +fileMp3Name;
+						 System.out.println("#####webttsResultUrl  not oss server file  "+ webttsResultUrl);
+//						 webttsResultUrl = OSSUploadUtil.uploadFileNewName(inputStream,"mp3", VideoDialogTtsName+"/");
+						 break;
 						//String ossUrl=OSSUploadUtil.uploadFileNewName(inputStream,"mp3", "qa/");
 						//System.out.println(ossUrl + "合成 WebAPI 调用成功，音频保存位置：resource\\" + resultMap.get("sid") + ".mp3");
 					}
@@ -138,8 +173,6 @@ public class WebaiuiTtsUtil {
 		}
 		long getUploadFileNewNameTime = System.currentTimeMillis();
 		System.out.println("#################### WebaiuiTtsUtil  getUploadFileNewNameTime  "+(getUploadFileNewNameTime-getaiuiEntityTime)  + "##" +(getUploadFileNewNameTime-getaiuiEntityTime)/1000);
-		
-		
 		}catch(Exception e ){
 			e.printStackTrace();
 		}
