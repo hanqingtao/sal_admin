@@ -23,7 +23,7 @@ public class GuavaCacheUtil {
     /**
      * 缓存时间：分钟 改成秒 
      */
-    private static final long GUAVA_CACHE_TIME = 60;
+    private static final long GUAVA_CACHE_TIME = 120;
 
     /**
      * 缓存操作对象

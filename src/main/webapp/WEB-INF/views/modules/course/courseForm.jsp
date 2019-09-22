@@ -77,6 +77,13 @@
 				<form:textarea path="reply" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">搜索名称：</label>
+			<div class="controls">
+				<form:input path="nameSearch" htmlEscape="false" maxlength="128" class="input-xlarge required"/>
+				<span class="help-inline"><font color="red">多个搜索名称，请用,号分隔!*</font> </span>
+			</div>
+		</div>
 		
 		<div class="control-group">
 			<label class="control-label">视频上传：</label>

@@ -16,6 +16,7 @@ public class Course extends DataEntity<Course> {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;		// 课程名称
+	private String nameSearch;		// 课程名称
 	private String courseCode;		// 课程唯一标识
 	private String courseType;		// 课程类型
 	private String categoryName;		// 所属分类名称
@@ -178,6 +179,14 @@ public class Course extends DataEntity<Course> {
 
 	public void setReply(String reply) {
 		this.reply = reply;
+	}
+
+	public String getNameSearch() {
+		return nameSearch;
+	}
+
+	public void setNameSearch(String nameSearch) {
+		this.nameSearch = nameSearch;
 	}
 	
 }

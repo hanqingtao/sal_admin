@@ -41,8 +41,7 @@
 		action="${ctx}/course/course/courseImport" method="post" class="form-horizontal">
 		
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>	
-		
+	
 		<!-- 
 		<div class="control-group">
 			<label class="control-label">课程分类：</label>
@@ -79,7 +78,7 @@
 				class="form-control required eHide" 
 				<a herf="javascript:;" id="toUpLoadFileFlag" class="btn btn-primary  setUploadWidth">上传</a>
 				-->
-				<span class="help-inline"><font color="red"><div id ="myTipModalContainer" ></div>*</font> </span>
+				<span class="help-inline"><font color="red"><div id ="myTipModalContainer" >${message}</div>*</font> </span>
 			</div>
 		</div>
 		

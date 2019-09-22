@@ -50,6 +50,8 @@ public class AiuiWebController extends BaseController {
 	@Autowired
 	private CourseService courseService;
 	
+	//http://localhost:8080/sal/aiui/getVoiceByName?courseName=1
+	
 	@RequestMapping(value = "getVoiceByName")
 	@ResponseBody
 	public ApiResponse<?> audioUpload(
@@ -74,7 +76,7 @@ public class AiuiWebController extends BaseController {
 			 courseName = ""; 
 		 }
 		 Course courseQuery = new Course();
-		 courseQuery.setName(courseName);
+		 courseQuery.setNameSearch(courseName);
 		 //设置本地路径
 		 List<Course> courseList = courseService.getByName(courseQuery);
 		 if(null != courseList && courseList.size()>0){

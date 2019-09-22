@@ -44,33 +44,6 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>	
 		
-		<!-- 
-		<div class="control-group">
-			<label class="control-label">课程分类：</label>
-			<div class="controls">
-			<sys:treeselect id="categoryId" name="categoryId" value="${course.categoryId}" labelName="course.categoryName" labelValue="${course.categoryName}"
-					title="部门" url="/course/courseCategory/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-			</div>
-		</div>	
-		<div class="control-group">
-			<label class="control-label">课程类型：</label>
-			<div class="controls">
-				<form:select path="courseType" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('course_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">视频状态：</label>
-			<div class="controls">
-				<form:radiobuttons path="status" items="${fns:getDictList('course_status')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
-			</div>
-		</div>
-		
-		<form:hidden id="videoPath" path="videoPath" htmlEscape="false" maxlength="128" class="input-xlarge"/>
-		-->
-		
 		<div class="control-group">
 			<label class="control-label">选择文件上传：</label>
 			<div class="controls">

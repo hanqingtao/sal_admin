@@ -87,6 +87,9 @@ public class CourseController extends BaseController {
 	@RequestMapping(value = "courseImport")
 	public String courseImport(@RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
 			HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		int suceeNum = 0;
+		int errorNum = 0;
 		if (null != uploadFile) {
 			InputStream inputStream = null;
 			try {
@@ -104,21 +107,29 @@ public class CourseController extends BaseController {
 								if (null == course.getCategoryName() || course.getCategoryName().isEmpty()) {
 									flag = false;
 									errorMsg = "课程分类名称不能为空!";
+									errorNum = errorNum + 1;
+									continue;
 								}
 								// 判断数据的正确性
 								if (null == course.getCategoryCode() || course.getCategoryCode().isEmpty()) {
 									flag = false;
 									errorMsg = "课程分类code不能为空!";
+									errorNum = errorNum + 1;
+									continue;
 								}
 								// 判断数据的正确性
 								if (null == course.getName() || course.getName().isEmpty()) {
 									flag = false;
 									errorMsg = "课程名称不能为空!";
+									errorNum = errorNum + 1;
+									continue;
 								}
 								// 判断数据的正确性
 								if (null == course.getCourseCode() || course.getCourseCode().isEmpty()) {
 									flag = false;
 									errorMsg = "课程code不能为空!";
+									errorNum = errorNum + 1;
+									continue;
 								}
 								List<Course> courseOld = (List<Course>) courseService.getByCode(course.getCourseCode());
 
@@ -129,6 +140,8 @@ public class CourseController extends BaseController {
 								if (courseOld.size() > 0) {
 									flag = false;
 									errorMsg = "部分课程已经存在系统中!";
+									errorNum = errorNum + 1;
+									continue;
 								}
 								// 判断 是否为空
 								if (null == course.getReply() || course.getReply().isEmpty()) {
@@ -138,14 +151,17 @@ public class CourseController extends BaseController {
 								if (null == course.getVideoPath() || course.getVideoPath().isEmpty()) {
 									flag = false;
 									errorMsg = "课程路径地址不能为空!";
+									errorNum = errorNum + 1;
+									continue;
 								}
-								OSSConfig ossConfig = OSSConfig.getOssConfigInstance();
-								course.setVideoPath(ossConfig.getVideoUrl() + course.getVideoPath());
+								//OSSConfig ossConfig = OSSConfig.getOssConfigInstance();
+								//course.setVideoPath(ossConfig.getVideoUrl() + course.getVideoPath());
 								// 设置 课程 类型 1 默认
 								course.setCourseType("1");
 								if (null != course.getCategoryCode()) {
 									List<CourseCategory> courseCategoryList = courseCategoryService
 											.getByCode(course.getCategoryCode());
+									if(!courseCategoryList.isEmpty()){
 									CourseCategory courseCategory = (CourseCategory) courseCategoryList.get(0);
 									if (null != courseCategory.getId() && !courseCategory.getId().isEmpty()) {
 										course.setCategoryName(courseCategory.getName());
@@ -153,7 +169,9 @@ public class CourseController extends BaseController {
 										course.setCategoryCode(courseCategory.getCode());
 										course.setCategoryIds(courseCategory.getParentIds());
 									}
+									}
 								}
+								suceeNum = suceeNum + 1;
 								courseService.save(course);
 							}
 						}
@@ -164,9 +182,17 @@ public class CourseController extends BaseController {
 				logger.info("import coures faile,message: " + e.getMessage());
 			}
 		}
+		String message = "";
+		if(suceeNum>0){
+			message = "成功导入:"+suceeNum+"条数据.";
+		}
+		if(errorNum>0){
+			message = "<br> 未导入:"+errorNum+"条数据.";
+		}
+		model.addAttribute("message",message);
 		// response.setContentType("test/html;charset=UTF-8");
 		// model.addAttribute("course", course);
-		return "modules/course/courseImport";
+		return "modules/course/toCourseImport";
 	}
 
 	@RequiresPermissions("course:course:edit")

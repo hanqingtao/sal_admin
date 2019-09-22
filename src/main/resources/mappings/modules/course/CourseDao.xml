@@ -5,6 +5,7 @@
 	<sql id="courseColumns">
 		a.id AS "id",
 		a.name AS "name",
+		a.name_search AS "nameSearch",
 		a.course_code AS "courseCode",
 		a.course_type AS "courseType",
 		a.category_name AS "categoryName",
@@ -117,11 +118,11 @@
 		FROM course a
 		<where>
 			1=1 
-			<if test="name != null and name != ''">
-			AND a.name LIKE
-			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-			<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			<if test="nameSearch != null and nameSearch != ''">
+			AND a.name_search LIKE
+			<if test="dbName == 'oracle'">'%'||#{nameSearch}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{nameSearch}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{nameSearch},'%')</if>
 			</if>
 		</where>
 		limit 1
@@ -129,6 +130,7 @@
 	<insert id="insert">
 		INSERT INTO course(
 			name,
+			name_search,
 			course_code,
 			course_type,
 			category_name,
@@ -152,6 +154,7 @@
 			category_ids
 		) VALUES (
 			#{name},
+			#{nameSearch},
 			#{courseCode},
 			#{courseType},
 			#{categoryName},
@@ -179,6 +182,7 @@
 	<update id="update">
 		UPDATE course SET 	
 			name = #{name},
+			name_search = #{nameSearch},
 			course_code = #{courseCode},
 			course_type = #{courseType},
 			category_name = #{categoryName},
