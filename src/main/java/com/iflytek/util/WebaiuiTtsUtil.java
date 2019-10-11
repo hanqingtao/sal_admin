@@ -53,28 +53,28 @@ import com.iflytek.voicecloud.webapi_tts.FileUtil;
  */
 public class WebaiuiTtsUtil {
 	
-	private static final Logger logger = LoggerFactory.getLogger(WebaiuiTtsUtil.class);
+	public static final Logger logger = LoggerFactory.getLogger(WebaiuiTtsUtil.class);
 	
-	private static  String AIUI_URL = "http://openapi.xfyun.cn/v2/aiui";
-	private static  String APPID = "5d3d95ea";
-	private static  String API_KEY = "5fd24cbae0bd5917660afaa479929669";
-	private static  String AUTH_ID = "779705c3e4cfd0a279fb7cf1da752663";//29f0b5211cb74caf5320fb0625d6fb98";
-	private static final String DATA_TYPE = "text";// data_type text 文本  audio音频 
-	private static final String SCENE = "IFLYTEK.tts";//_box";//_box";//main_box 测试 text 类型  audio 用  main即可
-	private static final String RESULT_LEVEL = "complete";
-	private static String VideoDialogTtsName="tts";
-	private static final String VCN = "x_nannan";
-	private static final String SPEED = "60";
-	private static final String VOLUME ="50";
-	private static final String PITCH ="50";
-	private static final String AUE = "lame";//可选值：raw（未压缩的pcm或wav格式）、speex（speex格式，即sample_rate=8000的speex音频）、speex-wb（宽频speex格式，即sample_rate=16000的speex音频），默认为 raw
-	private static final String SAMPLE_RATE = "16000"; //默认 16000 16k采样率   8000 8K采样率 
-	private static final String FILE_PATH = "/Users/harry/out/nihao.pcm";//16k_10.pcm";////test.txt";//16k_10.pcm";//bj_weather.wav";////16k_10.pcm"; // 中文
+	public static  String AIUI_URL = "http://openapi.xfyun.cn/v2/aiui";
+	public static  String APPID = "5d3d95ea";
+	public static  String API_KEY = "5fd24cbae0bd5917660afaa479929669";
+	public static  String AUTH_ID = "779705c3e4cfd0a279fb7cf1da752663";//29f0b5211cb74caf5320fb0625d6fb98";
+	public static final String DATA_TYPE = "text";// data_type text 文本  audio音频 
+	public static final String SCENE = "IFLYTEK.tts";//_box";//_box";//main_box 测试 text 类型  audio 用  main即可
+	public static final String RESULT_LEVEL = "complete";
+	public static String VideoDialogTtsName="tts";
+	public static final String VCN = "x_nannan";
+	public static final String SPEED = "60";
+	public static final String VOLUME ="50";
+	public static final String PITCH ="50";
+	public static final String AUE = "lame";//可选值：raw（未压缩的pcm或wav格式）、speex（speex格式，即sample_rate=8000的speex音频）、speex-wb（宽频speex格式，即sample_rate=16000的speex音频），默认为 raw
+	public static final String SAMPLE_RATE = "16000"; //默认 16000 16k采样率   8000 8K采样率 
+	public static final String FILE_PATH = "/Users/harry/out/nihao.pcm";//16k_10.pcm";////test.txt";//16k_10.pcm";//bj_weather.wav";////16k_10.pcm"; // 中文
 	// 个性化参数，需转义 个性化参数，json字符串，目前支持用户级（auth_id）、应用级（appid）和用户自定义级，不支持透传其他参数。
-	private static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"779705c3e4cfd0a279fb7cf1da752663\\\"}";
-	private static String mainAudioTtsPath = "/opt/tools/apache-tomcat-7.0.54/webapps/ROOT/";
+	public static final String PERS_PARAM = "{\\\"auth_id\\\":\\\"779705c3e4cfd0a279fb7cf1da752663\\\"}";
+	public static String mainAudioTtsPath = "/opt/tools/apache-tomcat-7.0.54/webapps/ROOT/";
 			//"/opt/tools/apache-tomcat-7.0.54/webapps/ROOT";
-	private static String audioUrlPre = "https://robot.lianggehuangli.com/tts/";
+	public static String audioUrlPre = "https://robot.lianggehuangli.com/tts/";
 	//"http://127.0.0.1/sal/tts/";
 	
 	static {
@@ -217,7 +217,7 @@ public class WebaiuiTtsUtil {
 		}
 	}
 
-	private static Map<String, String> buildHeader() throws UnsupportedEncodingException, ParseException {
+	public static Map<String, String> buildHeader() throws UnsupportedEncodingException, ParseException {
 		String curTime = System.currentTimeMillis() / 1000L + "";
 		//text 
 		String param = "{\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"scene\":\""+SCENE
@@ -240,7 +240,7 @@ public class WebaiuiTtsUtil {
 		return header;
 	}
 	
-	private static byte[] readFile(String filePath) throws IOException {
+	public static byte[] readFile(String filePath) throws IOException {
 		InputStream in = new FileInputStream(filePath);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024 * 4];
@@ -253,7 +253,7 @@ public class WebaiuiTtsUtil {
 		return data;
 	}
 	
-	private static String httpPost(String url, Map<String, String> header, byte[] body) {
+	public static String httpPost(String url, Map<String, String> header, byte[] body) {
 		String result = "";
 		BufferedReader in = null;
 		OutputStream out = null;

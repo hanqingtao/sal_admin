@@ -119,10 +119,13 @@
 		<where>
 			1=1 
 			<if test="nameSearch != null and nameSearch != ''">
+			AND a.name_search = #{nameSearch} 
+			<!-- 
 			AND a.name_search LIKE
 			<if test="dbName == 'oracle'">'%'||#{nameSearch}||'%'</if>
 			<if test="dbName == 'mssql'">'%'+#{nameSearch}+'%'</if>
 			<if test="dbName == 'mysql'">concat('%',#{nameSearch},'%')</if>
+			 -->
 			</if>
 		</where>
 		limit 1
