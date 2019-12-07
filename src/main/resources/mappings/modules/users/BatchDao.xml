@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.users.dao.BatchDao">
+    
+	<sql id="batchColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.create_name AS "createName",
+		a.count AS "count",
+		a.pre AS "pre"
+	</sql>
+	
+	<sql id="batchJoins">
+	</sql>
+    
+	<select id="get" resultType="Batch">
+		SELECT 
+			<include refid="batchColumns"/>
+		FROM batch a
+		<include refid="batchJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Batch">
+		SELECT 
+			<include refid="batchColumns"/>
+		FROM batch a
+		<include refid="batchJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="beginBeginTime != null and endBeginTime != null and beginBeginTime != '' and endBeginTime != ''">
+				AND a.begin_time BETWEEN #{beginBeginTime} AND #{endBeginTime}
+			</if>
+			<if test="beginEndTime != null and endEndTime != null and beginEndTime != '' and endEndTime != ''">
+				AND a.end_time BETWEEN #{beginEndTime} AND #{endEndTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Batch">
+		SELECT 
+			<include refid="batchColumns"/>
+		FROM batch a
+		<include refid="batchJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO batch(
+			name,
+			begin_time,
+			end_time,
+			create_date,
+			create_by,
+			create_name,
+			count,
+			pre
+		) VALUES (
+			#{name},
+			#{beginTime},
+			#{endTime},
+			#{createDate},
+			#{createBy.id},
+			#{createName},
+			#{count},
+			#{pre}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE batch SET 	
+			name = #{name},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
+			create_name = #{createName},
+			count = #{count},
+			pre = #{pre}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM batch
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

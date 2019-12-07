@@ -51,7 +51,7 @@ public class AiuiWebController extends BaseController {
 	private CourseService courseService;
 	
 	//http://localhost:8080/sal/aiui/getVoiceByName?courseName=1
-	
+	//请先使用教材上的激活码激活后，再跟我说话吧
 	@RequestMapping(value = "getVoiceByName")
 	@ResponseBody
 	public ApiResponse<?> audioUpload(
