@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.test;
+package com.ambition.agile.test;
 
 import java.util.HashMap;
 import java.util.Map;

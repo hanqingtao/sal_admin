@@ -76,6 +76,7 @@
 				</td>
 				<shiro:hasPermission name="users:batch:edit"><td>
     				<a href="${ctx}/users/batch/form?id=${batch.id}">修改</a>
+    				<a href="${ctx}/users/batch/export?id=${batch.id}" onclick="return confirmx('导出激活码？', this.href)">导出</a>
 					<a href="${ctx}/users/batch/delete?id=${batch.id}" onclick="return confirmx('确认要删除该批次吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
