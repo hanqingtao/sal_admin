@@ -3,6 +3,8 @@
  */
 package com.ambition.agile.modules.users.dao;
 
+import java.util.List;
+
 import com.ambition.agile.common.persistence.CrudDao;
 import com.ambition.agile.common.persistence.annotation.MyBatisDao;
 import com.ambition.agile.modules.users.entity.Cdkey;
@@ -14,5 +16,7 @@ import com.ambition.agile.modules.users.entity.Cdkey;
  */
 @MyBatisDao
 public interface CdkeyDao extends CrudDao<Cdkey> {
+	
+	public List<Cdkey> findListByBatch(Cdkey cdkey);
 	
 }

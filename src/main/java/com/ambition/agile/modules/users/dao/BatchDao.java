@@ -4,6 +4,7 @@
 package com.ambition.agile.modules.users.dao;
 
 import com.ambition.agile.common.persistence.CrudDao;
+import com.ambition.agile.common.persistence.Page;
 import com.ambition.agile.common.persistence.annotation.MyBatisDao;
 import com.ambition.agile.modules.users.entity.Batch;
 
@@ -14,5 +15,6 @@ import com.ambition.agile.modules.users.entity.Batch;
  */
 @MyBatisDao
 public interface BatchDao extends CrudDao<Batch> {
+
 	
 }

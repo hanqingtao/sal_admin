@@ -34,6 +34,10 @@ public class CdkeyService extends CrudService<CdkeyDao, Cdkey> {
 		return super.findPage(page, cdkey);
 	}
 	
+	public List<Cdkey> findListByBatch(Cdkey cdkey){
+		return ((CdkeyDao)this.dao).findListByBatch(cdkey);
+	}
+	
 	@Transactional(readOnly = false)
 	public void save(Cdkey cdkey) {
 		super.save(cdkey);

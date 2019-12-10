@@ -17,7 +17,7 @@ import com.ambition.agile.common.persistence.DataEntity;
 public class Cdkey extends DataEntity<Cdkey> {
 	
 	private static final long serialVersionUID = 1L;
-	private String batchId;		// batch_id
+	private Integer batchId;		// 批次id
 	private String code;		// 激活码
 	private String status;		// 状态 0 未用 1 激活 2作废
 	private Date activeDate;		// 激活时间
@@ -34,12 +34,12 @@ public class Cdkey extends DataEntity<Cdkey> {
 		super(id);
 	}
 
-	@Length(min=0, max=11, message="batch_id长度必须介于 0 和 11 之间")
-	public String getBatchId() {
+	//@Length(min=0, max=11, message="batch_id长度必须介于 0 和 11 之间")
+	public Integer getBatchId() {
 		return batchId;
 	}
 
-	public void setBatchId(String batchId) {
+	public void setBatchId(Integer batchId) {
 		this.batchId = batchId;
 	}
 	

@@ -1,5 +1,6 @@
 package com.ambition.agile.common.util;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -70,6 +71,11 @@ public class ComUtil {
 	}
 
 	public static boolean isNullOrEmpty(Integer s) {
+		//return (s == null) || (s.intValue() <= 0);
+		return s == null;
+	}
+	
+	public static boolean isNullOrEmpty(Date s) {
 		//return (s == null) || (s.intValue() <= 0);
 		return s == null;
 	}

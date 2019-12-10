@@ -21,7 +21,7 @@ public class Batch extends DataEntity<Batch> {
 	private Date beginTime;		// 开始时间
 	private Date endTime;		// 结束时间
 	private String createName;		// create_name
-	private String count;		// 数量
+	private Integer count;		// 数量
 	private String pre;		// 前缀
 	private Date beginBeginTime;		// 开始 开始时间
 	private Date endBeginTime;		// 结束 开始时间
@@ -72,12 +72,12 @@ public class Batch extends DataEntity<Batch> {
 		this.createName = createName;
 	}
 	
-	@Length(min=0, max=5, message="数量长度必须介于 0 和 5 之间")
-	public String getCount() {
+	//@Length(min=0, max=5, message="数量长度必须介于 0 和 5 之间")
+	public Integer getCount() {
 		return count;
 	}
 
-	public void setCount(String count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 	
