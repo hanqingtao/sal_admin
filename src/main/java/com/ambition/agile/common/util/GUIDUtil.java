@@ -26,6 +26,38 @@ public class GUIDUtil {
 		StringBuffer stringBuffer = new StringBuffer();
 		String uuid = generateGUID();//UUID.randomUUID().toString().replace("-", "");
 		System.out.println("uuid "+uuid);
+		for (int i = 0; i < 8; i++) { // 32 -> 8
+			String str = uuid.substring(i * 4, i * 4 + 4);
+			System.out.println("str:"+str);
+			// 16进制为基解析
+			int strInteger = Integer.parseInt(str, 16);
+			System.out.println(strInteger + "&&&" + chars[strInteger % 0x3E]);
+			// 0x3E -> 字典总数 62
+			stringBuffer.append(chars[strInteger % 0x3E]);
+		}
+		return stringBuffer.toString();
+	}
+	
+	public static String getEightCardByGUID(){
+		StringBuffer stringBuffer = new StringBuffer();
+		String uuid = generateGUID();//UUID.randomUUID().toString().replace("-", "");
+		System.out.println("uuid "+uuid);
+		for (int i = 0; i < 8; i++) { // 32 -> 8
+			String str = uuid.substring(i * 4, i * 4 + 4);
+			System.out.println("str:"+str);
+			// 16进制为基解析
+			int strInteger = Integer.parseInt(str, 16);
+			System.out.println(strInteger + "&&&" + chars[strInteger % 0x3E]);
+			// 0x3E -> 字典总数 62
+			stringBuffer.append(chars[strInteger % 0x3E]);
+		}
+		return stringBuffer.toString();
+	}
+	
+	public static String getTenCardByGUID(){
+		StringBuffer stringBuffer = new StringBuffer();
+		String uuid = generateGUID();//UUID.randomUUID().toString().replace("-", "");
+		System.out.println("uuid "+uuid);
 		for (int i = 0; i < 10; i++) { // 32 -> 8
 			String str = uuid.substring(i * 3, i * 3 + 3);
 			System.out.println("str:"+str);
@@ -38,11 +70,28 @@ public class GUIDUtil {
 		return stringBuffer.toString();
 	}
 	
-	
+	public static String getSixCardByGUID(){
+		StringBuffer stringBuffer = new StringBuffer();
+		String uuid = generateGUID();//UUID.randomUUID().toString().replace("-", "");
+		System.out.println("uuid "+uuid);
+		for (int i = 0; i < 6; i++) { // 32 -> 8
+			String str = uuid.substring(i * 5, i * 5 + 5);
+			System.out.println("str:"+str);
+			// 16进制为基解析
+			int strInteger = Integer.parseInt(str, 16);
+			System.out.println(strInteger + "&&&" + chars[strInteger % 0x3E]);
+			// 0x3E -> 字典总数 62
+			stringBuffer.append(chars[strInteger % 0x3E]);
+		}
+		return stringBuffer.toString();
+	}
 	
 	public static void main(String[] argv) {
-		String t = generateGUID();
-		System.out.println(t);
-		System.out.println(t.length());
+		String eight = getTenCardByGUID();
+		String ten = getEightCardByGUID();
+		String six = getSixCardByGUID();
+		System.out.println(eight);
+		System.out.println(ten);
+		System.out.println(six);
 	}
 }

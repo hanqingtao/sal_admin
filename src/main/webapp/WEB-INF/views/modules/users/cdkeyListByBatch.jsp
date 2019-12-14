@@ -18,13 +18,13 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/users/cdkey/">激活码列表</a></li>
-		<shiro:hasPermission name="users:cdkey:edit"><li><a href="${ctx}/users/cdkey/form">激活码添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/users/cdkey/listByBatch">${cdkey.batch.name}激活码列表</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="cdkey" action="${ctx}/users/cdkey/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cdkey" action="${ctx}/users/cdkey/listByBatch" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<input id="cdkey.batch.id" name="cdkey.bath.id" type="hidden" value="${cdkey.batch.id}"/>
+		<input id="batch.id" name="batch.id" type="hidden" value="${cdkey.batch.id}"/>
+		<input id="batch.name" name="batch.name" type="hidden" value="${cdkey.batch.name}"/>
 		<ul class="ul-form">
 			<li><label>激活码：</label>
 				<form:input path="code" htmlEscape="false" maxlength="16" class="input-medium"/>

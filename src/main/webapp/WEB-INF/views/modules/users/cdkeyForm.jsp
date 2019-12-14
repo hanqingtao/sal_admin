@@ -25,7 +25,7 @@
 		});
 	</script>
 </head>
-<body>egd
+<body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/users/cdkey/">激活码列表</a></li>
 		<li class="active"><a href="${ctx}/users/cdkey/form?id=${cdkey.id}">激活码<shiro:hasPermission name="users:cdkey:edit">${not empty cdkey.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="users:cdkey:edit">查看</shiro:lacksPermission></a></li>
@@ -34,9 +34,9 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">batch_id：</label>
+			<label class="control-label">批次标识：</label>
 			<div class="controls">
-				<form:input path="batchId" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:input path="batch.id" htmlEscape="false" maxlength="11" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -46,12 +46,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">状态 0 未用 1 激活 2作废：</label>
+			<label class="control-label">状态：</label>
 			<div class="controls">
 				<form:select path="status" class="input-xlarge ">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('cdkey_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				</form:select>( 0 未用 1 激活 2作废)
 			</div>
 		</div>
 		<div class="control-group">

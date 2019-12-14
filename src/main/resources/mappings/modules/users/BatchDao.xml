@@ -71,12 +71,11 @@
 		</choose>
 	</select>
 	
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"  keyColumn="id">
 		INSERT INTO batch(
 			name,
 			begin_time,
 			end_time,
-			create_date,
 			create_by,
 			create_name,
 			count,
@@ -85,7 +84,6 @@
 			#{name},
 			#{beginTime},
 			#{endTime},
-			#{createDate},
 			#{createBy.id},
 			#{createName},
 			#{count},

@@ -4,14 +4,17 @@
     
 	<sql id="cdkeyColumns">
 		a.id AS "id",
-		a.batch_id AS "batchId",
 		a.code AS "code",
+		a.password AS "password",
 		a.status AS "status",
 		a.create_date AS "createDate",
-		a.active_date AS "activeDate"
+		a.active_date AS "activeDate",
+		a.batch_id as "batch.id",
+		a8.name as "batch.name"
 	</sql>
 	
 	<sql id="cdkeyJoins">
+		LEFT JOIN batch a8 ON a8.id = a.batch_id
 	</sql>
     
 	<select id="get" resultType="Cdkey">
@@ -37,6 +40,9 @@
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
+			</if>
+			<if test="batch != null and batch.id != null and batch.id != ''">
+				AND a.batch_id = #{batch.id}
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
 				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
@@ -67,8 +73,8 @@
 					<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{code},'%')</if>
 			</if>
-			<if test="batchId != null and batchId != ''">
-				AND a.batch_id = #{batchId}
+			<if test="batch.id != null and batch.id != ''">
+				AND a.batch_id = #{batch.id}
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
@@ -105,17 +111,44 @@
 			</otherwise>
 		</choose>
 	</select>
+	<!--  根据code password status 来获取 是否有该记录 -->
+	<select id="findByCodePassword" resultType="Cdkey">
+		SELECT 
+			<include refid="cdkeyColumns"/>
+		FROM cdkey a
+		<include refid="cdkeyJoins"/>
+		<where>
+			<if test="code != null and code != ''">
+				AND a.code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{code},'%')</if>
+			</if>
+			<if test="password != null and password != ''">
+				AND a.code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{password}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{password}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{password},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		
+	</select>
 	
 	<insert id="insert">
 		INSERT INTO cdkey(
 			batch_id,
 			code,
+			password,
 			status,
 			create_date,
 			active_date
 		) VALUES (
-			#{batchId},
+			#{batch.id},
 			#{code},
+			#{password},
 			#{status},
 			#{createDate},
 			#{activeDate}
@@ -124,8 +157,9 @@
 	
 	<update id="update">
 		UPDATE cdkey SET 	
-			batch_id = #{batchId},
+			batch_id = #{batch.id},
 			code = #{code},
+			password = #{password},
 			status = #{status},
 			active_date = #{activeDate}
 		WHERE id = #{id}

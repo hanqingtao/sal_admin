@@ -14,6 +14,14 @@
 			$("#searchForm").submit();
         	return false;
         }
+		//跳转到 激活码列表页面，同时根据 batch.id 作为查询条件
+		function toCdkeyByBatchId(batchId){
+			//alert(batchId);
+			//$("#[cdkey.batch.id]").val(batchId);
+			//alert("abc"+$("#batchId").val());
+			$("#frm").submit();
+		}
+		</script>
 	</script>
 </head>
 <body>
@@ -75,8 +83,13 @@
 					${batch.count}
 				</td>
 				<shiro:hasPermission name="users:batch:edit"><td>
-    				<a href="${ctx}/users/batch/form?id=${batch.id}">修改</a>
-    				<a href="${ctx}/users/batch/batchExport?id=${batch.id}" target="_blank" onclick="return confirmx('导出激活码？', this.href)">导出</a>
+    					<a href="${ctx}/users/batch/form?id=${batch.id}">修改</a>
+    					<a href="${ctx}/users/batch/batchExport?id=${batch.id}" target="_blank" onclick="return confirmx('导出激活码？', this.href)">导出</a>
+					 
+						<a href="${ctx}/users/cdkey/listByBatch?batchId=${batch.id}">查看激活码</a>
+					<!-- 
+					<a href="#" onclick="toCdkeyByBatchId('${batch.id}')" >查看激活码</a>
+					 -->
 					<a href="${ctx}/users/batch/delete?id=${batch.id}" onclick="return confirmx('确认要删除该批次吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
@@ -84,5 +97,10 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
+	<form id="frm" name="frm" type="hidden" action="${ctx}/users/cdkey/listByBatch" method="post">
+		<input type="hidden" name="cdkey.batch.id" id="cdkey.batch.id"  value="8" />
+	</form>
 </body>
+
+
 </html>

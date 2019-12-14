@@ -25,7 +25,7 @@
 		});
 	</script>
 </head>
-<body>egd
+<body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/users/batch/">批次列表</a></li>
 		<li class="active"><a href="${ctx}/users/batch/form?id=${batch.id}">批次<shiro:hasPermission name="users:batch:edit">${not empty batch.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="users:batch:edit">查看</shiro:lacksPermission></a></li>
@@ -56,23 +56,36 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">create_name：</label>
-			<div class="controls">
-				<form:input path="createName" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">数量：</label>
 			<div class="controls">
-				<form:input path="count" htmlEscape="false" maxlength="5" class="input-xlarge "/>
+				<c:if test="${!empty batch.id}">
+					<!-- 修改时的操作 -->
+					${batch.count }
+				</c:if>
+				<c:if test="${empty batch.id}">
+					<form:input path="count" htmlEscape="false" maxlength="5" class="input-xlarge "/>
+				</c:if>
 			</div>
 		</div>
+		<c:if test="${!empty batch.id}">
+		<div class="control-group">
+			<label class="control-label">创建人：</label>
+			<div class="controls">
+				${batch.createName }
+				<!--
+				<form:input path="createName" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+				-->
+			</div>
+		</div>
+		</c:if>
+		<!-- 
 		<div class="control-group">
 			<label class="control-label">前缀：</label>
 			<div class="controls">
 				<form:input path="pre" htmlEscape="false" maxlength="16" class="input-xlarge "/>
 			</div>
 		</div>
+		-->
 		<div class="form-actions">
 			<shiro:hasPermission name="users:batch:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

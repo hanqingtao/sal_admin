@@ -17,14 +17,18 @@ import com.ambition.agile.common.persistence.DataEntity;
 public class Cdkey extends DataEntity<Cdkey> {
 	
 	private static final long serialVersionUID = 1L;
-	private Integer batchId;		// 批次id
+//	private Integer batchId;		// 批次id
 	private String code;		// 激活码
+	private String password; //密码
 	private String status;		// 状态 0 未用 1 激活 2作废
 	private Date activeDate;		// 激活时间
+	private Batch batch;			//批次
+	
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
 	private Date beginActiveDate;		// 开始 激活时间
 	private Date endActiveDate;		// 结束 激活时间
+	
 	
 	public Cdkey() {
 		super();
@@ -35,13 +39,13 @@ public class Cdkey extends DataEntity<Cdkey> {
 	}
 
 	//@Length(min=0, max=11, message="batch_id长度必须介于 0 和 11 之间")
-	public Integer getBatchId() {
-		return batchId;
-	}
-
-	public void setBatchId(Integer batchId) {
-		this.batchId = batchId;
-	}
+//	public Integer getBatchId() {
+//		return batchId;
+//	}
+//
+//	public void setBatchId(Integer batchId) {
+//		this.batchId = batchId;
+//	}
 	
 	@Length(min=0, max=16, message="激活码长度必须介于 0 和 16 之间")
 	public String getCode() {
@@ -100,6 +104,22 @@ public class Cdkey extends DataEntity<Cdkey> {
 
 	public void setEndActiveDate(Date endActiveDate) {
 		this.endActiveDate = endActiveDate;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Batch getBatch() {
+		return batch;
+	}
+
+	public void setBatch(Batch batch) {
+		this.batch = batch;
 	}
 		
 }

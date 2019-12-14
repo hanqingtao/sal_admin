@@ -54,11 +54,14 @@ public class BatchService extends  CrudService<BatchDao, Batch>  {
 		if (batch.getIsNewRecord()){
 			//entity.preInsert();
 			int batchId = batchDao.insert(batch) ;
+			//System.out.println("########### insert " + batchId + "batch.getId "+batch.getId());
+			//batch.setId(batchId +"");
 			if(null != batch && batch.getCount()>0){
 				for(int i=0;i<batch.getCount();i++){
 					Cdkey cdkey = new Cdkey();
-					cdkey.setBatchId(batchId);
-					cdkey.setCode(GUIDUtil.getCardByGUID());
+					cdkey.setBatch(batch);
+					cdkey.setCode(GUIDUtil.getEightCardByGUID());
+					//cdkey.setCode(GUIDUtil.getEightCardByGUID());
 					cdkey.setCreateBy(UserUtils.getUser());
 					cdkey.setCreateDate(new Date());
 					cdkey.setStatus("0");

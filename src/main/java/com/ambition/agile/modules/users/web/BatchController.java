@@ -36,6 +36,7 @@ import com.ambition.agile.common.util.DateTimeUtil;
 import com.ambition.agile.common.web.BaseController;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.modules.sys.entity.Dict;
+import com.ambition.agile.modules.sys.entity.User;
 import com.ambition.agile.modules.sys.service.DictService;
 import com.ambition.agile.modules.sys.utils.UserUtils;
 import com.ambition.agile.modules.users.entity.Batch;
@@ -82,7 +83,7 @@ public class BatchController extends BaseController {
 		model.addAttribute("page", page);
 		return "modules/users/batchList";
 	}
-
+	
 	//导出
 	@RequiresPermissions("users:batch:view")
 	@RequestMapping(value = {"batchExport", "batchExport"})
@@ -93,7 +94,7 @@ public class BatchController extends BaseController {
 //					SysUser sysUser = sysUserService.get(user1.getId());
 					Batch batch = batchService.get(id);
 					Cdkey cdkey = new Cdkey();
-					cdkey.setBatchId(Integer.parseInt(id));
+					cdkey.setBatch(batch);
 					List<Cdkey>	cdkeyList = cdkeyService.findListByBatch(cdkey);
 					Map<String, Object> map=new HashMap<String, Object>();
 					 
@@ -183,6 +184,7 @@ public class BatchController extends BaseController {
 								
 								j++;
 							}
+							
 						}
 //						String[] split = voteList.split(",");
 //						int length = split.length;
@@ -213,6 +215,11 @@ public class BatchController extends BaseController {
 	public String save(Batch batch, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, batch)){
 			return form(batch, model);
+		}
+		User user= UserUtils.getUser();
+		if(null != user && StringUtils.isNotEmpty(user.getId())){
+			batch.setCreateBy(user);
+			batch.setCreateName(user.getLoginName());
 		}
 		batchService.save(batch);
 		addMessage(redirectAttributes, "保存批次成功");

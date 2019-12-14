@@ -19,7 +19,9 @@ import com.ambition.agile.common.config.Global;
 import com.ambition.agile.common.persistence.Page;
 import com.ambition.agile.common.web.BaseController;
 import com.ambition.agile.common.utils.StringUtils;
+import com.ambition.agile.modules.users.entity.Batch;
 import com.ambition.agile.modules.users.entity.Cdkey;
+import com.ambition.agile.modules.users.service.BatchService;
 import com.ambition.agile.modules.users.service.CdkeyService;
 
 /**
@@ -33,6 +35,9 @@ public class CdkeyController extends BaseController {
 
 	@Autowired
 	private CdkeyService cdkeyService;
+	
+	@Autowired
+	private BatchService batchService;
 	
 	@ModelAttribute
 	public Cdkey get(@RequestParam(required=false) String id) {
@@ -52,6 +57,31 @@ public class CdkeyController extends BaseController {
 		Page<Cdkey> page = cdkeyService.findPage(new Page<Cdkey>(request, response), cdkey); 
 		model.addAttribute("page", page);
 		return "modules/users/cdkeyList";
+	}
+	
+	//根据批次，查询该批次下的所有的激活码列表
+	@RequiresPermissions("users:cdkey:view")
+	@RequestMapping(value = {"listByBatch", "listByBatch"})
+	public String listByBatch(Cdkey cdkey,String batchId,
+			HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		System.out.println("##########"+batchId);
+		if(null != batchId && !batchId.isEmpty()){
+			if(cdkey.getBatch() ==null || StringUtils.isEmpty(cdkey.getBatch().getId() )){
+				Batch batch = batchService.get(batchId);
+				//batch.setId(batchId);
+				cdkey.setBatch(batch);
+			}
+			
+		}
+		
+		if(null != cdkey.getBatch() && null != cdkey.getBatch().getId()){
+			System.out.println(cdkey.getBatch().getId());
+		}
+		Page<Cdkey> page = cdkeyService.findPage(new Page<Cdkey>(request, response), cdkey); 
+		model.addAttribute("cdkey", cdkey);
+		model.addAttribute("page", page);
+		return "modules/users/cdkeyListByBatch";
 	}
 
 	@RequiresPermissions("users:cdkey:view")

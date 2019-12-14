@@ -96,6 +96,9 @@ public class WxAcodeApiController extends BaseController {
 		return ApiResponse.success("返回用户信息.", jsonObject);
 	}
 	
+	
+	//findByCodePassword
+	
 	 public static String decode(String param){
 	        String result= null;
 	        try {
