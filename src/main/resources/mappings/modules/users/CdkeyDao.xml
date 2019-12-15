@@ -10,7 +10,9 @@
 		a.create_date AS "createDate",
 		a.active_date AS "activeDate",
 		a.batch_id as "batch.id",
-		a8.name as "batch.name"
+		a8.name as "batch.name",
+		a8.begin_time as "beginTime",
+		a8.end_time AS "endTime"
 	</sql>
 	
 	<sql id="cdkeyJoins">

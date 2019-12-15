@@ -3,6 +3,8 @@
  */
 package com.ambition.agile.modules.users.entity;
 
+import java.util.Date;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.ambition.agile.common.persistence.DataEntity;
@@ -22,6 +24,10 @@ public class Users extends DataEntity<Users> {
 	private String grade;		// 年级
 	private Integer beginAge;		// 开始 年龄
 	private Integer endAge;		// 结束 年龄
+	private Date beginTime;//激活码的有效期的开始时间
+	private Date endTime;//激活码有效期的结束时间
+	private Integer cdkeyId;//
+	//private Cdkey cdkey;//
 	
 	public Users() {
 		super();
@@ -89,5 +95,37 @@ public class Users extends DataEntity<Users> {
 	public void setEndAge(Integer endAge) {
 		this.endAge = endAge;
 	}
-		
+
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	/*
+	public Cdkey getCdkey() {
+		return cdkey;
+	}
+
+	public void setCdkey(Cdkey cdkey) {
+		this.cdkey = cdkey;
+	}
+	*/
+
+	public Integer getCdkeyId() {
+		return cdkeyId;
+	}
+
+	public void setCdkeyId(Integer cdkeyId) {
+		this.cdkeyId = cdkeyId;
+	}
 }

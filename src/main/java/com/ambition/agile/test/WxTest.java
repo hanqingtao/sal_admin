@@ -17,11 +17,11 @@ public class WxTest {
 	    String wxAppId = "wx3bfbcc616d044410";
 	    String wxSecret = "d2f1423075b2c441f785062bc218b08f";
 	    String wxGrantType = "client_credential";
-	    
+	    String openId = "023mVZRk1ozNSn0KttSk1DQjSk1mVZRr";
 	    Map<String, String> requestUrlParam = new HashMap<String, String>();
 	    requestUrlParam.put("appid",wxAppId);    // resource.getString("appId"));  //开发者设置中的appId
 	    requestUrlParam.put("secret", wxSecret); //resource.getString("appSecret")); //开发者设置中的appSecret
-	    //requestUrlParam.put("js_code", openId);  //小程序调用wx.login返回的code
+	    requestUrlParam.put("js_code", openId);  //小程序调用wx.login返回的code
 	    requestUrlParam.put("grant_type", wxGrantType);//resource.getString("grantType"));    //默认参数 authorization_code
 	    String str = WxHttpClientUtil.sendPost(requestUrl, requestUrlParam);
 	    System.out.println(str);
@@ -29,6 +29,7 @@ public class WxTest {
 	    String access_token = jsonObject.getString("access_token");
 	    System.out.println(access_token);
 	    
+	    //获取二维码，有的还需要传入参数
 	    String wxacodeunlimitUrl = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN";
 	    wxacodeunlimitUrl = wxacodeunlimitUrl.replace("ACCESS_TOKEN", access_token);
 	    Map<String, String> wxacodeunlimitUrlParam = new HashMap<String, String>();

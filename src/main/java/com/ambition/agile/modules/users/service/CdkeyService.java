@@ -37,6 +37,10 @@ public class CdkeyService extends CrudService<CdkeyDao, Cdkey> {
 	public List<Cdkey> findListByBatch(Cdkey cdkey){
 		return ((CdkeyDao)this.dao).findListByBatch(cdkey);
 	}
+	//前台学员激活时的查询方法
+	public List<Cdkey> findByCodePassword(Cdkey cdkey){
+		return ((CdkeyDao)this.dao).findByCodePassword(cdkey);
+	}
 	
 	@Transactional(readOnly = false)
 	public void save(Cdkey cdkey) {

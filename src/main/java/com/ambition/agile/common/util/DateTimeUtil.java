@@ -270,6 +270,23 @@ public class DateTimeUtil {
 		return 0;
 	}
 	
+	//比较两个日期的大小
+	public static int compare_date(Date date1, Date date2) {
+		//DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+				if (date1.getTime() > date2.getTime()) {
+					return 1;
+				} else if (date1.getTime() < date2.getTime()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			} catch (Exception exception) {
+				exception.printStackTrace();
+			}
+			return 0;
+	}
+	
 	public static String integerToString(int lon){
 		String str = "";
 		int hh = lon/3600;
@@ -356,7 +373,7 @@ public class DateTimeUtil {
     public static int getMonth() {
         return Calendar.getInstance().get(2) + 1;
     }
-	
+    
 	public static void main(String[] args) {
 		System.out.println( DateTimeUtil.getCurrentTime());
 	}

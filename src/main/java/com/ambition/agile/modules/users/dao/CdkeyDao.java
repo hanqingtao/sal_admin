@@ -19,4 +19,6 @@ public interface CdkeyDao extends CrudDao<Cdkey> {
 	
 	public List<Cdkey> findListByBatch(Cdkey cdkey);
 	
+	public List<Cdkey> findByCodePassword(Cdkey cdkey); 
+	
 }

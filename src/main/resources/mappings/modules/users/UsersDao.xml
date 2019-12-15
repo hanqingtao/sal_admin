@@ -13,11 +13,16 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
 		a.age AS "age",
 		a.grade AS "grade"
 	</sql>
 	
 	<sql id="usersJoins">
+		<!-- 
+		LEFT JOIN cdkey a8 ON a.cdkey_id = a8.id		
+		 -->
 	</sql>
     
 	<select id="get" resultType="Users">
@@ -87,6 +92,9 @@
 	<insert id="insert">
 		INSERT INTO users(
 			open_id,
+			cdkey_id,
+			begin_time,
+			end_time,
 			name,
 			sort,
 			create_by,
@@ -99,6 +107,9 @@
 			grade
 		) VALUES (
 			#{openId},
+			#{cdkeyId},
+			#{beginTime},
+			#{endTime},
 			#{name},
 			#{sort},
 			#{createBy.id},
@@ -115,6 +126,9 @@
 	<update id="update">
 		UPDATE users SET 	
 			open_id = #{openId},
+			cdkey_id = #{cdkeyId},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
 			name = #{name},
 			sort = #{sort},
 			update_by = #{updateBy.id},
