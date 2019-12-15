@@ -11,8 +11,8 @@
 		a.active_date AS "activeDate",
 		a.batch_id as "batch.id",
 		a8.name as "batch.name",
-		a8.begin_time as "beginTime",
-		a8.end_time AS "endTime"
+		a8.begin_time as "batch.beginTime",
+		a8.end_time AS "batch.endTime"
 	</sql>
 	
 	<sql id="cdkeyJoins">
@@ -121,16 +121,10 @@
 		<include refid="cdkeyJoins"/>
 		<where>
 			<if test="code != null and code != ''">
-				AND a.code LIKE 
-					<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{code},'%')</if>
+				AND a.code = #{code}
 			</if>
 			<if test="password != null and password != ''">
-				AND a.code LIKE 
-					<if test="dbName == 'oracle'">'%'||#{password}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{password}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{password},'%')</if>
+				AND a.password =  #{password}
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}

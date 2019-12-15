@@ -115,9 +115,9 @@ public class UserApiController extends BaseController {
 		    				users.getEndTime() != null){
 		    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
 		    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
-		    			int begin = DateTimeUtil.compare_date(users.getBeginTime(), nowDate);
-		    			int end = DateTimeUtil.compare_date(nowDate,users.getEndTime());
-		    			if( begin>=0 && end <=0  ){
+		    			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
+		    			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
+		    			if( begin>=1 && end >=1  ){
 		    				isActive = 1;
 		    			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
 		    			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
@@ -126,7 +126,7 @@ public class UserApiController extends BaseController {
 		    				isActive = 0;
 		    				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
 		    			}
-		    			if(end>0 ){
+		    			if(end<0 ){
 		    				isActive = 0;
 		    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
 		    			}
@@ -201,23 +201,26 @@ public class UserApiController extends BaseController {
 					    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
 					    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
 					    		users.setEndTime(cdkeyTemp.getBatch().getEndTime());
-					    		usersService.save(users);
+					    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
+					    		
+					    		usersService.codeActive(users,cdkeyTemp);
 					    }else{
 					    		//如果 该用户已经在 users 表中有记录，则进行时间的更新
 						    	users.setOpenId(openId);
 					    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
 					    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
 					    		users.setEndTime(cdkeyTemp.getBatch().getEndTime());
-					    		usersService.save(users);
+					    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
+					    		usersService.codeActive(users,cdkeyTemp);
 					    }
 					//进行数据的判断 逻辑
 					if(users.getBeginTime() != null && 
 							users.getEndTime() != null){
 						beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
 						endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
-						int begin = DateTimeUtil.compare_date(users.getBeginTime(), nowDate);
-						int end = DateTimeUtil.compare_date(nowDate,users.getEndTime());
-						if( begin>=0 && end <=0  ){
+						int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
+						int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
+						if( begin>=1 && end >=1  ){
 							isActive = 1;
 						     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
 						     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
@@ -226,7 +229,7 @@ public class UserApiController extends BaseController {
 							isActive = 0;
 							message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
 						}
-						if(end>0 ){
+						if(end<0 ){
 							isActive = 0;
 							message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
 						}
@@ -240,6 +243,7 @@ public class UserApiController extends BaseController {
 		jsonObject.put("days", days);
 		jsonObject.put("beginTime", beginTime);
 		jsonObject.put("endTime", endTime);
+		jsonObject.put("message", message);
 		//jsonObject.put("expires_in", expiresIn);
 	    System.out.println(jsonObject);
 	    //return jsonObject;
