@@ -28,13 +28,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.adobe.xmp.impl.Utils;
 import com.ambition.agile.common.config.Global;
+import com.ambition.agile.common.guava.GuavaCacheUtil;
 import com.ambition.agile.common.persistence.Page;
-import com.ambition.agile.common.util.ComUtil;
 import com.ambition.agile.common.util.DateTimeUtil;
-import com.ambition.agile.common.web.BaseController;
 import com.ambition.agile.common.utils.StringUtils;
+import com.ambition.agile.common.web.BaseController;
 import com.ambition.agile.modules.sys.entity.Dict;
 import com.ambition.agile.modules.sys.entity.User;
 import com.ambition.agile.modules.sys.service.DictService;
@@ -43,8 +42,6 @@ import com.ambition.agile.modules.users.entity.Batch;
 import com.ambition.agile.modules.users.entity.Cdkey;
 import com.ambition.agile.modules.users.service.BatchService;
 import com.ambition.agile.modules.users.service.CdkeyService;
-
-import ch.qos.logback.classic.pattern.Util;
 
 /**
  * 批次Controller
@@ -84,15 +81,131 @@ public class BatchController extends BaseController {
 		return "modules/users/batchList";
 	}
 	
+
 	//导出
+		@RequiresPermissions("users:batch:view")
+		@RequestMapping(value = {"batchExport", "batchExport"})
+		public void batchExport(String id,
+				HttpServletRequest request, HttpServletResponse response, Model model) {
+					try {
+//						User user1= UserUtils.getUser();
+//						SysUser sysUser = sysUserService.get(user1.getId());
+						Batch batch = batchService.get(id);
+						Cdkey cdkey = new Cdkey();
+						cdkey.setBatch(batch);
+						List<Cdkey>	cdkeyList = cdkeyService.findListByBatch(cdkey);
+						Map<String, Object> map=new HashMap<String, Object>();
+							// 创建HSSFWorkbook对象(excel的文档对象)
+							HSSFWorkbook wb = new HSSFWorkbook();
+							// 建立新的sheet对象（excel的表单）
+							HSSFSheet sheet = wb.createSheet(batch.getName());
+							HSSFRow row1 = sheet.createRow(0);
+							HSSFCell cell = row1.createCell(0);
+							Date date=new Date();
+							if(cdkeyList != null && cdkeyList.size()>0){
+								String time=DateTimeUtil.dateToString(date,"yyyy-MM-dd HH:mm");
+								String beginTime = DateTimeUtil.dateToString(batch.getBeginTime(),"yyyy-MM-dd");
+								String endTime =  DateTimeUtil.dateToString(batch.getEndTime(),"yyyy-MM-dd");
+								// 设置单元格内容
+								cell.setCellValue(batch.getName()+"有效期:"+beginTime+"--"+endTime);
+							}else{
+								// 设置单元格内容
+								cell.setCellValue("批量卡信息");
+							}
+							//合并单元格CellRangeAddress构造参数依次表示起始行，截至行，起始列， 截至列 设置行高
+							row1.setHeight((short)1000);
+							//设置列宽
+							sheet.setColumnWidth(0,9000);
+							sheet.setColumnWidth(1,9000);
+							sheet.setColumnWidth(2,9000);
+							sheet.setColumnWidth(3,5000);
+							sheet.setColumnWidth(4,5000);
+
+							// 设置字体   
+							HSSFFont font = wb.createFont();   
+							//font.setColor(HSSFFont.COLOR_RED);   //颜色  
+							font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);   //加粗   
+							font.setFontHeightInPoints((short)20);     //字体大小
+							// 设置样式   
+							HSSFCellStyle cellStyle = wb.createCellStyle();
+							cellStyle.setFont(font);
+							cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);   //左右居中
+							cellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);//上下居中 
+							cell.setCellStyle(cellStyle);
+							// 在sheet里创建第二行
+							HSSFRow row2 = sheet.createRow(1);
+							// 创建单元格并设置单元格内容
+							
+							row2.createCell(0).setCellValue("激活码");
+							row2.createCell(1).setCellValue("密码");
+							row2.createCell(2).setCellValue("状态");
+							row2.createCell(3).setCellValue("创建时间");
+							row2.createCell(4).setCellValue("激活时间");
+//							row2.createCell(5).setCellValue("结束时间");
+//							String[] lists = voteList.split(",");
+							
+							if(cdkeyList!=null&&cdkeyList.size()>0){
+								int j=2;
+								Dict dict =new Dict();
+								dict.setType("cdkey_status");
+								List<Dict> cdkeyStatusDict = dictService.findList(dict);
+								for (Cdkey cdkeyTemp: cdkeyList) {
+									HSSFRow rowTemp = sheet.createRow(j);
+									//dict.setValue(cdkeyTemp.getStatus());
+									String status = "未激活";
+									if(StringUtils.isNotEmpty(cdkeyTemp.getStatus())){
+										for(Dict dictTemp:cdkeyStatusDict){
+											if(dictTemp.getValue() != null && 
+													cdkeyTemp.getStatus().equals(dictTemp.getValue()) ){
+												status = dictTemp.getLabel();
+											}
+										}
+									}
+									
+									rowTemp.createCell(0).setCellValue(cdkeyTemp.getCode());
+									rowTemp.createCell(1).setCellValue(cdkeyTemp.getPassword());
+									if(status != null){
+										rowTemp.createCell(2).setCellValue(status);
+									}
+									if( cdkeyTemp.getCreateDate() != null ){
+										String createDate = DateTimeUtil.dateToString(batch.getCreateDate(),"yyyy-MM-dd HH:mm");
+										rowTemp.createCell(3).setCellValue(createDate);
+									}
+									if(null != cdkeyTemp.getActiveDate()){
+										String activeDate = DateTimeUtil.dateToString(batch.getCreateDate(),"yyyy-MM-dd HH:mm");
+										rowTemp.createCell(4).setCellValue(activeDate);
+									}
+									
+									j++;
+								}
+								
+							}
+//							String[] split = voteList.split(",");
+//							int length = split.length;
+							int reginCount =4;//length-1;
+							sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, reginCount));
+							OutputStream out = response.getOutputStream();
+							response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");
+							response.setContentType("application/msexcel;charset=UTF-8");
+							wb.write(out);
+							out.flush();
+							out.close();
+							System.out.println("export cdkey List success!!!");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+		
+	
+	//导出
+	/*
 	@RequiresPermissions("users:batch:view")
 	@RequestMapping(value = {"batchExport", "batchExport"})
 	public void batchExport(String id,
 			HttpServletRequest request, HttpServletResponse response, Model model) {
 				try {
-//					User user1= UserUtils.getUser();
-//					SysUser sysUser = sysUserService.get(user1.getId());
 					Batch batch = batchService.get(id);
+					System.out.println("#############"+batch.getName());
 					Cdkey cdkey = new Cdkey();
 					cdkey.setBatch(batch);
 					List<Cdkey>	cdkeyList = cdkeyService.findListByBatch(cdkey);
@@ -143,11 +256,11 @@ public class BatchController extends BaseController {
 						// 创建单元格并设置单元格内容
 						
 						row2.createCell(0).setCellValue("激活码");
-						row2.createCell(1).setCellValue("状态");
-						row2.createCell(2).setCellValue("创建时间");
+						row2.createCell(1).setCellValue("密码");
+						row2.createCell(2).setCellValue("激活状态");
 						row2.createCell(3).setCellValue("激活时间");
-//						row2.createCell(4).setCellValue("开始时间");
-//						row2.createCell(5).setCellValue("结束时间");
+						row2.createCell(4).setCellValue("激活时间");
+//						row2.createCell(5).setCellValue("状态");
 //						String[] lists = voteList.split(",");
 						
 						if(cdkeyList!=null&&cdkeyList.size()>0){
@@ -158,50 +271,71 @@ public class BatchController extends BaseController {
 								dict.setValue(cdkeyTemp.getStatus());
 								dict.setType("cdkey_status");
 								String status = "";
-								List<Dict> cdkeyStatusDict = dictService.findList(dict);
-								for(Dict dictTemp:cdkeyStatusDict){
-									if(dictTemp.getLabel() != null){
-										status += dictTemp.getLabel()+",";
-									}
+								if(null != cdkeyTemp.getStatus()){
+								if(cdkeyTemp.getStatus().equals("0")){
+									status = "未使用";
+								}
+								if(cdkeyTemp.getStatus().equals("1")){
+									status = "已激活";
+								}
+								if(cdkeyTemp.getStatus().equals("2")){
+									status = "作废";
+								}
 								}
 								
-								if(status.lastIndexOf(",")==status.length()-1) {
-									status = status.substring(0,status.length()-1);
-								}
-							
+								
 								rowTemp.createCell(0).setCellValue(cdkeyTemp.getCode());
+								if(StringUtils.isNotEmpty(cdkeyTemp.getPassword()) ) {
+									rowTemp.createCell(1).setCellValue(cdkeyTemp.getPassword());
+								}
 								if(status != null){
-									rowTemp.createCell(1).setCellValue(status);
+									rowTemp.createCell(2).setCellValue(status);
 								}
 								if( cdkeyTemp.getCreateDate() != null ){
 									String createDate = DateTimeUtil.dateToString(batch.getCreateDate(),"yyyy-MM-dd HH:mm");
-									rowTemp.createCell(2).setCellValue(createDate);
+									rowTemp.createCell(3).setCellValue(createDate);
 								}
 								if(null != cdkeyTemp.getActiveDate()){
 									String activeDate = DateTimeUtil.dateToString(batch.getCreateDate(),"yyyy-MM-dd HH:mm");
-									rowTemp.createCell(3).setCellValue(activeDate);
+									rowTemp.createCell(4).setCellValue(activeDate);
 								}
 								
 								j++;
 							}
 							
 						}
-//						String[] split = voteList.split(",");
-//						int length = split.length;
-						int reginCount =4;//length-1;
+						
+						int reginCount =5;
 						sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, reginCount));
 						OutputStream out = response.getOutputStream();
-						response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");
+						response.setHeader("Content-disposition","attachment;filename="+batch.getName()+".xls");
 						response.setContentType("application/msexcel;charset=UTF-8");
 						wb.write(out);
 						out.flush();
 						out.close();
-						System.out.println("export cdkey List success!!!");
+						System.out.println("export cdkey success!!!");
 				} catch (Exception e) {
 					e.printStackTrace();
+				}finally{
+					
+					
 				}
 			}
-	
+	*/
+	/*
+	List<Dict> cdkeyStatusDict = (List<Dict>)GuavaCacheUtil.getIfPresent("cdkeyStatusDict");
+	if(cdkeyStatusDict.isEmpty()){
+		 cdkeyStatusDict = dictService.findList(dict);
+		 GuavaCacheUtil.put("cdkeyStatusDict", cdkeyStatusDict);
+	}
+	//import com.ambition.agile.common.guava.GuavaCacheUtil;
+	for(Dict dictTemp:cdkeyStatusDict){
+		if(dictTemp.getValue() != null && 
+				dictTemp.getValue().equals(cdkey.getStatus()) ){
+			status = dictTemp.getLabel();
+			break;
+		}
+	}*/
 	
 	@RequiresPermissions("users:batch:view")
 	@RequestMapping(value = "form")

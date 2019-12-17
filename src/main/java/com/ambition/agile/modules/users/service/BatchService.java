@@ -3,6 +3,7 @@
  */
 package com.ambition.agile.modules.users.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,22 +55,28 @@ public class BatchService extends  CrudService<BatchDao, Batch>  {
 		if (batch.getIsNewRecord()){
 			//entity.preInsert();
 			int batchId = batchDao.insert(batch) ;
+			//集合是没有重复的值,LinkedHashSet是有顺序不重复集合,HashSet则为无顺序不重复集合 
+			List codeList = new ArrayList<String>(); 
+			while(codeList.size() < batch.getCount()){
+				String tmp = GUIDUtil.getEightCardByGUID();
+				if(!codeList.contains(tmp)){
+					codeList.add(tmp);//直接加入，当有重复值时，不会往里加入，直到set的长度为52才结束
+				}
+			}
 			//System.out.println("########### insert " + batchId + "batch.getId "+batch.getId());
 			//batch.setId(batchId +"");
 			if(null != batch && batch.getCount()>0){
 				for(int i=0;i<batch.getCount();i++){
 					Cdkey cdkey = new Cdkey();
 					cdkey.setBatch(batch);
-					cdkey.setCode(GUIDUtil.getEightCardByGUID());
-					//cdkey.setCode(GUIDUtil.getEightCardByGUID());
+					cdkey.setCode((String)codeList.get(i));
+					cdkey.setPassword(GUIDUtil.getSixCardByGUID());
 					cdkey.setCreateBy(UserUtils.getUser());
 					cdkey.setCreateDate(new Date());
 					cdkey.setStatus("0");
 					cdkeyDao.insert(cdkey);
 				}
-				
 			}
-			
 			//cdkeyDao.insert();
 		}else{
 			//entity.preUpdate();
