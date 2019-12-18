@@ -130,7 +130,18 @@
 				AND a.status = #{status}
 			</if>
 		</where>
-		
+	</select>
+	
+	<!--  判断该 code 是否已经在 数据库中存在? -->
+	<select id="getCountByCode" parameterType="java.lang.String"  resultType="Integer">
+		SELECT 
+			count(*)
+		FROM cdkey a
+		<where>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+		</where>
 	</select>
 	
 	<insert id="insert">

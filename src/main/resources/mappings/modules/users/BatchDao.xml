@@ -11,7 +11,8 @@
 		a.create_by AS "createBy.id",
 		a.create_name AS "createName",
 		a.count AS "count",
-		a.pre AS "pre"
+		a.pre AS "pre",
+		a.rule AS "rule"
 	</sql>
 	
 	<sql id="batchJoins">
@@ -79,7 +80,8 @@
 			create_by,
 			create_name,
 			count,
-			pre
+			pre,
+			rule
 		) VALUES (
 			#{name},
 			#{beginTime},
@@ -87,7 +89,8 @@
 			#{createBy.id},
 			#{createName},
 			#{count},
-			#{pre}
+			#{pre},
+			#{rule}
 		)
 	</insert>
 	
@@ -98,7 +101,8 @@
 			end_time = #{endTime},
 			create_name = #{createName},
 			count = #{count},
-			pre = #{pre}
+			pre = #{pre},
+			rule = #{rule}
 		WHERE id = #{id}
 	</update>
 	

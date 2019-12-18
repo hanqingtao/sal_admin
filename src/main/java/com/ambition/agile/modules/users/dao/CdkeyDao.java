@@ -21,4 +21,7 @@ public interface CdkeyDao extends CrudDao<Cdkey> {
 	
 	public List<Cdkey> findByCodePassword(Cdkey cdkey); 
 	
+	//判断code 是否已经在数据库中存在？ 如果存在，则>0 ,否则就是没有
+	public Integer getCountByCode(Cdkey cdkey);
+	
 }

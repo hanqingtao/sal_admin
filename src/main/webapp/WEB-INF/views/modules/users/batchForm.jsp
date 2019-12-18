@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">开始时间：</label>
+			<label class="control-label">有效期--开始时间：</label>
 			<div class="controls">
 				<input name="beginTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 					value="<fmt:formatDate value="${batch.beginTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">结束时间：</label>
+			<label class="control-label">有效期--结束时间：</label>
 			<div class="controls">
 				<input name="endTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 					value="<fmt:formatDate value="${batch.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
@@ -56,7 +56,34 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">数量：</label>
+			<label class="control-label">激活卡号前缀：</label>
+			<div class="controls">
+			<c:if test="${!empty batch.id}">
+					<!-- 修改时的操作 -->
+					${batch.pre }
+				</c:if>
+				<c:if test="${empty batch.id}">
+					<form:input path="pre" htmlEscape="false" maxlength="16" class="input-xlarge "/>（注意：前缀+数字总长度不能超过18位）
+				</c:if>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">激活卡数字生成规则：</label>
+			<div class="controls">
+				<c:if test='${!empty batch.id}'>
+				<form:radiobuttons path="rule" items="${fns:getDictList('code_rule')}" 
+					itemLabel="label" itemValue="value" htmlEscape="false" class="radio i-checks " 
+					  disabled='true'  />
+					  </c:if>
+					  <c:if test="${empty batch.id}">
+					  <form:radiobuttons path="rule" items="${fns:getDictList('code_rule')}" 
+					itemLabel="label" itemValue="value" htmlEscape="false" class="radio i-checks " 
+					    />
+					  </c:if>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">生成的数量：</label>
 			<div class="controls">
 				<c:if test="${!empty batch.id}">
 					<!-- 修改时的操作 -->
@@ -78,14 +105,6 @@
 			</div>
 		</div>
 		</c:if>
-		<!-- 
-		<div class="control-group">
-			<label class="control-label">前缀：</label>
-			<div class="controls">
-				<form:input path="pre" htmlEscape="false" maxlength="16" class="input-xlarge "/>
-			</div>
-		</div>
-		-->
 		<div class="form-actions">
 			<shiro:hasPermission name="users:batch:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

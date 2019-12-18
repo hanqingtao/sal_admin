@@ -89,7 +89,8 @@
 				</td>
 				<shiro:hasPermission name="users:batch:edit"><td>
     					<a href="${ctx}/users/batch/form?id=${batch.id}">修改</a>
-    					<a href="#" onclick="toCdkeyByBatchId(${batch.id})" 	>导出</a>
+    					<a href="${ctx}/users/batch/batchExport?id=${batch.id}" target="_blank" onclick="return confirmx('导出激活码？', this.href)">导出</a>
+    					<!-- <a href="#" onclick="toCdkeyByBatchId(${batch.id})" 	>导出</a>-->
 					 <!--   ${ctx}/users/batch/batchExport?id=${batch.id} 
 					 target="_blank" 
 					 onclick="return confirmx('导出激活码？', this.href)" -->

@@ -23,6 +23,7 @@ public class Batch extends DataEntity<Batch> {
 	private String createName;		// create_name
 	private Integer count;		// 数量
 	private String pre;		// 前缀
+	private String rule;		// 规则
 	private Date beginBeginTime;		// 开始 开始时间
 	private Date endBeginTime;		// 结束 开始时间
 	private Date beginEndTime;		// 开始 结束时间
@@ -120,6 +121,14 @@ public class Batch extends DataEntity<Batch> {
 
 	public void setEndEndTime(Date endEndTime) {
 		this.endEndTime = endEndTime;
+	}
+
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
 		
 }
