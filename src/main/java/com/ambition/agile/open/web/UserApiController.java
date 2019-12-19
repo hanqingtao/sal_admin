@@ -179,6 +179,7 @@ public class UserApiController extends BaseController {
 	    String endTime=null;
 	    int days=0;//
 	    Date nowDate = new Date();
+	    System.out.println("#$@@@$@$!$$!$"+cdkeyList.size());
 		if(cdkeyList.isEmpty()){
 			message = "激活码或密码错误!";
 		}else{
