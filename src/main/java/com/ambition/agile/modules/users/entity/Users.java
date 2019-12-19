@@ -26,8 +26,8 @@ public class Users extends DataEntity<Users> {
 	private Integer endAge;		// 结束 年龄
 	private Date beginTime;//激活码的有效期的开始时间
 	private Date endTime;//激活码有效期的结束时间
-	private Integer cdkeyId;//
-	//private Cdkey cdkey;//
+	private Integer cdkeyId;//主要用于 前台激活时，微信 openId的数据插入.
+	private Cdkey cdkey;// 主要是用于 会员管理中列表的显示
 	
 	public Users() {
 		super();
@@ -127,5 +127,13 @@ public class Users extends DataEntity<Users> {
 
 	public void setCdkeyId(Integer cdkeyId) {
 		this.cdkeyId = cdkeyId;
+	}
+
+	public Cdkey getCdkey() {
+		return cdkey;
+	}
+
+	public void setCdkey(Cdkey cdkey) {
+		this.cdkey = cdkey;
 	}
 }

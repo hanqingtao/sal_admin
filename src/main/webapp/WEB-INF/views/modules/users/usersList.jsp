@@ -51,15 +51,14 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>微信标识</th>
-				<!-- <th>年龄</th>
-				<th>年级</th>
-				 -->
-				<th>关注时间</th>
-				<th>备注信息</th>
-				<!-- 
+				<th>学员微信</th>
+				<th>激活码</th>
+				<th>密码</th>
+				<th>状态</th>
+				<th>激活时间</th>
+				<th>有效期-开始时间</th>
+				<th>有效期-截止时间</th>
 				<shiro:hasPermission name="users:users:edit"><th>操作</th></shiro:hasPermission>
-				-->
 			</tr>
 		</thead>
 		<tbody>
@@ -68,26 +67,35 @@
 				<td><a href="${ctx}/users/users/form?id=${users.id}">
 					${users.openId}
 				</a></td>
-				<!--
 				<td>
-					${users.age}
+					${users.cdkey.code}
 				</td>
 				<td>
-					${fns:getDictLabel(users.grade, 'grade', '')}
-				</td>
-				-->
-				<td>
-					<fmt:formatDate value="${users.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					${users.cdkey.password}
 				</td>
 				<td>
-					${users.remarks}
+					${fns:getDictLabel(users.cdkey.status, 'cdkey_status', '')}
 				</td>
-				<!-- 
+				<td>
+					<fmt:formatDate value="${users.cdkey.activeDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
+				<td>
+					<fmt:formatDate value="${users.beginTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
+				<td>
+					<fmt:formatDate value="${users.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
+				
+				
+				
+				
 				<shiro:hasPermission name="users:users:edit"><td>
-    				<a href="${ctx}/users/users/form?id=${users.id}">修改</a>
+    				<a href="${ctx}/users/users/form?id=${users.id}">修改有效期</a>
+				<!-- 
 					<a href="${ctx}/users/users/delete?id=${users.id}" onclick="return confirmx('确认要删除该学员信息吗？', this.href)">删除</a>
+				 -->
 				</td></shiro:hasPermission>
-				-->
+				
 			</tr>
 		</c:forEach>
 		</tbody>

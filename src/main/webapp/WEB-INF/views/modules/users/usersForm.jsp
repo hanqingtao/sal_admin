@@ -34,7 +34,7 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">用户微信标识：</label>
+			<label class="control-label">用户微信：</label>
 			<div class="controls">
 				<form:input path="openId" htmlEscape="false" maxlength="32" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -47,6 +47,24 @@
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">有效期--开始时间：</label>
+			<div class="controls">
+				<input name="beginTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="<fmt:formatDate value="${users.beginTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">有效期--结束时间：</label>
+			<div class="controls">
+				<input name="endTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="<fmt:formatDate value="${users.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+			</div>
+		</div>
+		
+		<!-- 
 		<div class="control-group">
 			<label class="control-label">排序：</label>
 			<div class="controls">
@@ -75,6 +93,7 @@
 				</form:select>
 			</div>
 		</div>
+		-->
 		<div class="form-actions">
 			<shiro:hasPermission name="users:users:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

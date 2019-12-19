@@ -15,14 +15,37 @@
 		a.del_flag AS "delFlag",
 		a.begin_time AS "beginTime",
 		a.end_time AS "endTime",
+		c.id AS "cdkey.id",
+		c.code AS "cdkey.code",
+		c.password AS "cdkey.password",
+		c.active_date as "cdkey.activeDate",
+		c.status as "cdkey.status",
+		c.batch_id as "cdkey.batch.id",
+		b.name as "cdkey.batch.name",
+		a.age AS "age",
+		a.grade AS "grade"
+	</sql>
+	
+	<sql id="usersSimpleColumns">
+		a.id AS "id",
+		a.open_id AS "openId",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
 		a.age AS "age",
 		a.grade AS "grade"
 	</sql>
 	
 	<sql id="usersJoins">
-		<!-- 
-		LEFT JOIN cdkey a8 ON a.cdkey_id = a8.id		
-		 -->
+		LEFT JOIN cdkey c ON a.cdkey_id = c.id
+		LEFT JOIN batch b ON b.id = c.batch_id	
 	</sql>
     
 	<select id="get" resultType="Users">
@@ -83,9 +106,8 @@
 	
 	<select id="getByOpenId" resultType="Users">
 		SELECT 
-			<include refid="usersColumns"/>
+			<include refid="usersSimpleColumns"/>
 		FROM users a
-		<include refid="usersJoins"/>
 		WHERE a.open_id = #{openId}
 	</select>
 	
