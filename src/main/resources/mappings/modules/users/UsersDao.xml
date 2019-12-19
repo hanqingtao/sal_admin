@@ -15,7 +15,7 @@
 		a.del_flag AS "delFlag",
 		a.begin_time AS "beginTime",
 		a.end_time AS "endTime",
-		c.id AS "cdkey.id",
+		a.cdkey_id AS "cdkey.id",
 		c.code AS "cdkey.code",
 		c.password AS "cdkey.password",
 		c.active_date as "cdkey.activeDate",
@@ -39,6 +39,7 @@
 		a.del_flag AS "delFlag",
 		a.begin_time AS "beginTime",
 		a.end_time AS "endTime",
+		a.cdkey_id AS "cdkeyId",
 		a.age AS "age",
 		a.grade AS "grade"
 	</sql>

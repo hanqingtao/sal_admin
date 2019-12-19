@@ -110,6 +110,9 @@ public class UserApiController extends BaseController {
 		    Users users = usersService.getByOpenId(openId);
 		    //获取 users 表中的数据 如果存在，则判断时间上是否过期
 		    if(null != users && StringUtils.isNotEmpty(users.getId())){
+		    		if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
+		    			isActive = 1;
+		    		}
 		    		//如果用户存在，则判断开始和结束时间 是否在有效期内
 		    		if(users.getBeginTime() != null && 
 		    				users.getEndTime() != null){
@@ -131,10 +134,12 @@ public class UserApiController extends BaseController {
 		    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
 		    			}
 		    		}
+		    		if(	users.getEndTime() == null){
+		    			message = "激活码长期有效.";
+		    		}
 		    }
-
 		}
-		jsonObject.put("isActive",isActive );
+		jsonObject.put("isActive",isActive);
 		jsonObject.put("days", days);
 		jsonObject.put("beginTime", beginTime);
 		jsonObject.put("endTime", endTime);
