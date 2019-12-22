@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,6 @@ import com.ambition.agile.modules.users.entity.Cdkey;
 import com.ambition.agile.modules.users.entity.Users;
 import com.ambition.agile.modules.users.service.CdkeyService;
 import com.ambition.agile.modules.users.service.UsersService;
-import com.google.gson.JsonObject;
 
 /**
  * 关注小程序的微信用户信息Controller
@@ -110,10 +110,10 @@ public class UserApiController extends BaseController {
 		    Users users = usersService.getByOpenId(openId);
 		    //获取 users 表中的数据 如果存在，则判断时间上是否过期
 		    if(null != users && StringUtils.isNotEmpty(users.getId())){
+		    	
 		    		if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
-		    			isActive = 1;
-		    		}
-		    		//如果用户存在，则判断开始和结束时间 是否在有效期内
+		    			
+		    		//如果用户存在，则判断开始和结束时间 是否在有效期内 //进行数据的判断 逻辑 与激活时时的逻辑是一样的
 		    		if(users.getBeginTime() != null && 
 		    				users.getEndTime() != null){
 		    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
@@ -135,8 +135,11 @@ public class UserApiController extends BaseController {
 		    			}
 		    		}
 		    		if(	users.getEndTime() == null){
+		    			isActive = 1;
+		    			days =0;
 		    			message = "激活码长期有效.";
 		    		}
+		    }
 		    }
 		}
 		jsonObject.put("isActive",isActive);
@@ -198,11 +201,6 @@ public class UserApiController extends BaseController {
 					if(null == users || StringUtils.isEmpty(users.getId())){
 					    //if(null == users || users.getId().isEmpty()){
 					    		users = new Users();
-					    		//nickName = decode(nickName);
-	//				    		//System.out.println("$#######$"+nickName);
-	//				    		if(null != nickName && !nickName.isEmpty()){
-	//				    			users.setName(nickName);
-	//				    		}
 					    		users.setOpenId(openId);
 					    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
 					    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
@@ -219,27 +217,38 @@ public class UserApiController extends BaseController {
 					    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
 					    		usersService.codeActive(users,cdkeyTemp);
 					    }
-					//进行数据的判断 逻辑
-					if(users.getBeginTime() != null && 
-							users.getEndTime() != null){
-						beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
-						endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
-						int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
-						int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
-						if( begin>=1 && end >=1  ){
-							isActive = 1;
-						     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
-						     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
-						}
-						if(begin<0 ){
-							isActive = 0;
-							message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
-						}
-						if(end<0 ){
-							isActive = 0;
-							message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
-						}
-					}
+					
+					//Map activeMap = dealActive(users);
+					if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
+		    			
+			    		//如果用户存在，则判断开始和结束时间 是否在有效期内 //进行数据的判断 逻辑 与激活时时的逻辑是一样的
+			    		if(users.getBeginTime() != null && 
+			    				users.getEndTime() != null){
+			    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
+			    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
+			    			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
+			    			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
+			    			if( begin>=1 && end >=1  ){
+			    				isActive = 1;
+			    			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
+			    			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
+			    			}
+			    			if(begin<0 ){
+			    				isActive = 0;
+			    				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
+			    			}
+			    			if(end<0 ){
+			    				isActive = 0;
+			    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
+			    			}
+			    		}
+			    		if(	users.getEndTime() == null){
+			    			isActive = 1;
+			    			days =0;
+			    			message = "激活码长期有效.";
+			    		}
+			    }
+					
 					
 				}
 			}
@@ -256,6 +265,46 @@ public class UserApiController extends BaseController {
 		return ApiResponse.success(message, jsonObject);
 	}
 	
+	
+	private Map dealActive(Users users){
+		String message = "";
+		int isActive = 0;//状态
+		String beginTime=null;
+	    String endTime=null;
+	    int days=0;//
+		Date nowDate = new Date();
+		Map mapActive = new ConcurrentHashMap();
+		if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
+			isActive = 1;
+		}
+		//进行数据的判断 逻辑 与w登录时的逻辑是一样的
+		if(users.getBeginTime() != null && 
+				users.getEndTime() != null){
+			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
+			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
+			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
+			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
+			if( begin>=1 && end >=1  ){
+				isActive = 1;
+			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
+			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
+			}
+			if(begin<0 ){
+				isActive = 0;
+				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
+			}
+			if(end<0 ){
+				isActive = 0;
+				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
+			}
+		}
+		if(	users.getEndTime() == null){
+			days = 0;
+			isActive=1;
+			message = "激活码长期有效.";
+		}
+		return mapActive;
+	}
 	
 	@RequestMapping(value="/user/uploadUserVoice")
 	@ResponseBody
