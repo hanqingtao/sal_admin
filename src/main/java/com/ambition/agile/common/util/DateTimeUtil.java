@@ -21,6 +21,7 @@ public class DateTimeUtil {
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
+	public static final String DATE_STRING_YMD_CHINA = "yyyy年MM月dd日";
 	
 	
 	/** 获取当前系统时间
@@ -40,6 +41,14 @@ public class DateTimeUtil {
 		DateFormat dateFormat = new SimpleDateFormat(dateStr);
 		return dateFormat.format(date);
 	}
+	
+//	public static String dateToStringChina(Date date, String dateStr){
+//		DateFormat dateFormat = new SimpleDateFormat(dateStr);
+//		return dateFormat.format(date);
+//		//DATE_STRING_YMD_CHINA
+//		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2005-06-09"); 
+//		String now = new SimpleDateFormat("yyyy年MM月dd日").format(date);
+//	}
 
 	/** String 类型日期时间转 Date
 	 * @param str 时间格式（如：yyyy-MM-dd HH:mm:ss）
@@ -374,7 +383,14 @@ public class DateTimeUtil {
         return Calendar.getInstance().get(2) + 1;
     }
     
-	public static void main(String[] args) {
+	public static void main(String[] args)  throws Exception{
+		
+		String abc = DateTimeUtil.dateToString(DateTimeUtil.getCurrentTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
+		System.out.println(abc);
 		System.out.println( DateTimeUtil.getCurrentTime());
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2005-06-09"); 
+		String now = new SimpleDateFormat("yyyy年MM月dd日").format(date);
+		System.out.println(now);
+		
 	}
 }

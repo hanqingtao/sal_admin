@@ -133,6 +133,8 @@ public class UserApiController extends BaseController {
 		    				isActive = 0;
 		    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
 		    			}
+		    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
+		    			System.out.println("~~~~~~~getUserInfo~~~~~~~#@:"+endTime);
 		    		}
 		    		if(	users.getEndTime() == null){
 		    			isActive = 1;
@@ -241,6 +243,8 @@ public class UserApiController extends BaseController {
 			    				isActive = 0;
 			    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
 			    			}
+			    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
+			    			System.out.println("~~~~~~~code active~~~~~~~#@:"+endTime);
 			    		}
 			    		if(	users.getEndTime() == null){
 			    			isActive = 1;
