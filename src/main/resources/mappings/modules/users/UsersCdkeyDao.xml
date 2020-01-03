@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.users.dao.UsersCdkeyDao">
+    
+	<sql id="usersCdkeyColumns">
+		a.id AS "id",
+		a.cdkey_id AS "cdkey.id",
+		c.code AS "cdkey.code",
+		c.password AS "cdkey.password",
+		c.status AS "cdkey.status",
+		c.active_date AS "cdkey.active_date",
+		a.users_id AS "usersId",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="usersCdkeyJoins">
+		left join cdkey c on a.cdkey_id = c.id
+	</sql>
+    
+	<select id="get" resultType="UsersCdkey">
+		SELECT 
+			<include refid="usersCdkeyColumns"/>
+		FROM users_cdkey a
+		<include refid="usersCdkeyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UsersCdkey">
+		SELECT 
+			<include refid="usersCdkeyColumns"/>
+		FROM users_cdkey a
+		<include refid="usersCdkeyJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UsersCdkey">
+		SELECT 
+			<include refid="usersCdkeyColumns"/>
+		FROM users_cdkey a
+		<include refid="usersCdkeyJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO users_cdkey(
+			cdkey_id,
+			users_id,
+			create_date
+		) VALUES (
+			#{cdkey.id},
+			#{usersId},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE users_cdkey SET 	
+			cdkey_id = #{cdkey.id},
+			users_id = #{usersId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM users_cdkey
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

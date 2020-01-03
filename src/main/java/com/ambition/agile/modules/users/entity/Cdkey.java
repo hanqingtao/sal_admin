@@ -22,6 +22,7 @@ public class Cdkey extends DataEntity<Cdkey> {
 	private String password; //密码
 	private String status;		// 状态 0 未用 1 激活 2作废
 	private Date activeDate;		// 激活时间
+	private Integer activeBy;	//激活人
 	private Batch batch;			//批次
 	
 	private Date beginCreateDate;		// 开始 创建时间
@@ -120,6 +121,14 @@ public class Cdkey extends DataEntity<Cdkey> {
 
 	public void setBatch(Batch batch) {
 		this.batch = batch;
+	}
+
+	public Integer getActiveBy() {
+		return activeBy;
+	}
+
+	public void setActiveBy(Integer activeBy) {
+		this.activeBy = activeBy;
 	}
 		
 }

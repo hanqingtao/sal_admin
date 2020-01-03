@@ -61,4 +61,11 @@ public class Constants {
 	//excel 
 	public static final String  POINT = ".";
 	
+	//users cdkey  未使用
+	public static final String CDKEY_STATUS_NOUSE = "0";
+	//已激活
+	public static final String CDKEY_STATUS_USED = "1";
+	//cancel 作废
+	public static final String CDKEY_STATUS_CANCEL = "2";
+	
 }

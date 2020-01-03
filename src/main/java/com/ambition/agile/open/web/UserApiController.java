@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ambition.agile.common.ApiResponse;
+import com.ambition.agile.common.constant.Constants;
 import com.ambition.agile.common.util.DateTimeUtil;
 import com.ambition.agile.common.util.WxHttpClientUtil;
 import com.ambition.agile.common.utils.StringUtils;
@@ -196,65 +197,75 @@ public class UserApiController extends BaseController {
 			//如果查到激活码信息，则激活成功
 			if(cdkeyList.size()>0){
 				Cdkey cdkeyTemp = cdkeyList.get(0);
-				if(null != cdkeyTemp && StringUtils.isNotEmpty(cdkeyTemp.getId())){
-					//查询 openid 是否插入到数据库中过
-					Users users = usersService.getByOpenId(openId);
-					//如果查询出来的 users 为空,则进行如下判断
-					if(null == users || StringUtils.isEmpty(users.getId())){
-					    //if(null == users || users.getId().isEmpty()){
-					    		users = new Users();
-					    		users.setOpenId(openId);
-					    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
-					    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
-					    		users.setEndTime(cdkeyTemp.getBatch().getEndTime());
-					    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
-					    		
-					    		usersService.codeActive(users,cdkeyTemp);
-					    }else{
-					    		//如果 该用户已经在 users 表中有记录，则进行时间的更新
-						    	users.setOpenId(openId);
-					    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
-					    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
-					    		users.setEndTime(cdkeyTemp.getBatch().getEndTime());
-					    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
-					    		usersService.codeActive(users,cdkeyTemp);
-					    }
-					
-					//Map activeMap = dealActive(users);
-					if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
-		    			
-			    		//如果用户存在，则判断开始和结束时间 是否在有效期内 //进行数据的判断 逻辑 与激活时时的逻辑是一样的
-			    		if(users.getBeginTime() != null && 
-			    				users.getEndTime() != null){
-			    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
-			    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
-			    			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
-			    			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
-			    			if( begin>=1 && end >=1  ){
-			    				isActive = 1;
-			    			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
-			    			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
-			    			}
-			    			if(begin<0 ){
-			    				isActive = 0;
-			    				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
-			    			}
-			    			if(end<0 ){
-			    				isActive = 0;
-			    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
-			    			}
-			    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
-			    			System.out.println("~~~~~~~code active~~~~~~~#@:"+endTime);
-			    		}
-			    		if(	users.getEndTime() == null){
-			    			isActive = 1;
-			    			days =0;
-			    			message = "激活码长期有效.";
-			    		}
-			    }
-					
-					
+				//已激活 
+				if(null != cdkeyTemp && StringUtils.isNotEmpty(cdkeyTemp.getId()) && 
+						cdkeyTemp.getStatus().equals(Constants.CDKEY_STATUS_USED)){
+					message = "该激活码已被成功激活，请更换其它激活码.";
 				}
+				// 作废
+				if(null != cdkeyTemp && StringUtils.isNotEmpty(cdkeyTemp.getId()) && 
+						cdkeyTemp.getStatus().equals(Constants.CDKEY_STATUS_CANCEL)){
+					message = "该激活码已作废，请更换其它激活码.";
+				}
+				if(null != cdkeyTemp && StringUtils.isNotEmpty(cdkeyTemp.getId()) && 
+						cdkeyTemp.getStatus().equals(Constants.CDKEY_STATUS_NOUSE) ){
+						//查询 openid 是否插入到数据库中过
+						Users users = usersService.getByOpenId(openId);
+						//如果查询出来的 users 为空,则进行如下判断
+						if(null == users || StringUtils.isEmpty(users.getId())){
+						    //if(null == users || users.getId().isEmpty()){
+						    		users = new Users();
+						    		users.setOpenId(openId);
+						    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
+						    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
+						    		users.setEndTime(cdkeyTemp.getBatch().getEndTime());
+						    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
+						    		
+						    		usersService.codeActive(users,cdkeyTemp);
+						    }else{
+						    		//如果 该用户已经在 users 表中有记录，则进行时间的更新
+							    	users.setOpenId(openId);
+						    		users.setCdkeyId(Integer.parseInt(cdkeyTemp.getId()));
+						    		users.setBeginTime(cdkeyTemp.getBatch().getBeginTime());
+						    		users.setEndTime(cdkeyTemp.getBatch().getEndTime());
+						    		//这儿要加上事务，处理 users cdkey beginTime endTime 和 cdkey status
+						    		usersService.codeActive(users,cdkeyTemp);
+						    }
+						
+						//Map activeMap = dealActive(users);
+						if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
+			    			
+				    		//如果用户存在，则判断开始和结束时间 是否在有效期内 //进行数据的判断 逻辑 与激活时时的逻辑是一样的
+				    		if(users.getBeginTime() != null && 
+				    				users.getEndTime() != null){
+				    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
+				    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
+				    			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
+				    			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
+				    			if( begin>=1 && end >=1  ){
+				    				isActive = 1;
+				    			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
+				    			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
+				    			}
+				    			if(begin<0 ){
+				    				isActive = 0;
+				    				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
+				    			}
+				    			if(end<0 ){
+				    				isActive = 0;
+				    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
+				    			}
+				    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
+				    			System.out.println("~~~~~~~code active~~~~~~~#@:"+endTime);
+				    		}
+				    		if(	users.getEndTime() == null){
+				    			isActive = 1;
+				    			days =0;
+				    			message = "激活码长期有效.";
+				    		}
+				    }
+				}
+				
 			}
 			}
 		JSONObject jsonObject =new JSONObject();

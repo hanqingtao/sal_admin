@@ -9,6 +9,7 @@
 		a.status AS "status",
 		a.create_date AS "createDate",
 		a.active_date AS "activeDate",
+		a.active_by as "activeBy",
 		a.batch_id as "batch.id",
 		a8.name as "batch.name",
 		a8.begin_time as "batch.beginTime",
@@ -126,12 +127,14 @@
 			<if test="password != null and password != ''">
 				AND a.password =  #{password}
 			</if>
+
+		</where>
+	</select>
+	<!-- 
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
 			</if>
-		</where>
-	</select>
-	
+	 -->
 	<!--  判断该 code 是否已经在 数据库中存在? -->
 	<select id="getCountByCode" parameterType="java.lang.String"  resultType="Integer">
 		SELECT 
@@ -168,7 +171,8 @@
 			code = #{code},
 			password = #{password},
 			status = #{status},
-			active_date = #{activeDate}
+			active_date = #{activeDate},
+			active_by = #{activeBy}
 		WHERE id = #{id}
 	</update>
 	
