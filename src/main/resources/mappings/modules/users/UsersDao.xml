@@ -112,7 +112,7 @@
 		WHERE a.open_id = #{openId}
 	</select>
 	
-	<insert id="insert">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"  keyColumn="id">
 		INSERT INTO users(
 			open_id,
 			cdkey_id,

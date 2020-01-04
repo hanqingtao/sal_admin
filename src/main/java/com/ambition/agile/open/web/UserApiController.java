@@ -25,6 +25,8 @@ import com.ambition.agile.common.util.DateTimeUtil;
 import com.ambition.agile.common.util.WxHttpClientUtil;
 import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
+import com.ambition.agile.modules.sys.entity.User;
+import com.ambition.agile.modules.sys.utils.UserUtils;
 import com.ambition.agile.modules.users.entity.Cdkey;
 import com.ambition.agile.modules.users.entity.Users;
 import com.ambition.agile.modules.users.service.CdkeyService;
@@ -107,42 +109,49 @@ public class UserApiController extends BaseController {
 	    String message="返回用户信息";//信息
 	    Date nowDate = new Date();
 	    //查询下是否有该 openid 入库了，如果没有则插入数据。
-		if(null != openId && !openId.isEmpty()){
+		if(StringUtils.isNotEmpty(openId)){
 		    Users users = usersService.getByOpenId(openId);
+		    
 		    //获取 users 表中的数据 如果存在，则判断时间上是否过期
 		    if(null != users && StringUtils.isNotEmpty(users.getId())){
-		    	
 		    		if(( null != users.getCdkeyId()  &&	users.getCdkeyId()>0) ){
-		    			
-		    		//如果用户存在，则判断开始和结束时间 是否在有效期内 //进行数据的判断 逻辑 与激活时时的逻辑是一样的
-		    		if(users.getBeginTime() != null && 
-		    				users.getEndTime() != null){
-		    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
-		    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
-		    			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
-		    			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
-		    			if( begin>=1 && end >=1  ){
-		    				isActive = 1;
-		    			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
-		    			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
-		    			}
-		    			if(begin<0 ){
-		    				isActive = 0;
-		    				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
-		    			}
-		    			if(end<0 ){
-		    				isActive = 0;
-		    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
-		    			}
-		    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
-		    			System.out.println("~~~~~~~getUserInfo~~~~~~~#@:"+endTime);
+			    		//如果用户存在，则判断开始和结束时间 是否在有效期内 //进行数据的判断 逻辑 与激活时时的逻辑是一样的
+			    		if(users.getBeginTime() != null && 
+			    				users.getEndTime() != null){
+			    			beginTime  = DateTimeUtil.dateToString(users.getBeginTime(),DateTimeUtil.DATE_STRING_YMD);
+			    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD);
+			    			int begin = DateTimeUtil.compare_date(nowDate,users.getBeginTime());
+			    			int end = DateTimeUtil.compare_date(users.getEndTime(),nowDate);
+			    			if( begin>=1 && end >=1  ){
+			    				isActive = 1;
+			    			     days = DateTimeUtil.daysBetween(nowDate, users.getEndTime());
+			    			     message = "激活码有效，使用期限至"+endTime+"还有多少"+days+"天到期.";
+			    			}
+			    			if(begin<0 ){
+			    				isActive = 0;
+			    				message = "激活码无效，未到使用期限,生效时间是: "+beginTime;
+			    			}
+			    			if(end<0 ){
+			    				isActive = 0;
+			    				message = "激活码无效，已过使用期限,最后使用时间是: "+endTime;
+			    			}
+			    			endTime = DateTimeUtil.dateToString(users.getEndTime(),DateTimeUtil.DATE_STRING_YMD_CHINA);
+			    			System.out.println("~~~~~~~getUserInfo~~~~~~~#@:"+endTime);
+			    		}
+			    		if(	users.getEndTime() == null){
+			    			isActive = 1;
+			    			days =0;
+			    			message = "激活码长期有效.";
+			    		}
+			    }
+		    }else{
+		    		// openid 没有入库，则插入数据。
+		    		Users usersNew = new Users();
+		    		usersNew.setOpenId(openId);
+		    		if(StringUtils.isNotEmpty(nickName)){
+		    			usersNew.setName(nickName);
 		    		}
-		    		if(	users.getEndTime() == null){
-		    			isActive = 1;
-		    			days =0;
-		    			message = "激活码长期有效.";
-		    		}
-		    }
+		    		usersService.save(usersNew);
 		    }
 		}
 		jsonObject.put("isActive",isActive);
